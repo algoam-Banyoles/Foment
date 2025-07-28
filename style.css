@@ -76,7 +76,27 @@ button:active {
   border: 1px solid #666;
 }
 
+#classificacio-year-select,
+#categoria-select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin: 0.25rem;
+  font-size: 1rem;
+  background: #444;
+  color: #fff;
+  border: 1px solid #666;
+}
+
 #filters-row {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+#classificacio-filters {
   margin-top: 0.5rem;
   display: flex;
   align-items: center;

@@ -8,6 +8,7 @@ self.addEventListener("install", event => {
         "./main.js",
         "https://cdn.jsdelivr.net/npm/chart.js",
         "./ranquing.json",
+        "./classificacions.json",
         "./icons/icon-192.png",
         "./icons/icon-512.png"
       ]);
