@@ -24,6 +24,11 @@ button {
   margin: 0.25rem;
   font-size: 1rem;
 }
+#filters-row {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+}
 #content {
   margin-top: 1rem;
 }

@@ -90,8 +90,7 @@ function mostraRanquing() {
 }
 
 document.getElementById('btn-ranking').addEventListener('click', () => {
-  document.getElementById('year-select').style.display = 'inline-block';
-  document.getElementById('modalitat-buttons').style.display = 'inline-block';
+  document.getElementById('filters-row').style.display = 'flex';
   mostraRanquing();
 });
 
