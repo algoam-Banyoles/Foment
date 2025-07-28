@@ -23,7 +23,6 @@ function inicialitza() {
         .sort((a, b) => a - b);
       anySeleccionat = anys[anys.length - 1];
       preparaSelectors();
-      mostraRanquing();
     })
     .catch(err => {
       console.error('Error carregant el ranquing', err);
@@ -64,7 +63,7 @@ function mostraRanquing() {
   cont.innerHTML = '';
   const taula = document.createElement('table');
   const cap = document.createElement('tr');
-  ['Any', 'Modalitat', 'Posició', 'Jugador', 'Mitjana'].forEach(t => {
+  ['Posició', 'Jugador', 'Mitjana'].forEach(t => {
     const th = document.createElement('th');
     th.textContent = t;
     cap.appendChild(th);
@@ -76,7 +75,7 @@ function mostraRanquing() {
       reg.Modalitat === modalitatSeleccionada)
     .forEach(reg => {
       const tr = document.createElement('tr');
-      ['Any', 'Modalitat', 'Posició', 'Jugador', 'Mitjana'].forEach(clau => {
+      ['Posició', 'Jugador', 'Mitjana'].forEach(clau => {
         const td = document.createElement('td');
         let valor = reg[clau];
         if (clau === 'Mitjana') {
@@ -90,6 +89,10 @@ function mostraRanquing() {
   cont.appendChild(taula);
 }
 
-document.getElementById('btn-ranking').addEventListener('click', mostraRanquing);
+document.getElementById('btn-ranking').addEventListener('click', () => {
+  document.getElementById('year-select').style.display = 'inline-block';
+  document.getElementById('modalitat-buttons').style.display = 'inline-block';
+  mostraRanquing();
+});
 
 inicialitza();
