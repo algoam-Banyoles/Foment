@@ -1,6 +1,8 @@
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/service-worker.js")
+    // Register using a relative path so it also works when the site
+    // is served from a sub directory (e.g. GitHub Pages)
+    navigator.serviceWorker.register("./service-worker.js")
       .then(reg => console.log("SW registrat!", reg))
       .catch(err => console.error("Error al registrar el SW:", err));
   });
@@ -16,7 +18,9 @@ function inicialitza() {
     .then(res => res.json())
     .then(dades => {
       ranquing = dades;
-      anys = [...new Set(dades.map(d => d.Any))].sort();
+      // Map the years to numbers for a proper sort and comparison
+      anys = [...new Set(dades.map(d => parseInt(d.Any, 10)))]
+        .sort((a, b) => a - b);
       anySeleccionat = anys[anys.length - 1];
       preparaSelectors();
       mostraRanquing();
@@ -37,7 +41,7 @@ function preparaSelectors() {
     select.appendChild(opt);
   });
   select.addEventListener('change', () => {
-    anySeleccionat = select.value;
+    anySeleccionat = parseInt(select.value, 10);
     mostraRanquing();
   });
 
@@ -67,7 +71,9 @@ function mostraRanquing() {
   });
   taula.appendChild(cap);
   ranquing
-    .filter(reg => reg.Any === anySeleccionat && reg.Modalitat === modalitatSeleccionada)
+    .filter(reg =>
+      parseInt(reg.Any, 10) === anySeleccionat &&
+      reg.Modalitat === modalitatSeleccionada)
     .forEach(reg => {
       const tr = document.createElement('tr');
       ['Any', 'Modalitat', 'Posició', 'Jugador', 'Mitjana'].forEach(clau => {
