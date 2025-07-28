@@ -69,30 +69,34 @@ function mostraRanquing() {
     cap.appendChild(th);
   });
   taula.appendChild(cap);
-  ranquing
-    .filter(reg =>
-      parseInt(reg.Any, 10) === anySeleccionat &&
-      reg.Modalitat === modalitatSeleccionada)
-    .forEach(reg => {
-      const tr = document.createElement('tr');
-      ['Posició', 'Jugador', 'Mitjana'].forEach(clau => {
-        const td = document.createElement('td');
-        let valor = reg[clau];
-        if (clau === 'Mitjana') {
-          valor = Number.parseFloat(reg[clau]).toFixed(3);
-        }
-        td.textContent = valor;
-        if (clau === 'Jugador') {
-          td.classList.add('jugador-cell');
-          td.style.cursor = 'pointer';
-          td.addEventListener('click', () => {
-            mostraEvolucioJugador(reg['Jugador'], modalitatSeleccionada);
-          });
-        }
-        tr.appendChild(td);
-      });
-      taula.appendChild(tr);
+
+  const dadesOrdenades = ranquing
+    .filter(
+      reg =>
+        parseInt(reg.Any, 10) === anySeleccionat &&
+        reg.Modalitat === modalitatSeleccionada
+    )
+    .sort((a, b) => parseFloat(b.Mitjana) - parseFloat(a.Mitjana));
+
+  dadesOrdenades.forEach((reg, idx) => {
+    const tr = document.createElement('tr');
+    // Posicio es calcula per si l'array no esta préviament ordenat
+    ['Posició', 'Jugador', 'Mitjana'].forEach(clau => {
+      const td = document.createElement('td');
+      let valor;
+      if (clau === 'Posició') {
+        valor = idx + 1;
+      } else if (clau === 'Mitjana') {
+        valor = Number.parseFloat(reg[clau]).toFixed(3);
+      } else {
+        valor = reg[clau];
+      }
+      td.textContent = valor;
+      tr.appendChild(td);
+
     });
+    taula.appendChild(tr);
+  });
   cont.appendChild(taula);
 }
 

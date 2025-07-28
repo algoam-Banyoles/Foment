@@ -4,12 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#6200ee" />
   <link rel="stylesheet" href="style.css" />
   <title>Billar Foment Martinenc</title>
-</head>
-<body>
-  <h1>Billar Foment Martinenc</h1>
-  <div id="menu">
+  </head>
+  <body>
+  <div id="app">
+    <h1>Billar Foment Martinenc</h1>
+    <div id="menu">
     <button id="btn-ranking">Veure rànquing</button>
     <div id="filters-row" style="display:none">
       <select id="year-select"></select>
@@ -20,13 +22,9 @@
       </div>
     </div>
     <!-- aquí es poden afegir més botons en el futur -->
+    </div>
+    <div id="content"></div>
   </div>
-  <div id="content"></div>
-  <div id="player-chart" style="display:none">
-    <button id="close-chart">Tancar</button>
-    <canvas id="chart-canvas" width="400" height="300"></canvas>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="main.js"></script>
-</body>
+  </body>
 </html>
