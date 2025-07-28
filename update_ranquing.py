@@ -44,7 +44,16 @@ def update():
             'Posició': cell_value(cells.get('C', ET.Element('c')), strings),
             'Jugador': cell_value(cells.get('D', ET.Element('c')), strings),
             'Mitjana': cell_value(cells.get('E', ET.Element('c')), strings),
+            'Soci': cell_value(cells.get('F', ET.Element('c')), strings),
+            'Nom': cell_value(cells.get('G', ET.Element('c')), strings),
+            'Cognom1': cell_value(cells.get('H', ET.Element('c')), strings),
+            'Cognom2': cell_value(cells.get('I', ET.Element('c')), strings),
         }
+        noms = [record.get('Nom', '').strip(),
+                record.get('Cognom1', '').strip(),
+                record.get('Cognom2', '').strip()]
+        nom_complet = ' '.join([n for n in noms if n])
+        record['NomComplet'] = nom_complet if nom_complet else record['Jugador']
         rows.append(record)
     JSON_FILE.write_text(json.dumps(rows, ensure_ascii=False, indent=2))
 
