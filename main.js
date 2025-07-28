@@ -157,9 +157,8 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
       }
     }
   });
-  const chartEl = document.getElementById('player-chart');
-  chartEl.style.display = 'flex';
-  chartEl.scrollIntoView({ behavior: 'smooth' });
+
+  document.getElementById('chart-overlay').style.display = 'flex';
 }
 
 document.getElementById('btn-ranking').addEventListener('click', () => {
@@ -183,8 +182,9 @@ document.getElementById('btn-update').addEventListener('click', () => {
 });
 
 document.getElementById('close-chart').addEventListener('click', () => {
-  const chartEl = document.getElementById('player-chart');
-  chartEl.style.display = 'none';
+
+  document.getElementById('chart-overlay').style.display = 'none';
+
   const title = document.getElementById('chart-title');
   if (title) {
     title.textContent = '';
