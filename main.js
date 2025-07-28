@@ -150,11 +150,16 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
     options: {
       scales: {
         x: { title: { display: true, text: 'Any' } },
-        y: { title: { display: true, text: 'Mitjana' } }
+        y: {
+          title: { display: true, text: 'Mitjana' },
+          ticks: { beginAtZero: true }
+        }
       }
     }
   });
-  document.getElementById('player-chart').style.display = 'flex';
+  const chartEl = document.getElementById('player-chart');
+  chartEl.style.display = 'flex';
+  chartEl.scrollIntoView({ behavior: 'smooth' });
 }
 
 document.getElementById('btn-ranking').addEventListener('click', () => {
@@ -178,7 +183,8 @@ document.getElementById('btn-update').addEventListener('click', () => {
 });
 
 document.getElementById('close-chart').addEventListener('click', () => {
-  document.getElementById('player-chart').style.display = 'none';
+  const chartEl = document.getElementById('player-chart');
+  chartEl.style.display = 'none';
   const title = document.getElementById('chart-title');
   if (title) {
     title.textContent = '';
