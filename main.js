@@ -95,6 +95,9 @@ function mostraRanquing() {
       tr.appendChild(td);
 
     });
+    tr.addEventListener('click', () => {
+      mostraEvolucioJugador(reg.Jugador, modalitatSeleccionada);
+    });
     taula.appendChild(tr);
   });
   cont.appendChild(taula);

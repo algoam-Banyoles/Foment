@@ -6,6 +6,7 @@ self.addEventListener("install", event => {
         "./index.html",
         "./style.css",
         "./main.js",
+        "https://cdn.jsdelivr.net/npm/chart.js",
         "./ranquing.json",
         "./icons/icon-192.png",
         "./icons/icon-512.png"
