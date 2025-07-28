@@ -43,3 +43,27 @@ th, td {
   text-align: left;
   white-space: nowrap;
 }
+
+#player-chart {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+#player-chart canvas {
+  background: #fff;
+  max-width: 90%;
+}
+
+#player-chart button {
+  align-self: flex-end;
+  margin-bottom: 0.5rem;
+}

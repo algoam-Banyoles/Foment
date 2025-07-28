@@ -82,6 +82,13 @@ function mostraRanquing() {
           valor = Number.parseFloat(reg[clau]).toFixed(3);
         }
         td.textContent = valor;
+        if (clau === 'Jugador') {
+          td.classList.add('jugador-cell');
+          td.style.cursor = 'pointer';
+          td.addEventListener('click', () => {
+            mostraEvolucioJugador(reg['Jugador'], modalitatSeleccionada);
+          });
+        }
         tr.appendChild(td);
       });
       taula.appendChild(tr);
@@ -89,9 +96,44 @@ function mostraRanquing() {
   cont.appendChild(taula);
 }
 
+function mostraEvolucioJugador(jugador, modalitat) {
+  const dades = ranquing
+    .filter(r => r.Jugador === jugador && r.Modalitat === modalitat)
+    .map(r => ({ any: parseInt(r.Any, 10), mitjana: parseFloat(r.Mitjana) }))
+    .sort((a, b) => a.any - b.any);
+  const labels = dades.map(d => d.any);
+  const values = dades.map(d => Number.parseFloat(d.mitjana).toFixed(3));
+  const canvas = document.getElementById('chart-canvas');
+  if (window.playerChart) {
+    window.playerChart.destroy();
+  }
+  window.playerChart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: jugador + ' - ' + modalitat,
+        data: values,
+        fill: false,
+        borderColor: 'blue'
+      }]
+    },
+    options: {
+      scales: {
+        y: { beginAtZero: false }
+      }
+    }
+  });
+  document.getElementById('player-chart').style.display = 'flex';
+}
+
 document.getElementById('btn-ranking').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'flex';
   mostraRanquing();
+});
+
+document.getElementById('close-chart').addEventListener('click', () => {
+  document.getElementById('player-chart').style.display = 'none';
 });
 
 inicialitza();
