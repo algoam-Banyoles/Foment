@@ -90,21 +90,21 @@ function mostraRanquing() {
       } else if (clau === 'Mitjana') {
         valor = Number.parseFloat(reg[clau]).toFixed(3);
       } else {
-        valor = reg[clau];
+        valor = clau === 'Jugador' ? reg.NomComplet : reg[clau];
       }
       td.textContent = valor;
       if (clau === 'Jugador') {
         td.classList.add('player-cell');
         td.addEventListener('click', e => {
           e.stopPropagation();
-          mostraEvolucioJugador(reg.Jugador, modalitatSeleccionada);
+          mostraEvolucioJugador(reg.Jugador, reg.NomComplet, modalitatSeleccionada);
         });
       }
       tr.appendChild(td);
 
     });
     tr.addEventListener('click', () => {
-      mostraEvolucioJugador(reg.Jugador, modalitatSeleccionada);
+      mostraEvolucioJugador(reg.Jugador, reg.NomComplet, modalitatSeleccionada);
     });
     taula.appendChild(tr);
   });
@@ -112,7 +112,7 @@ function mostraRanquing() {
 }
 
 
-function mostraEvolucioJugador(jugador, modalitat) {
+function mostraEvolucioJugador(jugador, nom, modalitat) {
   const dades = ranquing
     .filter(r => r.Jugador === jugador && r.Modalitat === modalitat)
     .map(r => ({ any: parseInt(r.Any, 10), mitjana: parseFloat(r.Mitjana) }))
@@ -127,7 +127,7 @@ function mostraEvolucioJugador(jugador, modalitat) {
 
   const title = document.getElementById('chart-title');
   if (title) {
-    title.textContent = jugador + ' - ' + modalitat;
+    title.textContent = nom + ' - ' + modalitat;
   }
 
   const ctx = canvas.getContext('2d');
@@ -139,7 +139,7 @@ function mostraEvolucioJugador(jugador, modalitat) {
     data: {
       labels,
       datasets: [{
-        label: jugador + ' - ' + modalitat,
+        label: nom + ' - ' + modalitat,
         data: values,
         borderColor: 'blue',
         backgroundColor: 'rgba(0, 0, 255, 0.1)',
