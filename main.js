@@ -169,6 +169,11 @@ function mostraEvolucioJugador(jugador, modalitat) {
     canvas.height = 300;
   }
 
+  const title = document.getElementById('chart-title');
+  if (title) {
+    title.textContent = jugador + ' - ' + modalitat;
+  }
+
   drawLineChart(canvas, labels, values, jugador + ' - ' + modalitat);
   document.getElementById('player-chart').style.display = 'flex';
 }
@@ -195,7 +200,10 @@ document.getElementById('btn-update').addEventListener('click', () => {
 
 document.getElementById('close-chart').addEventListener('click', () => {
   document.getElementById('player-chart').style.display = 'none';
-  document.getElementById('chart-title').textContent = '';
+  const title = document.getElementById('chart-title');
+  if (title) {
+    title.textContent = '';
+  }
 });
 
 inicialitza();

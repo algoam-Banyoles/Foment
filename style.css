@@ -130,8 +130,19 @@ tr:nth-child(even) {
   margin-top: 1rem;
 }
 
+#player-chart h3 {
+  align-self: center;
+  margin: 0.5rem 0;
+}
+
 
 #player-chart canvas {
   max-width: 100%;
+}
+
+.player-cell {
+  cursor: pointer;
+  color: var(--primary-dark);
+  text-decoration: underline;
 }
 
