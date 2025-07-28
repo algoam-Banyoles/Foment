@@ -213,13 +213,22 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
     .filter(r => r.Jugador === jugador && r.Modalitat === modalitat)
     .map(r => ({ any: parseInt(r.Any, 10), mitjana: parseFloat(r.Mitjana) }))
     .sort((a, b) => a.any - b.any);
-  const labels = dades.map(d => d.any);
-  const values = dades.map(d => Number.parseFloat(d.mitjana));
-  const canvas = document.getElementById('chart-canvas');
-  if (!canvas.width) {
-    canvas.width = 400;
-    canvas.height = 300;
+
+  const firstYear = dades.length > 0 ? dades[0].any : null;
+  const lastYear = dades.length > 0 ? dades[dades.length - 1].any : null;
+  const labels = [];
+  const values = [];
+  if (firstYear !== null && lastYear !== null) {
+    for (let y = firstYear; y <= lastYear; y++) {
+      labels.push(y);
+      const reg = dades.find(d => d.any === y);
+      values.push(reg ? Number.parseFloat(reg.mitjana) : null);
+    }
   }
+
+  const canvas = document.getElementById('chart-canvas');
+  canvas.width = Math.min(window.innerWidth * 0.9, 800);
+  canvas.height = Math.min(window.innerHeight * 0.6, 600);
 
   const title = document.getElementById('chart-title');
   if (title) {
@@ -245,12 +254,18 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
     },
     options: {
       scales: {
-        x: { title: { display: true, text: 'Any' } },
+        x: {
+          title: { display: true, text: 'Any' },
+          ticks: { stepSize: 1 }
+        },
         y: {
           title: { display: true, text: 'Mitjana' },
+          min: 0,
           ticks: { beginAtZero: true }
         }
-      }
+      },
+      responsive: true,
+      maintainAspectRatio: false
     }
   });
 
