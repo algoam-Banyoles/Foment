@@ -12,6 +12,7 @@ let ranquing = [];
 let anys = [];
 let anySeleccionat = null;
 let modalitatSeleccionada = '3 BANDES';
+let lineChart = null;
 
 function inicialitza() {
   fetch('ranquing.json')
@@ -110,51 +111,6 @@ function mostraRanquing() {
   cont.appendChild(taula);
 }
 
-function drawLineChart(canvas, labels, data, label) {
-  const ctx = canvas.getContext('2d');
-  const width = canvas.width;
-  const height = canvas.height;
-  ctx.clearRect(0, 0, width, height);
-  const pad = 40;
-  const w = width - pad * 2;
-  const h = height - pad * 2;
-  const minY = Math.min(...data);
-  const maxY = Math.max(...data);
-  const range = maxY - minY || 1;
-
-  ctx.strokeStyle = '#000';
-  ctx.beginPath();
-  ctx.moveTo(pad, pad);
-  ctx.lineTo(pad, pad + h);
-  ctx.lineTo(pad + w, pad + h);
-  ctx.stroke();
-
-  ctx.strokeStyle = 'blue';
-  ctx.beginPath();
-  data.forEach((v, i) => {
-    const x = pad + (w * i) / (data.length - 1);
-    const y = pad + h - ((v - minY) / range) * h;
-    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-  });
-  ctx.stroke();
-
-  ctx.fillStyle = '#000';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'top';
-  labels.forEach((lab, i) => {
-    const x = pad + (w * i) / (labels.length - 1);
-    ctx.fillText(lab, x, pad + h + 5);
-  });
-
-  ctx.textAlign = 'right';
-  ctx.textBaseline = 'middle';
-  const steps = 4;
-  for (let i = 0; i <= steps; i++) {
-    const val = minY + (range * i) / steps;
-    const y = pad + h - (h * i) / steps;
-    ctx.fillText(val.toFixed(2), pad - 5, y);
-  }
-}
 
 function mostraEvolucioJugador(jugador, modalitat) {
   const dades = ranquing
@@ -174,7 +130,30 @@ function mostraEvolucioJugador(jugador, modalitat) {
     title.textContent = jugador + ' - ' + modalitat;
   }
 
-  drawLineChart(canvas, labels, values, jugador + ' - ' + modalitat);
+  const ctx = canvas.getContext('2d');
+  if (lineChart) {
+    lineChart.destroy();
+  }
+  lineChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: jugador + ' - ' + modalitat,
+        data: values,
+        borderColor: 'blue',
+        backgroundColor: 'rgba(0, 0, 255, 0.1)',
+        tension: 0.2,
+        fill: false
+      }]
+    },
+    options: {
+      scales: {
+        x: { title: { display: true, text: 'Any' } },
+        y: { title: { display: true, text: 'Mitjana' } }
+      }
+    }
+  });
   document.getElementById('player-chart').style.display = 'flex';
 }
 
@@ -203,6 +182,10 @@ document.getElementById('close-chart').addEventListener('click', () => {
   const title = document.getElementById('chart-title');
   if (title) {
     title.textContent = '';
+  }
+  if (lineChart) {
+    lineChart.destroy();
+    lineChart = null;
   }
 });
 
