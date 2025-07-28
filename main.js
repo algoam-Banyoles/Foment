@@ -14,19 +14,35 @@ let anySeleccionat = null;
 let modalitatSeleccionada = '3 BANDES';
 let lineChart = null;
 
+let classificacions = [];
+let classYears = [];
+let classAnySeleccionat = null;
+let classModalitatSeleccionada = '3 BANDES';
+let classCategoriaSeleccionada = null;
+
 function inicialitza() {
-  fetch('ranquing.json')
-    .then(res => res.json())
-    .then(dades => {
-      ranquing = dades;
-      // Map the years to numbers for a proper sort and comparison
-      anys = [...new Set(dades.map(d => parseInt(d.Any, 10)))]
+  Promise.all([
+    fetch('ranquing.json').then(r => r.json()),
+    fetch('classificacions.json').then(r => r.json()).catch(() => [])
+  ])
+    .then(([dadesRanking, dadesClass]) => {
+      ranquing = dadesRanking;
+      anys = [...new Set(dadesRanking.map(d => parseInt(d.Any, 10)))]
         .sort((a, b) => a - b);
       anySeleccionat = anys[anys.length - 1];
+
+      classificacions = dadesClass;
+      classYears = [...new Set(dadesClass.map(d => parseInt(d.Any, 10)))]
+        .sort((a, b) => a - b);
+      classAnySeleccionat = classYears[classYears.length - 1] || null;
+      const categories = new Set(dadesClass.map(d => d.Categoria));
+      classCategoriaSeleccionada = categories.values().next().value || null;
+
       preparaSelectors();
+      preparaSelectorsClassificacio();
     })
     .catch(err => {
-      console.error('Error carregant el ranquing', err);
+      console.error('Error carregant dades', err);
     });
 }
 
@@ -56,6 +72,50 @@ function preparaSelectors() {
       btn.classList.add('selected');
       mostraRanquing();
     });
+  });
+}
+
+function preparaSelectorsClassificacio() {
+  const yearSel = document.getElementById('classificacio-year-select');
+  yearSel.innerHTML = '';
+  classYears.slice().sort((a, b) => b - a).forEach(any => {
+    const opt = document.createElement('option');
+    opt.value = any;
+    opt.textContent = any;
+    if (any === classAnySeleccionat) opt.selected = true;
+    yearSel.appendChild(opt);
+  });
+  yearSel.addEventListener('change', () => {
+    classAnySeleccionat = parseInt(yearSel.value, 10);
+    mostraClassificacio();
+  });
+
+  const modalBtns = document.getElementById('classificacio-modalitat-buttons');
+  modalBtns.querySelectorAll('button').forEach(btn => {
+    if (btn.dataset.mod === classModalitatSeleccionada) {
+      btn.classList.add('selected');
+    }
+    btn.addEventListener('click', () => {
+      classModalitatSeleccionada = btn.dataset.mod;
+      modalBtns.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      mostraClassificacio();
+    });
+  });
+
+  const catSel = document.getElementById('categoria-select');
+  catSel.innerHTML = '';
+  const cats = [...new Set(classificacions.map(c => c.Categoria))].sort();
+  cats.forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = cat;
+    if (cat === classCategoriaSeleccionada) opt.selected = true;
+    catSel.appendChild(opt);
+  });
+  catSel.addEventListener('change', () => {
+    classCategoriaSeleccionada = catSel.value;
+    mostraClassificacio();
   });
 }
 
@@ -105,6 +165,42 @@ function mostraRanquing() {
     });
     tr.addEventListener('click', () => {
       mostraEvolucioJugador(reg.Jugador, reg.NomComplet, modalitatSeleccionada);
+    });
+    taula.appendChild(tr);
+  });
+  cont.appendChild(taula);
+}
+
+function mostraClassificacio() {
+  const cont = document.getElementById('content');
+  cont.innerHTML = '';
+  const taula = document.createElement('table');
+  const cap = document.createElement('tr');
+  ['Posició', 'Jugador', 'Punts', 'Caramboles', 'Entrades', 'Mitjana General', 'Mitjana Particular'].forEach(t => {
+    const th = document.createElement('th');
+    th.textContent = t;
+    cap.appendChild(th);
+  });
+  taula.appendChild(cap);
+
+  const dades = classificacions
+    .filter(r =>
+      parseInt(r.Any, 10) === classAnySeleccionat &&
+      r.Modalitat === classModalitatSeleccionada &&
+      r.Categoria === classCategoriaSeleccionada
+    )
+    .sort((a, b) => parseInt(a.Posició, 10) - parseInt(b.Posició, 10));
+
+  dades.forEach(reg => {
+    const tr = document.createElement('tr');
+    ['Posició', 'Jugador', 'Punts', 'Caramboles', 'Entrades', 'MitjanaGeneral', 'MitjanaParticular'].forEach(clau => {
+      const td = document.createElement('td');
+      let valor = reg[clau];
+      if (clau === 'MitjanaGeneral' || clau === 'MitjanaParticular') {
+        valor = Number.parseFloat(valor).toFixed(3);
+      }
+      td.textContent = valor;
+      tr.appendChild(td);
     });
     taula.appendChild(tr);
   });
@@ -163,6 +259,7 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
 
 document.getElementById('btn-ranking').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'flex';
+  document.getElementById('classificacio-filters').style.display = 'none';
   mostraRanquing();
 });
 
@@ -178,6 +275,27 @@ document.getElementById('btn-update').addEventListener('click', () => {
     .catch(err => {
       console.error(err);
       alert('No s\'ha pogut actualitzar el r\xe0nquing');
+    });
+});
+
+document.getElementById('btn-classificacio').addEventListener('click', () => {
+  document.getElementById('filters-row').style.display = 'none';
+  document.getElementById('classificacio-filters').style.display = 'flex';
+  mostraClassificacio();
+});
+
+document.getElementById('btn-update-classificacio').addEventListener('click', () => {
+  fetch('/update-classificacions')
+    .then(res => {
+      if (!res.ok) throw new Error('Error actualitzant classificacions');
+      return res.json();
+    })
+    .then(() => {
+      inicialitza();
+    })
+    .catch(err => {
+      console.error(err);
+      alert('No s\'ha pogut actualitzar les classificacions');
     });
 });
 
