@@ -130,6 +130,8 @@ tr:nth-child(even) {
   margin-top: 1rem;
 }
 
+
 #player-chart canvas {
   max-width: 100%;
 }
+

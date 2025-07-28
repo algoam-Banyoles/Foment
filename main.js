@@ -92,6 +92,13 @@ function mostraRanquing() {
         valor = reg[clau];
       }
       td.textContent = valor;
+      if (clau === 'Jugador') {
+        td.classList.add('player-cell');
+        td.addEventListener('click', e => {
+          e.stopPropagation();
+          mostraEvolucioJugador(reg.Jugador, modalitatSeleccionada);
+        });
+      }
       tr.appendChild(td);
 
     });
@@ -161,6 +168,7 @@ function mostraEvolucioJugador(jugador, modalitat) {
     canvas.width = 400;
     canvas.height = 300;
   }
+
   drawLineChart(canvas, labels, values, jugador + ' - ' + modalitat);
   document.getElementById('player-chart').style.display = 'flex';
 }
@@ -187,6 +195,7 @@ document.getElementById('btn-update').addEventListener('click', () => {
 
 document.getElementById('close-chart').addEventListener('click', () => {
   document.getElementById('player-chart').style.display = 'none';
+  document.getElementById('chart-title').textContent = '';
 });
 
 inicialitza();
