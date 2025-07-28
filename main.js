@@ -102,6 +102,9 @@ function mostraRanquing() {
       tr.appendChild(td);
 
     });
+    tr.addEventListener('click', () => {
+      mostraEvolucioJugador(reg.Jugador, modalitatSeleccionada);
+    });
     taula.appendChild(tr);
   });
   cont.appendChild(taula);
@@ -165,7 +168,7 @@ function mostraEvolucioJugador(jugador, modalitat) {
     canvas.width = 400;
     canvas.height = 300;
   }
-  document.getElementById('chart-title').textContent = jugador + ' - ' + modalitat;
+
   drawLineChart(canvas, labels, values, jugador + ' - ' + modalitat);
   document.getElementById('player-chart').style.display = 'flex';
 }
@@ -173,6 +176,21 @@ function mostraEvolucioJugador(jugador, modalitat) {
 document.getElementById('btn-ranking').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'flex';
   mostraRanquing();
+});
+
+document.getElementById('btn-update').addEventListener('click', () => {
+  fetch('/update-ranking')
+    .then(res => {
+      if (!res.ok) throw new Error('Error actualitzant el r\xe0nquing');
+      return res.json();
+    })
+    .then(() => {
+      inicialitza();
+    })
+    .catch(err => {
+      console.error(err);
+      alert('No s\'ha pogut actualitzar el r\xe0nquing');
+    });
 });
 
 document.getElementById('close-chart').addEventListener('click', () => {
