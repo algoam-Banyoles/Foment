@@ -4,12 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#6200ee" />
   <link rel="stylesheet" href="style.css" />
   <title>Billar Foment Martinenc</title>
-</head>
-<body>
-  <h1>Billar Foment Martinenc</h1>
-  <div id="menu">
+  </head>
+  <body>
+  <div id="app">
+    <h1>Billar Foment Martinenc</h1>
+    <div id="menu">
     <button id="btn-ranking">Veure rànquing</button>
     <div id="filters-row" style="display:none">
       <select id="year-select"></select>
@@ -20,8 +22,9 @@
       </div>
     </div>
     <!-- aquí es poden afegir més botons en el futur -->
+    </div>
+    <div id="content"></div>
   </div>
-  <div id="content"></div>
   <script src="main.js"></script>
-</body>
+  </body>
 </html>
