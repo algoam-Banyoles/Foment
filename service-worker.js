@@ -6,6 +6,7 @@ self.addEventListener("install", event => {
         "./index.html",
         "./style.css",
         "./main.js",
+        "./ranquing.json",
         "./icon-192.png",
         "./icon-512.png"
       ]);
