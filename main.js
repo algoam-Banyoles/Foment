@@ -157,6 +157,7 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
       }
     }
   });
+
   document.getElementById('chart-overlay').style.display = 'flex';
 }
 
@@ -181,7 +182,9 @@ document.getElementById('btn-update').addEventListener('click', () => {
 });
 
 document.getElementById('close-chart').addEventListener('click', () => {
+
   document.getElementById('chart-overlay').style.display = 'none';
+
   const title = document.getElementById('chart-title');
   if (title) {
     title.textContent = '';
