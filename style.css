@@ -1,6 +1,8 @@
 :root {
   --primary: #6200ee;
   --primary-dark: #3700b3;
+  --secondary: #03dac6;
+  --secondary-dark: #018786;
   --background: #f6f6f6;
   --text-color: #333;
 }
@@ -63,6 +65,15 @@ button:active {
 .button-group button.selected {
   background: var(--primary-dark);
 
+}
+
+.secondary-buttons button {
+  background: var(--secondary);
+}
+
+.secondary-buttons button:hover,
+.secondary-buttons button.selected {
+  background: var(--secondary-dark);
 }
 
 #year-select {
