@@ -166,6 +166,7 @@ tr:nth-child(even) {
   width: 95vmin;
   max-width: 95vmin;
   max-height: 95vmin;
+
 }
 
 #player-chart h3 {
@@ -175,8 +176,7 @@ tr:nth-child(even) {
 
 
 #player-chart canvas {
-  max-width: 100%;
-  width: 100%;
+  display: block;
   height: auto;
 }
 

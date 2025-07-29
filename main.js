@@ -241,7 +241,9 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
     chartContainer.style.width = size + 'px';
     chartContainer.style.maxWidth = size + 'px';
   }
+
   canvas.width = size;
+
   canvas.height = size * 0.6;
 
   const title = document.getElementById('chart-title');
