@@ -292,20 +292,6 @@ document.getElementById('btn-ranking').addEventListener('click', () => {
   mostraRanquing();
 });
 
-document.getElementById('btn-update').addEventListener('click', () => {
-  fetch('/update-ranking')
-    .then(res => {
-      if (!res.ok) throw new Error('Error actualitzant el r\xe0nquing');
-      return res.json();
-    })
-    .then(() => {
-      inicialitza();
-    })
-    .catch(err => {
-      console.error(err);
-      alert('No s\'ha pogut actualitzar el r\xe0nquing');
-    });
-});
 
 document.getElementById('btn-classificacio').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'none';
@@ -313,20 +299,6 @@ document.getElementById('btn-classificacio').addEventListener('click', () => {
   mostraClassificacio();
 });
 
-document.getElementById('btn-update-classificacio').addEventListener('click', () => {
-  fetch('/update-classificacions')
-    .then(res => {
-      if (!res.ok) throw new Error('Error actualitzant classificacions');
-      return res.json();
-    })
-    .then(() => {
-      inicialitza();
-    })
-    .catch(err => {
-      console.error(err);
-      alert('No s\'ha pogut actualitzar les classificacions');
-    });
-});
 
 document.getElementById('close-chart').addEventListener('click', () => {
 
