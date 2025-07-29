@@ -25,10 +25,18 @@ body {
 h1 {
   margin: 0 0 1rem;
   padding: 0.5rem 1rem;
-  background: var(--primary);
+  background: #000;
   color: #fff;
   text-align: center;
   border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.header-logo {
+  height: 2rem;
 }
 
 #menu {
