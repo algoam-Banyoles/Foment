@@ -249,9 +249,12 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
   }
 
   canvas.width = size;
+  canvas.style.width = size + 'px';
 
   // Increase height a bit so the x axis and its labels are always visible
+
   canvas.height = size * 0.75;
+
 
   const title = document.getElementById('chart-title');
   if (title) {
