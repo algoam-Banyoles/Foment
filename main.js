@@ -234,6 +234,12 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
   }
 
   const canvas = document.getElementById('chart-canvas');
+  // Show the overlay before creating the chart so Chart.js can
+  // correctly calculate the layout based on the visible size
+  const overlay = document.getElementById('chart-overlay');
+  if (overlay) {
+    overlay.style.display = 'flex';
+  }
   const vmin = Math.min(window.innerWidth, window.innerHeight);
   const size = vmin * 0.9;
   const chartContainer = document.getElementById('player-chart');
@@ -243,8 +249,12 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
   }
 
   canvas.width = size;
+  canvas.style.width = size + 'px';
 
-  canvas.height = size * 0.6;
+  // Increase height a bit so the x axis and its labels are always visible
+  const canvasHeight = size * 0.75;
+  canvas.height = canvasHeight;
+  canvas.style.height = canvasHeight + 'px';
 
   const title = document.getElementById('chart-title');
   if (title) {
@@ -285,7 +295,6 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
     }
   });
 
-  document.getElementById('chart-overlay').style.display = 'flex';
 }
 
 document.getElementById('btn-ranking').addEventListener('click', () => {
