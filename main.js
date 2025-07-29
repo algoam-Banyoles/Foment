@@ -1,10 +1,17 @@
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    // Register using a relative path so it also works when the site
-    // is served from a sub directory (e.g. GitHub Pages)
-    navigator.serviceWorker.register("./service-worker.js")
-      .then(reg => console.log("SW registrat!", reg))
-      .catch(err => console.error("Error al registrar el SW:", err));
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => {
+        console.log('SW registrat!', reg);
+      })
+      .catch(err => console.error('Error al registrar el SW:', err));
+
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      window.location.reload();
+      refreshing = true;
+    });
   });
 }
 

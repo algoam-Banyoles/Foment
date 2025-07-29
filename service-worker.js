@@ -1,18 +1,29 @@
-self.addEventListener("install", event => {
+self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
-    caches.open("static").then(cache => {
-      return cache.addAll([
-        "./",
-        "./index.html",
-        "./style.css",
-        "./main.js",
-        "https://cdn.jsdelivr.net/npm/chart.js",
-        "./ranquing.json",
-        "./classificacions.json",
-        "./icons/icon-192.png",
-        "./icons/icon-512.png"
-      ]);
-    })
+    caches.open('static-v1').then(cache =>
+      cache.addAll([
+        './',
+        './index.html',
+        './style.css',
+        './main.js',
+        'https://cdn.jsdelivr.net/npm/chart.js',
+        './ranquing.json',
+        './classificacions.json',
+        './icons/icon-192.png',
+        './icons/icon-512.png'
+      ])
+    )
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.filter(k => k !== 'static-v1').map(k => caches.delete(k))
+      )
+    ).then(() => self.clients.claim())
   );
 });
 
