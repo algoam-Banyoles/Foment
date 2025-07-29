@@ -252,9 +252,9 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
   canvas.style.width = size + 'px';
 
   // Increase height a bit so the x axis and its labels are always visible
-  const canvasHeight = size * 0.75;
-  canvas.height = canvasHeight;
-  canvas.style.height = canvasHeight + 'px';
+
+  canvas.height = size * 0.75;
+
 
   const title = document.getElementById('chart-title');
   if (title) {
