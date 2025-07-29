@@ -166,7 +166,7 @@ tr:nth-child(even) {
   width: 95vmin;
   max-width: 95vmin;
   max-height: 95vmin;
-  overflow: auto;
+
 }
 
 #player-chart h3 {
