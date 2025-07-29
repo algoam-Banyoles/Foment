@@ -234,8 +234,15 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
   }
 
   const canvas = document.getElementById('chart-canvas');
-  canvas.width = Math.min(window.innerWidth * 0.9, 800);
-  canvas.height = Math.min(window.innerHeight * 0.6, 600);
+  const vmin = Math.min(window.innerWidth, window.innerHeight);
+  const size = vmin * 0.9;
+  const chartContainer = document.getElementById('player-chart');
+  if (chartContainer) {
+    chartContainer.style.width = size + 'px';
+    chartContainer.style.maxWidth = size + 'px';
+  }
+  canvas.width = size;
+  canvas.height = size * 0.6;
 
   const title = document.getElementById('chart-title');
   if (title) {
