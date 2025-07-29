@@ -163,8 +163,9 @@ tr:nth-child(even) {
   padding: 1rem;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 95%;
-  width: 95%;
+  width: 95vmin;
+  max-width: 95vmin;
+  max-height: 95vmin;
 }
 
 #player-chart h3 {
