@@ -180,14 +180,14 @@ function mostraRanquing() {
         td.classList.add('player-cell');
         td.addEventListener('click', e => {
           e.stopPropagation();
-          mostraEvolucioJugador(reg.Jugador, reg.NomComplet, modalitatSeleccionada);
+          mostraEvolucioJugador(reg.Jugador, reg.NomComplet);
         });
       }
       tr.appendChild(td);
 
     });
     tr.addEventListener('click', () => {
-      mostraEvolucioJugador(reg.Jugador, reg.NomComplet, modalitatSeleccionada);
+      mostraEvolucioJugador(reg.Jugador, reg.NomComplet);
     });
     taula.appendChild(tr);
   });
@@ -231,23 +231,34 @@ function mostraClassificacio() {
 }
 
 
-function mostraEvolucioJugador(jugador, nom, modalitat) {
-  const dades = ranquing
-    .filter(r => r.Jugador === jugador && r.Modalitat === modalitat)
-    .map(r => ({ any: parseInt(r.Any, 10), mitjana: parseFloat(r.Mitjana) }))
-    .sort((a, b) => a.any - b.any);
+function mostraEvolucioJugador(jugador, nom) {
+  const modalitats = ['3 BANDES', 'BANDA', 'LLIURE'];
+  const dadesPerMod = modalitats.map(mod =>
+    ranquing
+      .filter(r => r.Jugador === jugador && r.Modalitat === mod)
+      .map(r => ({ any: parseInt(r.Any, 10), mitjana: parseFloat(r.Mitjana) }))
+      .sort((a, b) => a.any - b.any)
+  );
 
-  const firstYear = dades.length > 0 ? dades[0].any : null;
-  const lastYear = dades.length > 0 ? dades[dades.length - 1].any : null;
-  const labels = [];
-  const values = [];
-  if (firstYear !== null && lastYear !== null) {
-    for (let y = firstYear; y <= lastYear; y++) {
-      labels.push(y);
-      const reg = dades.find(d => d.any === y);
-      values.push(reg ? Number.parseFloat(reg.mitjana) : null);
-    }
-  }
+  const anys = [...new Set(dadesPerMod.flat().map(d => d.any))].sort(
+    (a, b) => a - b
+  );
+
+  const colors = ['blue', 'green', 'red'];
+  const datasets = modalitats.map((mod, idx) => {
+    const values = anys.map(y => {
+      const reg = dadesPerMod[idx].find(d => d.any === y);
+      return reg ? Number.parseFloat(reg.mitjana) : null;
+    });
+    return {
+      label: mod,
+      data: values,
+      borderColor: colors[idx],
+      backgroundColor: colors[idx],
+      tension: 0.2,
+      fill: false,
+    };
+  });
 
   const canvas = document.getElementById('chart-canvas');
   const overlay = document.getElementById('chart-overlay');
@@ -259,7 +270,7 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
 
   const title = document.getElementById('chart-title');
   if (title) {
-    title.textContent = nom + ' - ' + modalitat;
+    title.textContent = nom;
   }
 
   const ctx = canvas.getContext('2d');
@@ -269,15 +280,8 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
   lineChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels,
-      datasets: [{
-        label: nom + ' - ' + modalitat,
-        data: values,
-        borderColor: 'blue',
-        backgroundColor: 'rgba(0, 0, 255, 0.1)',
-        tension: 0.2,
-        fill: false
-      }]
+      labels: anys,
+      datasets,
     },
     options: {
       scales: {
