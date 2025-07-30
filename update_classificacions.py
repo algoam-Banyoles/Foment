@@ -29,7 +29,9 @@ def cell_value(cell, strings):
 def update():
     with zipfile.ZipFile(XLSX_FILE) as z:
         strings = load_shared_strings(z)
-        sheet_xml = z.read('xl/worksheets/sheet1.xml')
+        # The relevant data is stored in the second sheet of the workbook.
+        # sheet1 contains a pivot table which should be ignored.
+        sheet_xml = z.read('xl/worksheets/sheet2.xml')
     sheet = ET.fromstring(sheet_xml)
     sheet_data = sheet.find('a:sheetData', NS)
     rows = []
@@ -44,12 +46,14 @@ def update():
             'Categoria': cell_value(cells.get('C', ET.Element('c')), strings),
             'Posició': cell_value(cells.get('D', ET.Element('c')), strings),
             'Jugador': cell_value(cells.get('E', ET.Element('c')), strings),
-            'PJ': cell_value(cells.get('F', ET.Element('c')), strings),
-            'Punts': cell_value(cells.get('G', ET.Element('c')), strings),
-            'Caramboles': cell_value(cells.get('H', ET.Element('c')), strings),
-            'Entrades': cell_value(cells.get('I', ET.Element('c')), strings),
-            'MitjanaGeneral': cell_value(cells.get('J', ET.Element('c')), strings),
-            'MitjanaParticular': cell_value(cells.get('K', ET.Element('c')), strings),
+            # The new Excel sheet no longer contains the number of games played
+            # (PJ).  Only the score related fields are included from column F
+            # onwards.
+            'Punts': cell_value(cells.get('F', ET.Element('c')), strings),
+            'Caramboles': cell_value(cells.get('G', ET.Element('c')), strings),
+            'Entrades': cell_value(cells.get('H', ET.Element('c')), strings),
+            'MitjanaGeneral': cell_value(cells.get('I', ET.Element('c')), strings),
+            'MitjanaParticular': cell_value(cells.get('J', ET.Element('c')), strings),
         }
         rows.append(record)
     JSON_FILE.write_text(json.dumps(rows, ensure_ascii=False, indent=2))
