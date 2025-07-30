@@ -295,9 +295,13 @@ function mostraEvolucioJugador(jugador, nom) {
           suggestedMax: (() => {
             const all = datasets.flatMap(d => d.data).filter(v => v != null);
             const max = all.length ? Math.max(...all) : 1;
-            return Math.ceil((max + 0.05) * 20) / 20;
+
+
+            return Math.ceil((max + 0.1) * 10) / 10;
           })(),
-          ticks: { beginAtZero: true, stepSize: 0.05 }
+          ticks: { beginAtZero: true, stepSize: 0.1 }
+
+
         }
       },
       responsive: true,

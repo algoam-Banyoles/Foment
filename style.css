@@ -186,7 +186,9 @@ tr:nth-child(even) {
   width: 90vw;
   height: 80vh;
   max-width: 90vw;
-  max-height: 80vh;
+
+  max-height: 70vh;
+
   overflow: visible;
 
 }
