@@ -31,7 +31,7 @@ function adjustChartSize() {
   const chartContainer = document.getElementById('player-chart');
   if (chartContainer) {
     chartContainer.style.width = '90vw';
-    chartContainer.style.height = '70vh';
+    chartContainer.style.height = '80vh';
   }
   const canvas = document.getElementById('chart-canvas');
   if (canvas) {
@@ -296,9 +296,11 @@ function mostraEvolucioJugador(jugador, nom) {
             const all = datasets.flatMap(d => d.data).filter(v => v != null);
             const max = all.length ? Math.max(...all) : 1;
 
+
             return Math.ceil((max + 0.1) * 10) / 10;
           })(),
           ticks: { beginAtZero: true, stepSize: 0.1 }
+
 
         }
       },
