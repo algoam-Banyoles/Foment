@@ -284,6 +284,11 @@ function mostraEvolucioJugador(jugador, nom) {
       datasets,
     },
     options: {
+      plugins: {
+        legend: {
+          position: 'right'
+        }
+      },
       scales: {
         x: {
           title: { display: true, text: 'Any' },
