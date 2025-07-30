@@ -287,12 +287,17 @@ function mostraEvolucioJugador(jugador, nom) {
       scales: {
         x: {
           title: { display: true, text: 'Any' },
-          ticks: { stepSize: 1 }
+          ticks: { stepSize: 1, autoSkip: false }
         },
         y: {
           title: { display: true, text: 'Mitjana' },
           min: 0,
-          ticks: { beginAtZero: true }
+          suggestedMax: (() => {
+            const all = datasets.flatMap(d => d.data).filter(v => v != null);
+            const max = all.length ? Math.max(...all) : 1;
+            return Math.ceil((max + 0.1) * 10) / 10;
+          })(),
+          ticks: { beginAtZero: true, stepSize: 0.1 }
         }
       },
       responsive: true,
