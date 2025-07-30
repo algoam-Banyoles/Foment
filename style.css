@@ -177,7 +177,7 @@ tr:nth-child(even) {
 #player-chart {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: stretch;
   background: #fff;
   padding: 1rem;
   border-radius: 4px;
@@ -186,18 +186,22 @@ tr:nth-child(even) {
   width: 90vw;
   height: 96vh;
   max-width: 90vw;
-
   max-height: 84vh;
-
   overflow: visible;
-
 }
 
-#player-chart h3 {
-  align-self: center;
+#chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#chart-header h3 {
   margin: 0.5rem 0;
+  flex-grow: 1;
+  text-align: center;
 }
-
 
 #player-chart canvas {
   display: block;
