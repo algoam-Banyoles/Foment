@@ -31,7 +31,7 @@ function adjustChartSize() {
   const chartContainer = document.getElementById('player-chart');
   if (chartContainer) {
     chartContainer.style.width = '90vw';
-    chartContainer.style.height = '80vh';
+    chartContainer.style.height = '96vh';
   }
   const canvas = document.getElementById('chart-canvas');
   if (canvas) {
@@ -291,16 +291,17 @@ function mostraEvolucioJugador(jugador, nom) {
         },
         y: {
           title: { display: true, text: 'Mitjana' },
-          min: 0,
+          suggestedMin: (() => {
+            const all = datasets.flatMap(d => d.data).filter(v => v != null);
+            const min = all.length ? Math.min(...all) : 0;
+            return Math.floor((min - 0.1) * 10) / 10;
+          })(),
           suggestedMax: (() => {
             const all = datasets.flatMap(d => d.data).filter(v => v != null);
             const max = all.length ? Math.max(...all) : 1;
-
-
             return Math.ceil((max + 0.1) * 10) / 10;
           })(),
-          ticks: { beginAtZero: true, stepSize: 0.1 }
-
+          ticks: { beginAtZero: false, stepSize: 0.1 }
 
         }
       },
