@@ -27,6 +27,22 @@ let classAnySeleccionat = null;
 let classModalitatSeleccionada = '3 BANDES';
 let classCategoriaSeleccionada = null;
 
+function adjustChartSize() {
+  const chartContainer = document.getElementById('player-chart');
+  if (chartContainer) {
+    chartContainer.style.width = '90vw';
+    chartContainer.style.height = '80vh';
+  }
+  const canvas = document.getElementById('chart-canvas');
+  if (canvas) {
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+  }
+  if (lineChart) {
+    lineChart.resize();
+  }
+}
+
 function inicialitza() {
   Promise.all([
     fetch('ranquing.json').then(r => r.json()),
@@ -234,26 +250,11 @@ function mostraEvolucioJugador(jugador, nom, modalitat) {
   }
 
   const canvas = document.getElementById('chart-canvas');
-  // Show the overlay before creating the chart so Chart.js can
-  // correctly calculate the layout based on the visible size
   const overlay = document.getElementById('chart-overlay');
   if (overlay) {
     overlay.style.display = 'flex';
   }
-  const vmin = Math.min(window.innerWidth, window.innerHeight);
-  const size = vmin * 0.9;
-  const chartContainer = document.getElementById('player-chart');
-  if (chartContainer) {
-    chartContainer.style.width = size + 'px';
-    chartContainer.style.maxWidth = size + 'px';
-  }
-
-  canvas.width = size;
-  canvas.style.width = size + 'px';
-
-  // Increase height a bit so the x axis and its labels are always visible
-
-  canvas.height = size * 0.75;
+  adjustChartSize();
 
 
   const title = document.getElementById('chart-title');
@@ -322,6 +323,13 @@ document.getElementById('close-chart').addEventListener('click', () => {
   if (lineChart) {
     lineChart.destroy();
     lineChart = null;
+  }
+});
+
+window.addEventListener('resize', () => {
+  const overlay = document.getElementById('chart-overlay');
+  if (overlay && overlay.style.display !== 'none') {
+    adjustChartSize();
   }
 });
 
