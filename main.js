@@ -31,7 +31,7 @@ function adjustChartSize() {
   const chartContainer = document.getElementById('player-chart');
   if (chartContainer) {
     chartContainer.style.width = '90vw';
-    chartContainer.style.height = '80vh';
+    chartContainer.style.height = '96vh';
   }
   const canvas = document.getElementById('chart-canvas');
   if (canvas) {
