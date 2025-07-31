@@ -216,3 +216,20 @@ tr:nth-child(even) {
   text-decoration: underline;
 }
 
+#agenda {
+  margin-top: 1rem;
+}
+
+#agenda ul {
+  list-style: none;
+  padding: 0;
+}
+
+#agenda li {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
