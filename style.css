@@ -218,6 +218,7 @@ tr:nth-child(even) {
 
 #agenda {
   margin-top: 1rem;
+  display: none;
 }
 
 #agenda ul {
