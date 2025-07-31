@@ -25,7 +25,7 @@ export async function loadAgenda() {
       return evDate >= monday && evDate <= end;
     });
 
-    const container = document.getElementById('agenda-list');
+    const container = document.getElementById('agenda');
     if (!container) return;
     container.innerHTML = '';
     if (!filtered.length) {
