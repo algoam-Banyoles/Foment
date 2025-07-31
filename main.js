@@ -339,6 +339,9 @@ document.getElementById('btn-agenda').addEventListener('click', () => {
   document.getElementById('classificacio-filters').style.display = 'none';
   document.getElementById('content').style.display = 'none';
   document.getElementById('agenda').style.display = 'block';
+  if (window.loadAgenda) {
+    window.loadAgenda();
+  }
 });
 
 
