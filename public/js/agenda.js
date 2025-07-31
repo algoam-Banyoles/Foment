@@ -49,3 +49,8 @@ export async function loadAgenda() {
 
 // Auto-load when script is included
 loadAgenda();
+
+// Expose for other scripts
+if (typeof window !== 'undefined') {
+  window.loadAgenda = loadAgenda;
+}
