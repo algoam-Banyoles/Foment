@@ -149,6 +149,10 @@ td {
   white-space: nowrap;
 }
 
+.agenda-table td:nth-child(3) {
+  text-align: left;
+}
+
 
 th {
   background: var(--primary);
