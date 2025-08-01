@@ -320,7 +320,6 @@ function mostraEvolucioJugador(jugador, nom) {
 document.getElementById('btn-ranking').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'flex';
   document.getElementById('classificacio-filters').style.display = 'none';
-  document.getElementById('agenda').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraRanquing();
 });
@@ -329,19 +328,8 @@ document.getElementById('btn-ranking').addEventListener('click', () => {
 document.getElementById('btn-classificacio').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'none';
   document.getElementById('classificacio-filters').style.display = 'flex';
-  document.getElementById('agenda').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraClassificacio();
-});
-
-document.getElementById('btn-agenda').addEventListener('click', () => {
-  document.getElementById('filters-row').style.display = 'none';
-  document.getElementById('classificacio-filters').style.display = 'none';
-  document.getElementById('content').style.display = 'none';
-  document.getElementById('agenda').style.display = 'block';
-  if (window.loadAgenda) {
-    window.loadAgenda();
-  }
 });
 
 
