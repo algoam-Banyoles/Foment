@@ -1,27 +1,152 @@
 [
   {
-    "Data": "2024-04-01",
-    "Hora": "19:00",
-    "Títol": "Torneig Primavera"
+    "Data": "45901.0",
+    "Hora": "",
+    "Títol": "Inici inscripció campionat continu Rànquing 3 Bandes"
   },
   {
-    "Data": "2024-04-05",
-    "Hora": "20:00",
-    "Títol": "Partida amistosa"
+    "Data": "45910.0",
+    "Hora": "",
+    "Títol": "Fi inscripció campionat continu Rànquing 3 Bandes"
   },
   {
-    "Data": "2024-04-12",
-    "Hora": "18:00",
-    "Títol": "Campionat local"
+    "Data": "45915.0",
+    "Hora": "",
+    "Títol": "Inici inscripció Social 3 Bandes"
   },
   {
-    "Data": "2024-04-16",
-    "Hora": "18:30",
-    "Títol": "Entrenament especial"
+    "Data": "45915.0",
+    "Hora": "",
+    "Títol": "Inici campionat continu Rànquing 3 Bandes"
   },
   {
-    "Data": "2024-04-22",
-    "Hora": "17:00",
-    "Títol": "Final de temporada"
+    "Data": "45925.0",
+    "Hora": "",
+    "Títol": "Fi inscripció Social 3 Bandes"
+  },
+  {
+    "Data": "45931.0",
+    "Hora": "",
+    "Títol": "Inici Social 3 Bandes"
+  },
+  {
+    "Data": "45989.0",
+    "Hora": "",
+    "Títol": "Fi Social 3 Bandes"
+  },
+  {
+    "Data": "45985.0",
+    "Hora": "",
+    "Títol": "Inici inscripció Social Lliure"
+  },
+  {
+    "Data": "45994.0",
+    "Hora": "",
+    "Títol": "Fi inscripció Social Lliure"
+  },
+  {
+    "Data": "46000.0",
+    "Hora": "",
+    "Títol": "Inici Social Lliure"
+  },
+  {
+    "Data": "46002.0",
+    "Hora": "",
+    "Títol": "Assemblea Secció Billar"
+  },
+  {
+    "Data": "46066.0",
+    "Hora": "",
+    "Títol": "Fi Social Lliure"
+  },
+  {
+    "Data": "46069.0",
+    "Hora": "",
+    "Títol": "Inici inscripció Social Banda"
+  },
+  {
+    "Data": "46078.0",
+    "Hora": "",
+    "Títol": "Fi inscripció Social Banda"
+  },
+  {
+    "Data": "46083.0",
+    "Hora": "",
+    "Títol": "Inici Social Banda"
+  },
+  {
+    "Data": "46142.0",
+    "Hora": "",
+    "Títol": "Fi Social Banda"
+  },
+  {
+    "Data": "46146.0",
+    "Hora": "",
+    "Títol": "Inici inscripció Hàndicap 3 Bandes"
+  },
+  {
+    "Data": "46155.0",
+    "Hora": "",
+    "Títol": "Fi inscripció Hàndicap 3 Bandes"
+  },
+  {
+    "Data": "46160.0",
+    "Hora": "",
+    "Títol": "Inici Hàndicap"
+  },
+  {
+    "Data": "46196.0",
+    "Hora": "",
+    "Títol": "Fi Hàndicap"
+  },
+  {
+    "Data": "45934.0",
+    "Hora": "",
+    "Títol": "1r Exprés 9 Modalitats"
+  },
+  {
+    "Data": "45935.0",
+    "Hora": "",
+    "Títol": "1r Exprés 9 Modalitats"
+  },
+  {
+    "Data": "45955.0",
+    "Hora": "",
+    "Títol": "2n Exprés 9 Modalitats"
+  },
+  {
+    "Data": "45956.0",
+    "Hora": "",
+    "Títol": "2n Exprés 9 Modalitats"
+  },
+  {
+    "Data": "45997.0",
+    "Hora": "",
+    "Títol": "3r Exprés 9 Modalitats"
+  },
+  {
+    "Data": "45998.0",
+    "Hora": "",
+    "Títol": "3r Exprés 9 Modalitats"
+  },
+  {
+    "Data": "46053.0",
+    "Hora": "",
+    "Títol": "4t Exprés 9 Modalitats"
+  },
+  {
+    "Data": "46054.0",
+    "Hora": "",
+    "Títol": "4t Exprés 9 Modalitats"
+  },
+  {
+    "Data": "46123.0",
+    "Hora": "",
+    "Títol": "5è Exprés 9 Modalitats"
+  },
+  {
+    "Data": "46124.0",
+    "Hora": "",
+    "Títol": "5è Exprés 9 Modalitats"
   }
 ]
