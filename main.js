@@ -238,34 +238,67 @@ function mostraClassificacio() {
 function mostraAgenda() {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
-  const taula = document.createElement('table');
-  const cap = document.createElement('tr');
-  ['Data', 'Hora', 'Títol'].forEach(t => {
-    const th = document.createElement('th');
-    th.textContent = t;
-    cap.appendChild(th);
-  });
-  taula.appendChild(cap);
 
-  events.forEach(ev => {
-    const tr = document.createElement('tr');
-    ['Data', 'Hora', 'Títol'].forEach(clau => {
-      const td = document.createElement('td');
-      td.textContent = ev[clau];
-      tr.appendChild(td);
-    });
-    taula.appendChild(tr);
-  });
-  cont.appendChild(taula);
-}
-
-
-function mostraAgenda() {
-  const cont = document.getElementById('content');
-  cont.innerHTML = '';
   const h2 = document.createElement('h2');
   h2.textContent = 'Propers esdeveniments';
   cont.appendChild(h2);
+
+  const taula = document.createElement('table');
+
+  const avui = new Date();
+  const limit = new Date();
+  limit.setMonth(limit.getMonth() + 2);
+
+  const futurs = events
+    .map(ev => ({ ...ev, _d: new Date(ev['Data']) }))
+    .filter(ev => ev._d >= avui && ev._d <= limit)
+    .sort((a, b) => a._d - b._d);
+
+  if (futurs.length === 0) {
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 3;
+    td.textContent =
+      'Actualment no hi ha cap esdeveniment futur registrat per als pròxims dos mesos';
+    tr.appendChild(td);
+    taula.appendChild(tr);
+  } else {
+    let mesActual = '';
+    futurs.forEach(ev => {
+      const mes = ev._d.toLocaleDateString('ca-ES', { month: 'long', year: 'numeric' });
+      if (mes !== mesActual) {
+        mesActual = mes;
+        const trMes = document.createElement('tr');
+        const thMes = document.createElement('th');
+        thMes.colSpan = 3;
+        thMes.textContent = mes.charAt(0).toUpperCase() + mes.slice(1);
+        trMes.appendChild(thMes);
+        taula.appendChild(trMes);
+      }
+
+      const tr = document.createElement('tr');
+
+      const tdData = document.createElement('td');
+      tdData.textContent = ev._d.toLocaleDateString('ca-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+      tr.appendChild(tdData);
+
+      const tdHora = document.createElement('td');
+      tdHora.textContent = ev['Hora'] || '';
+      tr.appendChild(tdHora);
+
+      const tdTitol = document.createElement('td');
+      tdTitol.textContent = ev['Títol'] || '';
+      tr.appendChild(tdTitol);
+
+      taula.appendChild(tr);
+    });
+  }
+
+  cont.appendChild(taula);
 }
 
 
