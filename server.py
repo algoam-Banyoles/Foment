@@ -31,6 +31,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 self.send_response(500)
                 self.end_headers()
             return
+        if self.path == '/update-events':
+            try:
+                subprocess.run(['python3', 'update_events.py'], check=True)
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(b'{"status": "ok"}')
+            except subprocess.CalledProcessError:
+                self.send_response(500)
+                self.end_headers()
+            return
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
 if __name__ == '__main__':
