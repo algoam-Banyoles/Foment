@@ -238,6 +238,11 @@ function mostraClassificacio() {
 function mostraAgenda() {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
+
+  const h2 = document.createElement('h2');
+  h2.textContent = 'Propers esdeveniments';
+  cont.appendChild(h2);
+
   const taula = document.createElement('table');
   const cap = document.createElement('tr');
   ['Data', 'Hora', 'Títol'].forEach(t => {
@@ -247,25 +252,38 @@ function mostraAgenda() {
   });
   taula.appendChild(cap);
 
-  events.forEach(ev => {
+  const avui = new Date();
+  const limit = new Date();
+  limit.setMonth(limit.getMonth() + 2);
+
+  const futurs = events
+    .filter(ev => {
+      const d = new Date(ev['Data']);
+      return d >= avui && d <= limit;
+    })
+    .sort((a, b) => new Date(a['Data']) - new Date(b['Data']));
+
+  if (futurs.length === 0) {
     const tr = document.createElement('tr');
-    ['Data', 'Hora', 'Títol'].forEach(clau => {
-      const td = document.createElement('td');
-      td.textContent = ev[clau];
-      tr.appendChild(td);
-    });
+    const td = document.createElement('td');
+    td.colSpan = 3;
+    td.textContent =
+      'Actualment no hi ha cap esdeveniment futur registrat per als pròxims dos mesos';
+    tr.appendChild(td);
     taula.appendChild(tr);
-  });
+  } else {
+    futurs.forEach(ev => {
+      const tr = document.createElement('tr');
+      ['Data', 'Hora', 'Títol'].forEach(clau => {
+        const td = document.createElement('td');
+        td.textContent = ev[clau] || '';
+        tr.appendChild(td);
+      });
+      taula.appendChild(tr);
+    });
+  }
+
   cont.appendChild(taula);
-}
-
-
-function mostraAgenda() {
-  const cont = document.getElementById('content');
-  cont.innerHTML = '';
-  const h2 = document.createElement('h2');
-  h2.textContent = 'Propers esdeveniments';
-  cont.appendChild(h2);
 }
 
 
