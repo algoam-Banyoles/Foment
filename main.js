@@ -27,6 +27,8 @@ let classAnySeleccionat = null;
 let classModalitatSeleccionada = '3 BANDES';
 let classCategoriaSeleccionada = null;
 
+let events = [];
+
 function adjustChartSize() {
   const chartContainer = document.getElementById('player-chart');
   if (chartContainer) {
@@ -46,9 +48,10 @@ function adjustChartSize() {
 function inicialitza() {
   Promise.all([
     fetch('ranquing.json').then(r => r.json()),
-    fetch('classificacions.json').then(r => r.json()).catch(() => [])
+    fetch('classificacions.json').then(r => r.json()).catch(() => []),
+    fetch('events.json').then(r => r.json()).catch(() => [])
   ])
-    .then(([dadesRanking, dadesClass]) => {
+    .then(([dadesRanking, dadesClass, dadesEvents]) => {
       ranquing = dadesRanking;
       anys = [...new Set(dadesRanking.map(d => parseInt(d.Any, 10)))]
         .sort((a, b) => a - b);
@@ -60,6 +63,8 @@ function inicialitza() {
       classAnySeleccionat = classYears[classYears.length - 1] || null;
       const categories = new Set(dadesClass.map(d => d.Categoria));
       classCategoriaSeleccionada = categories.values().next().value || null;
+
+      events = dadesEvents;
 
       preparaSelectors();
       preparaSelectorsClassificacio();
@@ -230,6 +235,30 @@ function mostraClassificacio() {
   cont.appendChild(taula);
 }
 
+function mostraAgenda() {
+  const cont = document.getElementById('content');
+  cont.innerHTML = '';
+  const taula = document.createElement('table');
+  const cap = document.createElement('tr');
+  ['Data', 'Hora', 'Títol'].forEach(t => {
+    const th = document.createElement('th');
+    th.textContent = t;
+    cap.appendChild(th);
+  });
+  taula.appendChild(cap);
+
+  events.forEach(ev => {
+    const tr = document.createElement('tr');
+    ['Data', 'Hora', 'Títol'].forEach(clau => {
+      const td = document.createElement('td');
+      td.textContent = ev[clau];
+      tr.appendChild(td);
+    });
+    taula.appendChild(tr);
+  });
+  cont.appendChild(taula);
+}
+
 
 function mostraAgenda() {
   const cont = document.getElementById('content');
@@ -347,6 +376,13 @@ document.getElementById('btn-classificacio').addEventListener('click', () => {
   document.getElementById('classificacio-filters').style.display = 'flex';
   document.getElementById('content').style.display = 'block';
   mostraClassificacio();
+});
+
+document.getElementById('btn-agenda').addEventListener('click', () => {
+  document.getElementById('filters-row').style.display = 'none';
+  document.getElementById('classificacio-filters').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+  mostraAgenda();
 });
 
 
