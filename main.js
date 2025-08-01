@@ -231,6 +231,15 @@ function mostraClassificacio() {
 }
 
 
+function mostraAgenda() {
+  const cont = document.getElementById('content');
+  cont.innerHTML = '';
+  const h2 = document.createElement('h2');
+  h2.textContent = 'Propers esdeveniments';
+  cont.appendChild(h2);
+}
+
+
 function mostraEvolucioJugador(jugador, nom) {
   const modalitats = ['3 BANDES', 'BANDA', 'LLIURE'];
   const dadesPerMod = modalitats.map(mod =>
@@ -322,6 +331,14 @@ document.getElementById('btn-ranking').addEventListener('click', () => {
   document.getElementById('classificacio-filters').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraRanquing();
+});
+
+
+document.getElementById('btn-agenda').addEventListener('click', () => {
+  document.getElementById('filters-row').style.display = 'none';
+  document.getElementById('classificacio-filters').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+  mostraAgenda();
 });
 
 
