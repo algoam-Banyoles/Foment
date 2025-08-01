@@ -68,6 +68,7 @@ function inicialitza() {
 
       preparaSelectors();
       preparaSelectorsClassificacio();
+      document.getElementById('btn-agenda').click();
     })
     .catch(err => {
       console.error('Error carregant dades', err);
@@ -250,9 +251,12 @@ function mostraAgenda() {
   limit.setMonth(limit.getMonth() + 2);
 
   const futurs = events
-    .map(ev => ({ ...ev, _d: new Date(ev['Data']) }))
-    .filter(ev => ev._d >= avui && ev._d <= limit)
-    .sort((a, b) => a._d - b._d);
+    .filter(ev => {
+      const d = new Date(ev['Data']);
+      return d >= avui && d <= limit;
+    })
+    .sort((a, b) => new Date(a['Data']) - new Date(b['Data']));
+
 
   if (futurs.length === 0) {
     const tr = document.createElement('tr');
@@ -263,40 +267,18 @@ function mostraAgenda() {
     tr.appendChild(td);
     taula.appendChild(tr);
   } else {
-    let mesActual = '';
+
     futurs.forEach(ev => {
-      const mes = ev._d.toLocaleDateString('ca-ES', { month: 'long', year: 'numeric' });
-      if (mes !== mesActual) {
-        mesActual = mes;
-        const trMes = document.createElement('tr');
-        const thMes = document.createElement('th');
-        thMes.colSpan = 3;
-        thMes.textContent = mes.charAt(0).toUpperCase() + mes.slice(1);
-        trMes.appendChild(thMes);
-        taula.appendChild(trMes);
-      }
-
       const tr = document.createElement('tr');
-
-      const tdData = document.createElement('td');
-      tdData.textContent = ev._d.toLocaleDateString('ca-ES', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
+      ['Data', 'Hora', 'Títol'].forEach(clau => {
+        const td = document.createElement('td');
+        td.textContent = ev[clau] || '';
+        tr.appendChild(td);
       });
-      tr.appendChild(tdData);
-
-      const tdHora = document.createElement('td');
-      tdHora.textContent = ev['Hora'] || '';
-      tr.appendChild(tdHora);
-
-      const tdTitol = document.createElement('td');
-      tdTitol.textContent = ev['Títol'] || '';
-      tr.appendChild(tdTitol);
-
       taula.appendChild(tr);
     });
   }
+
 
   cont.appendChild(taula);
 }
