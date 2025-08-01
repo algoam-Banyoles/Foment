@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 import json
 from pathlib import Path
 
-XLSX_FILE = Path('Agenda.xlsx')
+XLSX_FILE = Path('agenda.xlsx')
 JSON_FILE = Path('events.json')
 
 NS = {'a': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}

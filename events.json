@@ -1,5 +1,27 @@
 [
-  {"Data": "2025-09-02", "Hora": "19:00", "Títol": "Torneig d'estiu"},
-  {"Data": "2025-09-04", "Hora": "20:00", "Títol": "Partit amist\u00f3s"}
-
+  {
+    "Data": "2024-04-01",
+    "Hora": "19:00",
+    "Títol": "Torneig Primavera"
+  },
+  {
+    "Data": "2024-04-05",
+    "Hora": "20:00",
+    "Títol": "Partida amistosa"
+  },
+  {
+    "Data": "2024-04-12",
+    "Hora": "18:00",
+    "Títol": "Campionat local"
+  },
+  {
+    "Data": "2024-04-16",
+    "Hora": "18:30",
+    "Títol": "Entrenament especial"
+  },
+  {
+    "Data": "2024-04-22",
+    "Hora": "17:00",
+    "Títol": "Final de temporada"
+  }
 ]
