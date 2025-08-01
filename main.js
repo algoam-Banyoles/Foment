@@ -245,13 +245,6 @@ function mostraAgenda() {
   cont.appendChild(h2);
 
   const taula = document.createElement('table');
-  const cap = document.createElement('tr');
-  ['Data', 'Hora', 'Títol'].forEach(t => {
-    const th = document.createElement('th');
-    th.textContent = t;
-    cap.appendChild(th);
-  });
-  taula.appendChild(cap);
 
   const avui = new Date();
   const limit = new Date();
@@ -264,6 +257,7 @@ function mostraAgenda() {
     })
     .sort((a, b) => new Date(a['Data']) - new Date(b['Data']));
 
+
   if (futurs.length === 0) {
     const tr = document.createElement('tr');
     const td = document.createElement('td');
@@ -273,6 +267,7 @@ function mostraAgenda() {
     tr.appendChild(td);
     taula.appendChild(tr);
   } else {
+
     futurs.forEach(ev => {
       const tr = document.createElement('tr');
       ['Data', 'Hora', 'Títol'].forEach(clau => {
@@ -283,6 +278,7 @@ function mostraAgenda() {
       taula.appendChild(tr);
     });
   }
+
 
   cont.appendChild(taula);
 }
