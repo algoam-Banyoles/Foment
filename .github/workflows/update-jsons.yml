@@ -23,6 +23,7 @@ jobs:
           python update_classificacions.py
           python update_ranquing.py
 
+
       - name: Commit and push changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -32,6 +33,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
 
             git add classificacions.json ranquing.json
+
 
             git commit -m "Update JSON files"
             git push

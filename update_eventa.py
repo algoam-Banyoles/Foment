@@ -8,6 +8,7 @@ SPREADSHEET_ID = '10HIcmcf5CAqB2OAiKEqb49djG9ysu-1koxvRmrwT-Fk'
 WORKSHEET_NAME = 'Agenda'
 OUTPUT_FILE = Path('eventa.json')
 
+
 def update():
     gc = gspread.service_account(filename=SA_FILENAME)
     sh = gc.open_by_key(SPREADSHEET_ID)
