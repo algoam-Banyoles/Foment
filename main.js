@@ -68,6 +68,7 @@ function inicialitza() {
 
       preparaSelectors();
       preparaSelectorsClassificacio();
+      document.getElementById('btn-agenda').click();
     })
     .catch(err => {
       console.error('Error carregant dades', err);
