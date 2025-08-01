@@ -1,0 +1,38 @@
+name: Update JSON files
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+    - cron: '0 21 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Run update scripts
+        run: |
+          python update_classificacions.py
+          python update_ranquing.py
+          python update_eventa.py
+      - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add classificacions.json ranquing.json eventa.json
+            git commit -m "Update JSON files"
+            git push
+          else
+            echo "No changes to commit"
+          fi
