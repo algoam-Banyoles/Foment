@@ -6,7 +6,8 @@ import gspread
 SA_FILENAME = '/tmp/sa.json'
 SPREADSHEET_ID = '10HIcmcf5CAqB2OAiKEqb49djG9ysu-1koxvRmrwT-Fk'
 WORKSHEET_NAME = 'Agenda'
-OUTPUT_FILE = Path('events.json')
+OUTPUT_FILE = Path('eventa.json')
+
 
 def update():
     gc = gspread.service_account(filename=SA_FILENAME)
