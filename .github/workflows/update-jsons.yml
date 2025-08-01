@@ -22,6 +22,7 @@ jobs:
         run: |
           python update_classificacions.py
           python update_ranquing.py
+          python update_events.py
 
 
       - name: Commit and push changes
@@ -32,7 +33,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if [ -n "$(git status --porcelain)" ]; then
 
-            git add classificacions.json ranquing.json
+            git add classificacions.json ranquing.json events.json
 
 
             git commit -m "Update JSON files"
