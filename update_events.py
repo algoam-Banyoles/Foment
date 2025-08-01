@@ -2,8 +2,11 @@ import zipfile
 import xml.etree.ElementTree as ET
 import json
 from pathlib import Path
+from datetime import datetime, timedelta
 
-XLSX_FILE = Path('agenda.xlsx')
+# Input Excel file with events. The date column uses dd/mm/aaaa format,
+# but Excel stores it as a numeric serial. Use the exact file name.
+XLSX_FILE = Path('Agenda.xlsx')
 JSON_FILE = Path('events.json')
 
 NS = {'a': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
@@ -26,6 +29,27 @@ def cell_value(cell, strings):
         return strings[idx]
     return val
 
+
+def to_iso_date(value: str) -> str:
+    """Convert an Excel cell value to ISO date string."""
+    value = value.strip()
+    if not value:
+        return ''
+    # Try numeric Excel serial first
+    try:
+        days = float(value)
+        # Excel's day zero is 1899-12-30
+        date = datetime(1899, 12, 30) + timedelta(days=days)
+        return date.strftime('%Y-%m-%d')
+    except ValueError:
+        pass
+    # Try dd/mm/yyyy format
+    try:
+        date = datetime.strptime(value, '%d/%m/%Y')
+        return date.strftime('%Y-%m-%d')
+    except ValueError:
+        return value
+
 def update():
     with zipfile.ZipFile(XLSX_FILE) as z:
         strings = load_shared_strings(z)
@@ -38,8 +62,9 @@ def update():
         if r_index == 1:
             continue  # header row
         cells = {c.get('r')[0]: c for c in row.findall('a:c', NS)}
+        raw_date = cell_value(cells.get('A', ET.Element('c')), strings)
         record = {
-            'Data': cell_value(cells.get('A', ET.Element('c')), strings),
+            'Data': to_iso_date(raw_date),
             'Hora': cell_value(cells.get('B', ET.Element('c')), strings),
             'Títol': cell_value(cells.get('C', ET.Element('c')), strings),
         }

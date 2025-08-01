@@ -1,27 +1,152 @@
 [
   {
-    "Data": "2024-04-01",
-    "Hora": "19:00",
-    "Títol": "Torneig Primavera"
+    "Data": "2025-09-01",
+    "Hora": "",
+    "Títol": "Inici inscripció campionat continu Rànquing 3 Bandes"
   },
   {
-    "Data": "2024-04-05",
-    "Hora": "20:00",
-    "Títol": "Partida amistosa"
+    "Data": "2025-09-10",
+    "Hora": "",
+    "Títol": "Fi inscripció campionat continu Rànquing 3 Bandes"
   },
   {
-    "Data": "2024-04-12",
-    "Hora": "18:00",
-    "Títol": "Campionat local"
+    "Data": "2025-09-15",
+    "Hora": "",
+    "Títol": "Inici inscripció Social 3 Bandes"
   },
   {
-    "Data": "2024-04-16",
-    "Hora": "18:30",
-    "Títol": "Entrenament especial"
+    "Data": "2025-09-15",
+    "Hora": "",
+    "Títol": "Inici campionat continu Rànquing 3 Bandes"
   },
   {
-    "Data": "2024-04-22",
-    "Hora": "17:00",
-    "Títol": "Final de temporada"
+    "Data": "2025-09-25",
+    "Hora": "",
+    "Títol": "Fi inscripció Social 3 Bandes"
+  },
+  {
+    "Data": "2025-10-01",
+    "Hora": "",
+    "Títol": "Inici Social 3 Bandes"
+  },
+  {
+    "Data": "2025-11-28",
+    "Hora": "",
+    "Títol": "Fi Social 3 Bandes"
+  },
+  {
+    "Data": "2025-11-24",
+    "Hora": "",
+    "Títol": "Inici inscripció Social Lliure"
+  },
+  {
+    "Data": "2025-12-03",
+    "Hora": "",
+    "Títol": "Fi inscripció Social Lliure"
+  },
+  {
+    "Data": "2025-12-09",
+    "Hora": "",
+    "Títol": "Inici Social Lliure"
+  },
+  {
+    "Data": "2025-12-11",
+    "Hora": "",
+    "Títol": "Assemblea Secció Billar"
+  },
+  {
+    "Data": "2026-02-13",
+    "Hora": "",
+    "Títol": "Fi Social Lliure"
+  },
+  {
+    "Data": "2026-02-16",
+    "Hora": "",
+    "Títol": "Inici inscripció Social Banda"
+  },
+  {
+    "Data": "2026-02-25",
+    "Hora": "",
+    "Títol": "Fi inscripció Social Banda"
+  },
+  {
+    "Data": "2026-03-02",
+    "Hora": "",
+    "Títol": "Inici Social Banda"
+  },
+  {
+    "Data": "2026-04-30",
+    "Hora": "",
+    "Títol": "Fi Social Banda"
+  },
+  {
+    "Data": "2026-05-04",
+    "Hora": "",
+    "Títol": "Inici inscripció Hàndicap 3 Bandes"
+  },
+  {
+    "Data": "2026-05-13",
+    "Hora": "",
+    "Títol": "Fi inscripció Hàndicap 3 Bandes"
+  },
+  {
+    "Data": "2026-05-18",
+    "Hora": "",
+    "Títol": "Inici Hàndicap"
+  },
+  {
+    "Data": "2026-06-23",
+    "Hora": "",
+    "Títol": "Fi Hàndicap"
+  },
+  {
+    "Data": "2025-10-04",
+    "Hora": "",
+    "Títol": "1r Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2025-10-05",
+    "Hora": "",
+    "Títol": "1r Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2025-10-25",
+    "Hora": "",
+    "Títol": "2n Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2025-10-26",
+    "Hora": "",
+    "Títol": "2n Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2025-12-06",
+    "Hora": "",
+    "Títol": "3r Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2025-12-07",
+    "Hora": "",
+    "Títol": "3r Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2026-01-31",
+    "Hora": "",
+    "Títol": "4t Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2026-02-01",
+    "Hora": "",
+    "Títol": "4t Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2026-04-11",
+    "Hora": "",
+    "Títol": "5è Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2026-04-12",
+    "Hora": "",
+    "Títol": "5è Exprés 9 Modalitats"
   }
 ]
