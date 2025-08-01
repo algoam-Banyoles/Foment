@@ -245,6 +245,7 @@ function mostraAgenda() {
   cont.appendChild(h2);
 
   const taula = document.createElement('table');
+  taula.classList.add('agenda-table');
 
   const avui = new Date();
   const limit = new Date();
