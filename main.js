@@ -301,7 +301,7 @@ function mostraAgenda() {
         if ((i === 0 && j < start) || date > daysInMonth) {
           cell.textContent = '';
         } else {
-          const iso = new Date(agendaAny, agendaMes, date).toISOString().split('T')[0];
+          const iso = new Date(Date.UTC(agendaAny, agendaMes, date)).toISOString().split('T')[0];
           cell.textContent = date;
           cell.dataset.date = iso;
           const dayEvents = events.filter(ev => ev['Data'] === iso);
