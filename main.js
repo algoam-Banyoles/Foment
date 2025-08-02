@@ -28,6 +28,8 @@ let classModalitatSeleccionada = '3 BANDES';
 let classCategoriaSeleccionada = null;
 
 let events = [];
+let agendaMes = new Date().getMonth();
+let agendaAny = new Date().getFullYear();
 
 function adjustChartSize() {
   const chartContainer = document.getElementById('player-chart');
@@ -239,49 +241,124 @@ function mostraClassificacio() {
 function mostraAgenda() {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
-
-  const h2 = document.createElement('h2');
-  h2.textContent = 'Propers esdeveniments';
-  cont.appendChild(h2);
-
-  const taula = document.createElement('table');
-  taula.classList.add('agenda-table');
-
-  const avui = new Date();
-  const limit = new Date();
-  limit.setMonth(limit.getMonth() + 2);
-
-  const futurs = events
-    .filter(ev => {
-      const d = new Date(ev['Data']);
-      return d >= avui && d <= limit;
-    })
-    .sort((a, b) => new Date(a['Data']) - new Date(b['Data']));
-
-
-  if (futurs.length === 0) {
-    const tr = document.createElement('tr');
-    const td = document.createElement('td');
-    td.colSpan = 3;
-    td.textContent =
-      'Actualment no hi ha cap esdeveniment futur registrat per als pròxims dos mesos';
-    tr.appendChild(td);
-    taula.appendChild(tr);
-  } else {
-
-    futurs.forEach(ev => {
+  const calContainer = document.createElement('div');
+  calContainer.id = 'calendar-container';
+  const nav = document.createElement('div');
+  nav.className = 'calendar-nav';
+  const prev = document.createElement('button');
+  prev.textContent = '<';
+  const next = document.createElement('button');
+  next.textContent = '>';
+  const label = document.createElement('span');
+  label.id = 'calendar-month';
+  prev.addEventListener('click', () => {
+    agendaMes--;
+    if (agendaMes < 0) {
+      agendaMes = 11;
+      agendaAny--;
+    }
+    render();
+  });
+  next.addEventListener('click', () => {
+    agendaMes++;
+    if (agendaMes > 11) {
+      agendaMes = 0;
+      agendaAny++;
+    }
+    render();
+  });
+  nav.appendChild(prev);
+  nav.appendChild(label);
+  nav.appendChild(next);
+  calContainer.appendChild(nav);
+  const calTable = document.createElement('table');
+  calTable.className = 'calendar-table';
+  const headRow = document.createElement('tr');
+  ['Dl', 'Dt', 'Dc', 'Dj', 'Dv', 'Ds', 'Dg'].forEach(d => {
+    const th = document.createElement('th');
+    th.textContent = d;
+    headRow.appendChild(th);
+  });
+  calTable.appendChild(headRow);
+  const calBody = document.createElement('tbody');
+  calTable.appendChild(calBody);
+  calContainer.appendChild(calTable);
+  cont.appendChild(calContainer);
+  const listTable = document.createElement('table');
+  listTable.id = 'event-list';
+  listTable.classList.add('agenda-table');
+  cont.appendChild(listTable);
+  function renderCalendar() {
+    calBody.innerHTML = '';
+    const first = new Date(agendaAny, agendaMes, 1);
+    const start = (first.getDay() + 6) % 7;
+    const daysInMonth = new Date(agendaAny, agendaMes + 1, 0).getDate();
+    let date = 1;
+    for (let i = 0; i < 6; i++) {
+      const row = document.createElement('tr');
+      for (let j = 0; j < 7; j++) {
+        const cell = document.createElement('td');
+        if ((i === 0 && j < start) || date > daysInMonth) {
+          cell.textContent = '';
+        } else {
+          const iso = new Date(agendaAny, agendaMes, date).toISOString().split('T')[0];
+          cell.textContent = date;
+          cell.dataset.date = iso;
+          const dayEvents = events.filter(ev => ev['Data'] === iso);
+          if (dayEvents.length > 0) {
+            let cls = 'event-other';
+            if (dayEvents.some(ev => ev['Títol'].includes('Fi'))) {
+              cls = 'event-fi';
+            } else if (dayEvents.some(ev => ev['Títol'].includes('Inici'))) {
+              cls = 'event-inici';
+            }
+            cell.classList.add(cls);
+            cell.addEventListener('click', () => highlightEvents(iso));
+          }
+          date++;
+        }
+        row.appendChild(cell);
+      }
+      calBody.appendChild(row);
+      if (date > daysInMonth) break;
+    }
+  }
+  function renderList() {
+    listTable.innerHTML = '';
+    const header = document.createElement('tr');
+    ['Data', 'Hora', 'Títol'].forEach(t => {
+      const th = document.createElement('th');
+      th.textContent = t;
+      header.appendChild(th);
+    });
+    listTable.appendChild(header);
+    const monthEvents = events
+      .filter(ev => {
+        const d = new Date(ev['Data']);
+        return d.getFullYear() === agendaAny && d.getMonth() === agendaMes;
+      })
+      .sort((a, b) => new Date(a['Data']) - new Date(b['Data']));
+    monthEvents.forEach(ev => {
       const tr = document.createElement('tr');
+      tr.dataset.date = ev['Data'];
       ['Data', 'Hora', 'Títol'].forEach(clau => {
         const td = document.createElement('td');
         td.textContent = ev[clau] || '';
         tr.appendChild(td);
       });
-      taula.appendChild(tr);
+      listTable.appendChild(tr);
     });
   }
-
-
-  cont.appendChild(taula);
+  function highlightEvents(dateStr) {
+    listTable.querySelectorAll('tr').forEach(tr => tr.classList.remove('selected-event'));
+    listTable.querySelectorAll(`tr[data-date='${dateStr}']`).forEach(tr => tr.classList.add('selected-event'));
+  }
+  function render() {
+    label.textContent = new Date(agendaAny, agendaMes).toLocaleDateString('ca-ES', { month: 'long', year: 'numeric' });
+    renderCalendar();
+    renderList();
+  }
+  render();
 }
 
 
@@ -378,13 +455,6 @@ document.getElementById('btn-ranking').addEventListener('click', () => {
   mostraRanquing();
 });
 
-
-document.getElementById('btn-agenda').addEventListener('click', () => {
-  document.getElementById('filters-row').style.display = 'none';
-  document.getElementById('classificacio-filters').style.display = 'none';
-  document.getElementById('content').style.display = 'block';
-  mostraAgenda();
-});
 
 
 document.getElementById('btn-classificacio').addEventListener('click', () => {
