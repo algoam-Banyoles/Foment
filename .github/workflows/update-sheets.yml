@@ -29,6 +29,7 @@ jobs:
       - name: Run updater
         env:
           SHEET_ID: ${{ secrets.SHEET_ID }}
+          SHEET_TABS: "Inscrits,Partides,Classificacio,Calendari"
           # Si NO passes SHEET_TABS, el script intentarà descobrir-les automàticament.
           # Exemple (substitueix pels noms reals de pestanya):
           # SHEET_TABS: "Catàleg,Inventari,Traduccions"
