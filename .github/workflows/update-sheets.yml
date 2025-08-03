@@ -1,41 +1,43 @@
 name: Refresh OpenSheet JSON
 
 on:
+  # Executa's cada 6 h (00:00, 06:00, 12:00, 18:00 UTC) + llançament manual
   schedule:
-    # Cada 6 hores (UTC) → 4 cops/dia. (Senzill i robust amb canvis d'horari d'estiu)
-    - cron: "0 */6 * * *"
+    - cron: '0 */6 * * *'
   workflow_dispatch: {}
 
 permissions:
-  contents: write
+  contents: write            # permet fer commit/push amb GITHUB_TOKEN
 
 concurrency:
   group: refresh-opensheet-json
-  cancel-in-progress: false
+  cancel-in-progress: false  # evita jobs solapats
 
 jobs:
   update:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      # 1) Clona el repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2) Python 3.12 (no cal pip install perquè el script és auto­conteingut)
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: '3.12'
 
+      # 3) Executa l’script d’actualització
       - name: Run updater
         env:
-      
-  SHEET_ID:   ${{ secrets.SHEET_ID }}
-  SHEET_TABS: "1,2,3"          # ← índexs funcionen sempre
-  OUTPUT_DIR: "public/data"
-
+          SHEET_ID: ${{ secrets.SHEET_ID }}      # ← posa'l a Settings → Secrets
+          SHEET_TABS: "1,2,3,4"                  # índexs o noms separats per comes
+          OUTPUT_DIR: "public/data"              # carpeta on vols els .json
         run: |
           python tools/update_sheets.py
 
+      # 4) Fes commit i push només si hi ha canvis
       - name: Commit & push if changed
         run: |
           if [[ -n "$(git status --porcelain)" ]]; then
