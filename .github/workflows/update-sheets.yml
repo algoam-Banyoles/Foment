@@ -1,0 +1,49 @@
+name: Refresh OpenSheet JSON
+
+on:
+  schedule:
+    # Cada 6 hores (UTC) → 4 cops/dia. (Senzill i robust amb canvis d'horari d'estiu)
+    - cron: "0 */6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-opensheet-json
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run updater
+        env:
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+          # Si NO passes SHEET_TABS, el script intentarà descobrir-les automàticament.
+          # Exemple (substitueix pels noms reals de pestanya):
+          # SHEET_TABS: "Catàleg,Inventari,Traduccions"
+          OUTPUT_DIR: "public/data"  # ajusta-ho a la carpeta que llegeix la teva PWA
+        run: |
+          python tools/update_sheets.py
+
+      - name: Commit & push if changed
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "chore(data): refresh OpenSheet JSON [skip ci]"
+            git push
+          else
+            echo "No changes to commit."
+          fi
