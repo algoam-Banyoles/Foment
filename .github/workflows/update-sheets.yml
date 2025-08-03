@@ -28,12 +28,11 @@ jobs:
 
       - name: Run updater
         env:
-          SHEET_ID: ${{secrets.SHEET_ID}}
-          SHEET_TABS: "1,2,3"
-          # Si NO passes SHEET_TABS, el script intentarà descobrir-les automàticament.
-          # Exemple (substitueix pels noms reals de pestanya):
-          # SHEET_TABS: "Catàleg,Inventari,Traduccions"
-          OUTPUT_DIR: "public/data"  # ajusta-ho a la carpeta que llegeix la teva PWA
+      
+  SHEET_ID:   ${{ secrets.SHEET_ID }}
+  SHEET_TABS: "1,2,3"          # ← índexs funcionen sempre
+  OUTPUT_DIR: "public/data"
+
         run: |
           python tools/update_sheets.py
 
