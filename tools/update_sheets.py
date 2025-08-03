@@ -63,7 +63,7 @@ def main():
 
     changed = []
     for tab in tabs:
-        url = f"{BASE}/{SHEET_ID}/{urllib.parse.quote(tab)}"
+        url = f"{BASE}/1Dc01H5hAxPwwhyY_GnRAVFP2-uINanwJS1jhtFs2syU/{urllib.parse.quote(tab)}"
         try:
             payload = fetch_json(url)
         except Exception as e:
