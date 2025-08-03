@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os, sys, json, time, hashlib, urllib.request, urllib.error, pathlib, re
 
-SHEET_ID   = os.environ.get("SHEET_ID") or ""
+SHEET_ID   = "1Dc01H5hAxPwwhyY_GnRAVFP2-uINanwJS1jhtFs2syU"
 SHEET_TABS = [t.strip() for t in os.environ.get("SHEET_TABS", "").split(",") if t.strip()]
 OUTPUT_DIR = os.environ.get("OUTPUT_DIR", "public/data")
 
