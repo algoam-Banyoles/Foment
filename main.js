@@ -451,11 +451,62 @@ function mostraEvolucioJugador(jugador, nom) {
 function mostraTorneig(dades) {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
-  if (!Array.isArray(dades) || dades.length === 0) {
+  if (!dades || (Array.isArray(dades) && dades.length === 0)) {
     cont.innerHTML = '<p>No hi ha dades.</p>';
     return;
   }
-  if (typeof dades[0] === 'object' && !Array.isArray(dades[0])) {
+
+  // Nou format: { headers: [...], rows: [...] }
+  if (!Array.isArray(dades) && dades.headers && dades.rows) {
+    const { headers, rows } = dades;
+    const taula = document.createElement('table');
+    const cap = document.createElement('tr');
+    headers.forEach(h => {
+      const th = document.createElement('th');
+      th.textContent = h;
+      cap.appendChild(th);
+    });
+    taula.appendChild(cap);
+    rows.forEach(row => {
+      const tr = document.createElement('tr');
+      headers.forEach((h, idx) => {
+        const td = document.createElement('td');
+        // cada fila pot ser objecte o array
+        td.textContent = (row[h] !== undefined ? row[h] : row[idx]) || '';
+        tr.appendChild(td);
+      });
+      taula.appendChild(tr);
+    });
+    cont.appendChild(taula);
+    return;
+  }
+
+  // Format antic: array amb primera fila com a capçalera
+  if (Array.isArray(dades) && Array.isArray(dades[0])) {
+    const headers = dades[0];
+    const taula = document.createElement('table');
+    const cap = document.createElement('tr');
+    headers.forEach(h => {
+      const th = document.createElement('th');
+      th.textContent = h;
+      cap.appendChild(th);
+    });
+    taula.appendChild(cap);
+    dades.slice(1).forEach(row => {
+      const tr = document.createElement('tr');
+      headers.forEach((_, idx) => {
+        const td = document.createElement('td');
+        td.textContent = row[idx] || '';
+        tr.appendChild(td);
+      });
+      taula.appendChild(tr);
+    });
+    cont.appendChild(taula);
+    return;
+  }
+
+  // Per defecte: assumim array d'objectes
+  if (Array.isArray(dades) && typeof dades[0] === 'object') {
     const headers = [...new Set(dades.flatMap(obj => Object.keys(obj)))];
     const taula = document.createElement('table');
     const cap = document.createElement('tr');
@@ -475,11 +526,13 @@ function mostraTorneig(dades) {
       taula.appendChild(tr);
     });
     cont.appendChild(taula);
-  } else {
-    const pre = document.createElement('pre');
-    pre.textContent = JSON.stringify(dades, null, 2);
-    cont.appendChild(pre);
+    return;
   }
+
+  // Fallback: mostra com a JSON
+  const pre = document.createElement('pre');
+  pre.textContent = JSON.stringify(dades, null, 2);
+  cont.appendChild(pre);
 }
 
 document.getElementById('btn-ranking').addEventListener('click', () => {
