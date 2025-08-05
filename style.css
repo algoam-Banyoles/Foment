@@ -96,7 +96,8 @@ button:active {
 }
 
 #classificacio-year-select,
-#categoria-select {
+#categoria-select,
+#partides-categoria-select {
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 0.5rem;
