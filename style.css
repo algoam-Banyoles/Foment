@@ -211,7 +211,8 @@ td {
   border-bottom: 1px solid #ddd;
 }
 
-.partida:last-of-type {
+/* Remove bottom border only for the last match container */
+.table-responsive:last-of-type .partida {
   border-bottom: none;
 }
 
