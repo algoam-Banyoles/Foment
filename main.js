@@ -415,7 +415,9 @@ function mostraAgenda() {
 function mostraHorari() {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
-  const table = document.createElement('table');
+
+  const ul = document.createElement('ul');
+
   const hores = [
     ['Dilluns', '9:00 a 21:30'],
     ['Dimarts', '10:30 a 21:30'],
@@ -426,16 +428,13 @@ function mostraHorari() {
     ['Diumenge', '9:00 a 21:30']
   ];
   hores.forEach(([dia, hora]) => {
-    const tr = document.createElement('tr');
-    const tdDia = document.createElement('td');
-    tdDia.textContent = dia;
-    const tdHora = document.createElement('td');
-    tdHora.textContent = hora;
-    tr.appendChild(tdDia);
-    tr.appendChild(tdHora);
-    table.appendChild(tr);
+
+    const li = document.createElement('li');
+    li.textContent = `${dia}: ${hora}`;
+    ul.appendChild(li);
   });
-  cont.appendChild(table);
+  cont.appendChild(ul);
+
 
   const pAgost = document.createElement('p');
   pAgost.textContent = 'Agost tancat';
