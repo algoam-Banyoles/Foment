@@ -32,6 +32,7 @@ let agendaMes = new Date().getMonth();
 let agendaAny = new Date().getFullYear();
 let torneigModalitat = '';
 let torneigCaramboles = {};
+let torneigCategoriaSeleccionada = null;
 
 function adjustChartSize() {
   const chartContainer = document.getElementById('player-chart');
@@ -149,8 +150,37 @@ function preparaSelectorsClassificacio() {
       btn.classList.add('selected');
       mostraClassificacio();
     });
-    catBtns.appendChild(btn);
+  catBtns.appendChild(btn);
   });
+}
+
+function preparaTorneigCategories(categories, render) {
+  const cont = document.getElementById('torneig-category-buttons');
+  cont.innerHTML = '';
+  if (!categories || categories.length === 0) {
+    cont.style.display = 'none';
+    torneigCategoriaSeleccionada = null;
+    render();
+    return;
+  }
+  categories.sort();
+  if (!torneigCategoriaSeleccionada || !categories.includes(torneigCategoriaSeleccionada)) {
+    torneigCategoriaSeleccionada = categories[0];
+  }
+  categories.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.textContent = `${cat}a`;
+    if (cat === torneigCategoriaSeleccionada) btn.classList.add('selected');
+    btn.addEventListener('click', () => {
+      torneigCategoriaSeleccionada = cat;
+      cont.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      render();
+    });
+    cont.appendChild(btn);
+  });
+  cont.style.display = 'flex';
+  render();
 }
 
 function mostraRanquing() {
@@ -476,19 +506,8 @@ function mostraPartides(partides) {
     return dateB - dateA;
   });
 
-  const categories = [...new Set(partides.map(p => p["🏆 Categoria de la partida"]))].sort();
   const filters = document.createElement('div');
   filters.id = 'partides-filters';
-
-  const select = document.createElement('select');
-  select.id = 'partides-categoria-select';
-  categories.forEach(cat => {
-    const opt = document.createElement('option');
-    opt.value = cat;
-    opt.textContent = `Categoria ${cat}`;
-    select.appendChild(opt);
-  });
-  filters.appendChild(select);
 
   const input = document.createElement('input');
   input.id = 'partides-player-filter';
@@ -501,10 +520,10 @@ function mostraPartides(partides) {
   const list = document.createElement('div');
   cont.appendChild(list);
 
-  function render(cat, filtre = '') {
+  function render(filtre = '') {
     list.innerHTML = '';
     const filtered = partides
-      .filter(p => p["🏆 Categoria de la partida"] === cat)
+      .filter(p => p["🏆 Categoria de la partida"] === torneigCategoriaSeleccionada)
       .filter(p => {
         if (!filtre) return true;
         const nom1 = (p["🎱 Nom del Jugador 1"] || '').trim().toLowerCase();
@@ -583,27 +602,26 @@ function mostraPartides(partides) {
     });
   }
 
-  function update() {
-    render(select.value, input.value.trim().toLowerCase());
-  }
-
-  select.addEventListener('change', () => {
-    input.value = '';
-    update();
+  input.addEventListener('input', () => {
+    render(input.value.trim().toLowerCase());
   });
-  input.addEventListener('input', update);
-  if (categories.length) {
-    render(categories[0], input.value.trim().toLowerCase());
-  }
+
+  render();
 }
 
 function mostraTorneig(dades, file) {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
+  const catCont = document.getElementById('torneig-category-buttons');
+  catCont.style.display = 'none';
+  catCont.innerHTML = '';
+
   if (file === 'partides.json') {
-    mostraPartides(dades);
+    const categories = [...new Set(dades.map(p => p["🏆 Categoria de la partida"]))];
+    preparaTorneigCategories(categories, () => mostraPartides(dades));
     return;
   }
+
   if (!dades) {
     return;
   }
@@ -622,7 +640,10 @@ function mostraTorneig(dades, file) {
       acc[cat].push((reg['Nom jugador'] || '').trim());
       return acc;
     }, {});
-    Object.keys(agrupats).sort().forEach(cat => {
+    const categories = Object.keys(agrupats);
+    const render = () => {
+      cont.innerHTML = '';
+      const cat = torneigCategoriaSeleccionada;
       const h3 = document.createElement('h3');
       const car = torneigCaramboles[cat];
       h3.textContent = car
@@ -630,80 +651,120 @@ function mostraTorneig(dades, file) {
         : `${cat}a categoria`;
       cont.appendChild(h3);
       const ul = document.createElement('ul');
-      agrupats[cat].forEach(nom => {
+      (agrupats[cat] || []).forEach(nom => {
         const li = document.createElement('li');
         li.textContent = nom;
         ul.appendChild(li);
       });
       cont.appendChild(ul);
-    });
+    };
+    preparaTorneigCategories(categories, render);
     return;
   }
 
   // Format específic per a la classificació del torneig
-
   if (file === 'classificacio.json' && Array.isArray(dades) && dades[0] && 'Posició' in dades[0]) {
-
     const agrupats = dades.reduce((acc, reg) => {
       const cat = reg.Categoria || '';
       if (!acc[cat]) acc[cat] = [];
       acc[cat].push(reg);
       return acc;
     }, {});
-    Object.keys(agrupats)
-
-      .sort()
-
-      .forEach(cat => {
-        const h3 = document.createElement('h3');
-        const car = torneigCaramboles[cat];
-        h3.textContent = car
-          ? `${cat}a categoria (${car} caramboles)`
-          : `${cat}a categoria`;
-        cont.appendChild(h3);
-        const taula = document.createElement('table');
-        const cap = document.createElement('tr');
-        ['#', 'Jugador', 'PJ', 'P', 'C', 'E', 'MG', 'MM'].forEach(t => {
-          const th = document.createElement('th');
-          th.textContent = t;
-          cap.appendChild(th);
-        });
-        taula.appendChild(cap);
-        agrupats[cat]
-          .sort((a, b) => {
-            const puntsA = parseInt(a['Punts'], 10) || 0;
-            const puntsB = parseInt(b['Punts'], 10) || 0;
-            if (puntsB !== puntsA) return puntsB - puntsA;
-            const mitjanaA = parseFloat(a['MitjanaGeneral'] || a['Mitjana'] || '0');
-            const mitjanaB = parseFloat(b['MitjanaGeneral'] || b['Mitjana'] || '0');
-            return mitjanaB - mitjanaA;
-          })
-          .forEach((reg, idx) => {
-            const tr = document.createElement('tr');
-            const camps = [
-              idx + 1,
-
-              reg['Nom'] || '',
-              reg['PartidesJugades'] || reg['Partides jugades'] || reg['PJ'] || '',
-              reg['Punts'],
-              reg['Caramboles'],
-              reg['Entrades'],
-              reg['MitjanaGeneral'] || reg['Mitjana'] || '',
-              reg['MitjanaParticular'] || reg['Millor mitjana'] || ''
-            ];
-            camps.forEach((valor, idx) => {
-              const td = document.createElement('td');
-              if (idx >= 6 && valor !== '') {
-                const num = Number.parseFloat(valor);
-                valor = Number.isNaN(num) ? valor : num.toFixed(3);
-              }
-              td.textContent = valor;
-              tr.appendChild(td);
-            });
-            taula.appendChild(tr);
-          });
-        cont.appendChild(taula);
+    const categories = Object.keys(agrupats);
+    const render = () => {
+      cont.innerHTML = '';
+      const cat = torneigCategoriaSeleccionada;
+      const h3 = document.createElement('h3');
+      const car = torneigCaramboles[cat];
+      h3.textContent = car
+        ? `${cat}a categoria (${car} caramboles)`
+        : `${cat}a categoria`;
+      cont.appendChild(h3);
+      const taula = document.createElement('table');
+      const cap = document.createElement('tr');
+      ['#', 'Jugador', 'PJ', 'P', 'C', 'E', 'MG', 'MM'].forEach(t => {
+        const th = document.createElement('th');
+        th.textContent = t;
+        cap.appendChild(th);
       });
+      taula.appendChild(cap);
+      (agrupats[cat] || [])
+        .sort((a, b) => {
+          const puntsA = parseInt(a['Punts'], 10) || 0;
+          const puntsB = parseInt(b['Punts'], 10) || 0;
+          if (puntsB !== puntsA) return puntsB - puntsA;
+          const mitjanaA = parseFloat(a['MitjanaGeneral'] || a['Mitjana'] || '0');
+          const mitjanaB = parseFloat(b['MitjanaGeneral'] || b['Mitjana'] || '0');
+          return mitjanaB - mitjanaA;
+        })
+        .forEach((reg, idx) => {
+          const tr = document.createElement('tr');
+          const camps = [
+            idx + 1,
+            reg['Nom'] || '',
+            reg['PartidesJugades'] || reg['Partides jugades'] || reg['PJ'] || '',
+            reg['Punts'],
+            reg['Caramboles'],
+            reg['Entrades'],
+            reg['MitjanaGeneral'] || reg['Mitjana'] || '',
+            reg['MitjanaParticular'] || reg['Millor mitjana'] || ''
+          ];
+          camps.forEach((valor, idx) => {
+            const td = document.createElement('td');
+            if (idx >= 6 && valor !== '') {
+              const num = Number.parseFloat(valor);
+              valor = Number.isNaN(num) ? valor : num.toFixed(3);
+            }
+            td.textContent = valor;
+            tr.appendChild(td);
+          });
+          taula.appendChild(tr);
+        });
+      cont.appendChild(taula);
+    };
+    preparaTorneigCategories(categories, render);
+    return;
+  }
+
+  // Altres formats amb camp Categoria
+  if (Array.isArray(dades) && dades[0] && 'Categoria' in dades[0]) {
+    const agrupats = dades.reduce((acc, reg) => {
+      const cat = reg.Categoria || '';
+      if (!acc[cat]) acc[cat] = [];
+      acc[cat].push(reg);
+      return acc;
+    }, {});
+    const headers = Object.keys(dades[0]).filter(h => h !== 'Categoria');
+    const categories = Object.keys(agrupats);
+    const render = () => {
+      cont.innerHTML = '';
+      const cat = torneigCategoriaSeleccionada;
+      const h3 = document.createElement('h3');
+      const car = torneigCaramboles[cat];
+      h3.textContent = car
+        ? `${cat}a categoria (${car} caramboles)`
+        : `${cat}a categoria`;
+      cont.appendChild(h3);
+      const taula = document.createElement('table');
+      const cap = document.createElement('tr');
+      headers.forEach(h => {
+        const th = document.createElement('th');
+        th.textContent = h;
+        cap.appendChild(th);
+      });
+      taula.appendChild(cap);
+      (agrupats[cat] || []).forEach(reg => {
+        const tr = document.createElement('tr');
+        headers.forEach(h => {
+          const td = document.createElement('td');
+          td.textContent = reg[h] || '';
+          tr.appendChild(td);
+        });
+        taula.appendChild(tr);
+      });
+      cont.appendChild(taula);
+    };
+    preparaTorneigCategories(categories, render);
     return;
   }
 
@@ -791,6 +852,7 @@ document.getElementById('btn-ranking').addEventListener('click', () => {
   document.getElementById('classificacio-filters').style.display = 'none';
   document.getElementById('torneig-buttons').style.display = 'none';
   document.getElementById('torneig-title').style.display = 'none';
+  document.getElementById('torneig-category-buttons').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraRanquing();
 });
@@ -802,6 +864,7 @@ document.getElementById('btn-classificacio').addEventListener('click', () => {
   document.getElementById('classificacio-filters').style.display = 'flex';
   document.getElementById('torneig-buttons').style.display = 'none';
   document.getElementById('torneig-title').style.display = 'none';
+  document.getElementById('torneig-category-buttons').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraClassificacio();
 });
@@ -811,6 +874,7 @@ document.getElementById('btn-agenda').addEventListener('click', () => {
   document.getElementById('classificacio-filters').style.display = 'none';
   document.getElementById('torneig-buttons').style.display = 'none';
   document.getElementById('torneig-title').style.display = 'none';
+  document.getElementById('torneig-category-buttons').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraAgenda();
 });
@@ -819,6 +883,8 @@ document.getElementById('btn-torneig').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'none';
   document.getElementById('classificacio-filters').style.display = 'none';
   document.getElementById('torneig-buttons').style.display = 'flex';
+  document.getElementById('torneig-category-buttons').style.display = 'none';
+  torneigCategoriaSeleccionada = null;
   const title = document.getElementById('torneig-title');
   const cont = document.getElementById('content');
   cont.style.display = 'block';
