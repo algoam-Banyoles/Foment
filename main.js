@@ -415,7 +415,9 @@ function mostraAgenda() {
 function mostraHorari() {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
+
   const ul = document.createElement('ul');
+
   const hores = [
     ['Dilluns', '9:00 a 21:30'],
     ['Dimarts', '10:30 a 21:30'],
@@ -426,11 +428,13 @@ function mostraHorari() {
     ['Diumenge', '9:00 a 21:30']
   ];
   hores.forEach(([dia, hora]) => {
+
     const li = document.createElement('li');
     li.textContent = `${dia}: ${hora}`;
     ul.appendChild(li);
   });
   cont.appendChild(ul);
+
 
   const pAgost = document.createElement('p');
   pAgost.textContent = 'Agost tancat';
@@ -445,15 +449,41 @@ function mostraHorari() {
 function mostraEnllacos() {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
-  const ul = document.createElement('ul');
-  const li = document.createElement('li');
-  const a = document.createElement('a');
-  a.href = 'https://www.fomentmartinenc.org/';
-  a.textContent = 'Foment Martinenc';
-  a.target = '_blank';
-  li.appendChild(a);
-  ul.appendChild(li);
-  cont.appendChild(ul);
+  fetch('enllacos.json')
+    .then(r => r.json())
+    .then(d => {
+      const ul = document.createElement('ul');
+      d.forEach(item => {
+        // Try to find common property names for title and URL
+        const text =
+          item.Títol ||
+          item.Titol ||
+          item.Nom ||
+          item.Name ||
+          item.Text ||
+          Object.values(item)[0];
+        const url =
+          item.URL ||
+          item.Url ||
+          item.Enllaç ||
+          item.Enllac ||
+          item.Link ||
+          Object.values(item)[1];
+        if (!url) return; // skip invalid rows
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = url;
+        a.textContent = text || url;
+        a.target = '_blank';
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+      cont.appendChild(ul);
+    })
+    .catch(err => {
+      cont.textContent = "No s'han pogut carregar els enllaços.";
+      console.error('Error loading links', err);
+    });
 }
 
 
