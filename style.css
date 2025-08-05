@@ -358,4 +358,43 @@ tr:nth-child(even) {
   background: #fff9c4 !important;
 }
 
+details summary {
+  cursor: pointer;
+}
+
+.enllac-tipus {
+  background: var(--primary);
+  color: #fff;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.enllac-club {
+  background: var(--secondary);
+  color: #fff;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  margin-left: 1rem;
+  margin-top: 0.3rem;
+}
+
+.enllacos-list {
+  list-style: none;
+  padding-left: 0;
+  margin-left: 2rem;
+}
+
+.enllac-url {
+  background: var(--category);
+  border-radius: 4px;
+  margin: 0.2rem 0;
+}
+
+.enllac-url a {
+  display: block;
+  padding: 0.2rem 0.4rem;
+  color: #fff;
+}
+
 
