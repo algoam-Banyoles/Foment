@@ -583,7 +583,9 @@ document.getElementById('btn-torneig').addEventListener('click', () => {
     .then(r => r.json())
     .then(d => {
       torneigModalitat = Array.isArray(d)
+
         ? d.map(m => m.Modalitat).join(', ')
+
         : (d.Modalitat || '');
       mostraTorneig();
     })
