@@ -463,6 +463,7 @@ function mostraEnllacos() {
         const tipusDetails = document.createElement('details');
         const tipusSummary = document.createElement('summary');
         tipusSummary.textContent = tipus;
+        tipusSummary.classList.add('enllac-tipus');
         tipusDetails.appendChild(tipusSummary);
 
         const clubMap = {};
@@ -477,9 +478,11 @@ function mostraEnllacos() {
             const clubDetails = document.createElement('details');
             const clubSummary = document.createElement('summary');
             clubSummary.textContent = club;
+            clubSummary.classList.add('enllac-club');
             clubDetails.appendChild(clubSummary);
 
             const ul = document.createElement('ul');
+            ul.classList.add('enllacos-list');
             clubItems.forEach(ci => {
               const url =
                 ci.Enllaç ||
@@ -489,6 +492,7 @@ function mostraEnllacos() {
                 ci.Link;
               if (!url) return;
               const li = document.createElement('li');
+              li.classList.add('enllac-url');
               const a = document.createElement('a');
               a.href = url;
               a.target = '_blank';
@@ -500,6 +504,7 @@ function mostraEnllacos() {
             tipusDetails.appendChild(clubDetails);
           } else {
             const ul = document.createElement('ul');
+            ul.classList.add('enllacos-list');
             clubItems.forEach(ci => {
               const url =
                 ci.Enllaç ||
@@ -509,6 +514,7 @@ function mostraEnllacos() {
                 ci.Link;
               if (!url) return;
               const li = document.createElement('li');
+              li.classList.add('enllac-url');
               const a = document.createElement('a');
               a.href = url;
               a.target = '_blank';
