@@ -31,6 +31,7 @@ let events = [];
 let agendaMes = new Date().getMonth();
 let agendaAny = new Date().getFullYear();
 let torneigModalitat = '';
+let torneigCaramboles = {};
 
 function adjustChartSize() {
   const chartContainer = document.getElementById('player-chart');
@@ -467,6 +468,30 @@ function mostraTorneig(dades) {
     return;
   }
 
+  // Format específic per als inscrits: array d'objectes amb categoria i nom
+  if (Array.isArray(dades) && dades[0] && 'Categoria jugador' in dades[0] && 'Nom jugador' in dades[0]) {
+    const agrupats = dades.reduce((acc, reg) => {
+      const cat = reg['Categoria jugador'];
+      if (!acc[cat]) acc[cat] = [];
+      acc[cat].push((reg['Nom jugador'] || '').trim());
+      return acc;
+    }, {});
+    Object.keys(agrupats).sort().forEach(cat => {
+      const h3 = document.createElement('h3');
+      const car = torneigCaramboles[cat] || '';
+      h3.textContent = `${cat}a categoria (${car} caramboles)`;
+      cont.appendChild(h3);
+      const ul = document.createElement('ul');
+      agrupats[cat].forEach(nom => {
+        const li = document.createElement('li');
+        li.textContent = nom;
+        ul.appendChild(li);
+      });
+      cont.appendChild(ul);
+    });
+    return;
+  }
+
   // Nou format: { headers: [...], rows: [...] }
   if (!Array.isArray(dades) && dades.headers && dades.rows) {
     const { headers, rows } = dades;
@@ -582,11 +607,16 @@ document.getElementById('btn-torneig').addEventListener('click', () => {
   fetch('data/modalitat.json')
     .then(r => r.json())
     .then(d => {
+      const modalObj = Array.isArray(d) ? (d[0] || {}) : (d || {});
       torneigModalitat = Array.isArray(d)
-
         ? d.map(m => m.Modalitat).join(', ')
-
-        : (d.Modalitat || '');
+        : (modalObj.Modalitat || '');
+      torneigCaramboles = {
+        '1': modalObj['1a'],
+        '2': modalObj['2a'],
+        '3': modalObj['3a'],
+        '4': modalObj['4a']
+      };
       mostraTorneig();
     })
     .catch(err => {
