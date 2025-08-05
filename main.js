@@ -415,9 +415,31 @@ function mostraAgenda() {
 function mostraHorari() {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
-  const p = document.createElement('p');
-  p.textContent = 'Pròximament disponibles els horaris de les activitats.';
-  cont.appendChild(p);
+  const ul = document.createElement('ul');
+  const hores = [
+    ['Dilluns', '9:00 a 21:30'],
+    ['Dimarts', '10:30 a 21:30'],
+    ['Dimecres', '9:00 a 21:30'],
+    ['Dijous', '9:00 a 21:30'],
+    ['Divendres', '10:30 a 21:30'],
+    ['Dissabte', '9:00 a 21:30'],
+    ['Diumenge', '9:00 a 21:30']
+  ];
+  hores.forEach(([dia, hora]) => {
+    const li = document.createElement('li');
+    li.textContent = `${dia}: ${hora}`;
+    ul.appendChild(li);
+  });
+  cont.appendChild(ul);
+
+  const pAgost = document.createElement('p');
+  pAgost.textContent = 'Agost tancat';
+  cont.appendChild(pAgost);
+
+  const pNotes = document.createElement('p');
+  pNotes.textContent =
+    "Aquests horaris poden patir alteracions en funció dels horaris d'obertura del bar del Foment.";
+  cont.appendChild(pNotes);
 }
 
 function mostraEnllacos() {
