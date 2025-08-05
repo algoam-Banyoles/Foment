@@ -641,7 +641,9 @@ function mostraTorneig(dades, file) {
   }
 
   // Format específic per a la classificació del torneig
+
   if (file === 'classificacio.json' && Array.isArray(dades) && dades[0] && 'Posició' in dades[0]) {
+
     const agrupats = dades.reduce((acc, reg) => {
       const cat = reg.Categoria || '';
       if (!acc[cat]) acc[cat] = [];
@@ -649,7 +651,9 @@ function mostraTorneig(dades, file) {
       return acc;
     }, {});
     Object.keys(agrupats)
+
       .sort()
+
       .forEach(cat => {
         const h3 = document.createElement('h3');
         const car = torneigCaramboles[cat];
@@ -666,11 +670,13 @@ function mostraTorneig(dades, file) {
         });
         taula.appendChild(cap);
         agrupats[cat]
+
           .sort((a, b) => parseInt(a['Posició'], 10) - parseInt(b['Posició'], 10))
           .forEach(reg => {
             const tr = document.createElement('tr');
             const camps = [
               reg['Posició'],
+
               reg['Nom'] || '',
               reg['PartidesJugades'] || reg['Partides jugades'] || reg['PJ'] || '',
               reg['Punts'],
