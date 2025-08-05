@@ -448,9 +448,44 @@ function mostraEvolucioJugador(jugador, nom) {
 
 }
 
+function mostraTorneig(dades) {
+  const cont = document.getElementById('content');
+  cont.innerHTML = '';
+  if (!Array.isArray(dades) || dades.length === 0) {
+    cont.innerHTML = '<p>No hi ha dades.</p>';
+    return;
+  }
+  if (typeof dades[0] === 'object' && !Array.isArray(dades[0])) {
+    const headers = [...new Set(dades.flatMap(obj => Object.keys(obj)))];
+    const taula = document.createElement('table');
+    const cap = document.createElement('tr');
+    headers.forEach(h => {
+      const th = document.createElement('th');
+      th.textContent = h;
+      cap.appendChild(th);
+    });
+    taula.appendChild(cap);
+    dades.forEach(reg => {
+      const tr = document.createElement('tr');
+      headers.forEach(h => {
+        const td = document.createElement('td');
+        td.textContent = reg[h] || '';
+        tr.appendChild(td);
+      });
+      taula.appendChild(tr);
+    });
+    cont.appendChild(taula);
+  } else {
+    const pre = document.createElement('pre');
+    pre.textContent = JSON.stringify(dades, null, 2);
+    cont.appendChild(pre);
+  }
+}
+
 document.getElementById('btn-ranking').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'flex';
   document.getElementById('classificacio-filters').style.display = 'none';
+  document.getElementById('torneig-buttons').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraRanquing();
 });
@@ -460,6 +495,7 @@ document.getElementById('btn-ranking').addEventListener('click', () => {
 document.getElementById('btn-classificacio').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'none';
   document.getElementById('classificacio-filters').style.display = 'flex';
+  document.getElementById('torneig-buttons').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraClassificacio();
 });
@@ -467,8 +503,30 @@ document.getElementById('btn-classificacio').addEventListener('click', () => {
 document.getElementById('btn-agenda').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'none';
   document.getElementById('classificacio-filters').style.display = 'none';
+  document.getElementById('torneig-buttons').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraAgenda();
+});
+
+document.getElementById('btn-torneig').addEventListener('click', () => {
+  document.getElementById('filters-row').style.display = 'none';
+  document.getElementById('classificacio-filters').style.display = 'none';
+  document.getElementById('torneig-buttons').style.display = 'flex';
+  document.getElementById('content').style.display = 'block';
+  document.getElementById('content').innerHTML = '';
+});
+
+document.querySelectorAll('#torneig-buttons button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const file = btn.dataset.file;
+    fetch(`data/${file}`)
+      .then(r => r.json())
+      .then(d => mostraTorneig(d))
+      .catch(err => {
+        console.error('Error carregant dades del torneig', err);
+        document.getElementById('content').innerHTML = '<p>Error carregant dades.</p>';
+      });
+  });
 });
 
 

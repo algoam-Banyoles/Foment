@@ -15,6 +15,7 @@
     <button id="btn-agenda">Agenda</button>
     <button id="btn-ranking">Rànquings</button>
     <button id="btn-classificacio">Classificacions</button>
+    <button id="btn-torneig">Torneig en Curs</button>
     <div id="filters-row" style="display:none">
       <select id="year-select"></select>
       <div id="modalitat-buttons" class="button-group secondary-buttons">
@@ -31,6 +32,13 @@
         <button data-mod="LLIURE">Lliure</button>
       </div>
       <select id="categoria-select"></select>
+    </div>
+    <div id="torneig-buttons" class="button-group secondary-buttons" style="display:none">
+      <button data-file="modalitat.json">Modalitat</button>
+      <button data-file="inscrits.json">Inscrits</button>
+      <button data-file="calendari.json">Calendari</button>
+      <button data-file="partides.json">Partides</button>
+      <button data-file="classificacio.json">Classificació</button>
     </div>
     <!-- aquí es poden afegir més botons en el futur -->
     </div>
