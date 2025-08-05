@@ -1,5 +1,8 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.3/workbox-sw.js');
 
+// This value is replaced at build time by tools/update_sw_version.py
+const CACHE_VERSION = '20250805191510';
+
 // Activate new service worker as soon as it's finished installing
 workbox.core.skipWaiting();
 workbox.core.clientsClaim();
@@ -20,14 +23,14 @@ self.addEventListener('activate', (event) => {
 });
 
 workbox.precaching.precacheAndRoute([
-  { url: './style.css', revision: null },
-  { url: './main.js', revision: null },
+  { url: './style.css', revision: CACHE_VERSION },
+  { url: './main.js', revision: CACHE_VERSION },
   { url: 'https://cdn.jsdelivr.net/npm/chart.js', revision: null },
-  { url: './ranquing.json', revision: null },
-  { url: './classificacions.json', revision: null },
-  { url: './events.json', revision: null },
-  { url: './icons/icon-192.png', revision: null },
-  { url: './icons/icon-512.png', revision: null }
+  { url: './ranquing.json', revision: CACHE_VERSION },
+  { url: './classificacions.json', revision: CACHE_VERSION },
+  { url: './events.json', revision: CACHE_VERSION },
+  { url: './icons/icon-192.png', revision: CACHE_VERSION },
+  { url: './icons/icon-512.png', revision: CACHE_VERSION }
 ]);
 
 // index.html and navigation requests: Network First
