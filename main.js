@@ -412,6 +412,28 @@ function mostraAgenda() {
   render();
 }
 
+function mostraHorari() {
+  const cont = document.getElementById('content');
+  cont.innerHTML = '';
+  const p = document.createElement('p');
+  p.textContent = 'Pròximament disponibles els horaris de les activitats.';
+  cont.appendChild(p);
+}
+
+function mostraEnllacos() {
+  const cont = document.getElementById('content');
+  cont.innerHTML = '';
+  const ul = document.createElement('ul');
+  const li = document.createElement('li');
+  const a = document.createElement('a');
+  a.href = 'https://www.fomentmartinenc.org/';
+  a.textContent = 'Foment Martinenc';
+  a.target = '_blank';
+  li.appendChild(a);
+  ul.appendChild(li);
+  cont.appendChild(ul);
+}
+
 
 function mostraEvolucioJugador(jugador, nom) {
   const modalitats = ['3 BANDES', 'BANDA', 'LLIURE'];
@@ -884,6 +906,26 @@ document.getElementById('btn-agenda').addEventListener('click', () => {
   document.getElementById('torneig-category-buttons').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraAgenda();
+});
+
+document.getElementById('btn-horari').addEventListener('click', () => {
+  document.getElementById('filters-row').style.display = 'none';
+  document.getElementById('classificacio-filters').style.display = 'none';
+  document.getElementById('torneig-buttons').style.display = 'none';
+  document.getElementById('torneig-title').style.display = 'none';
+  document.getElementById('torneig-category-buttons').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+  mostraHorari();
+});
+
+document.getElementById('btn-enllacos').addEventListener('click', () => {
+  document.getElementById('filters-row').style.display = 'none';
+  document.getElementById('classificacio-filters').style.display = 'none';
+  document.getElementById('torneig-buttons').style.display = 'none';
+  document.getElementById('torneig-title').style.display = 'none';
+  document.getElementById('torneig-category-buttons').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+  mostraEnllacos();
 });
 
 document.getElementById('btn-torneig').addEventListener('click', () => {
