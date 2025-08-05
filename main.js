@@ -488,14 +488,41 @@ function mostraPartides(partides) {
         const emoji1 = car1 > car2 ? ' 🏆' : '';
         const emoji2 = car2 > car1 ? ' 🏆' : '';
 
-        const p1 = document.createElement('p');
-        p1.textContent = `${nom1}${emoji1} - ${car1} - ${entrades} - ${mitj1}`;
-        const p2 = document.createElement('p');
-        p2.textContent = `${nom2}${emoji2} - ${car2} - ${mitj2}`;
+        const table = document.createElement('table');
+        table.className = 'partida';
 
-        list.appendChild(p1);
-        list.appendChild(p2);
-        list.appendChild(document.createElement('hr'));
+        const tr1 = document.createElement('tr');
+        const tr2 = document.createElement('tr');
+
+        const tdNom1 = document.createElement('td');
+        tdNom1.textContent = `${nom1}${emoji1}`;
+        const tdCar1 = document.createElement('td');
+        tdCar1.textContent = car1;
+        const tdEntr = document.createElement('td');
+        tdEntr.textContent = entrades;
+        tdEntr.rowSpan = 2;
+        const tdMitj1 = document.createElement('td');
+        tdMitj1.textContent = mitj1;
+
+        tr1.appendChild(tdNom1);
+        tr1.appendChild(tdCar1);
+        tr1.appendChild(tdEntr);
+        tr1.appendChild(tdMitj1);
+
+        const tdNom2 = document.createElement('td');
+        tdNom2.textContent = `${nom2}${emoji2}`;
+        const tdCar2 = document.createElement('td');
+        tdCar2.textContent = car2;
+        const tdMitj2 = document.createElement('td');
+        tdMitj2.textContent = mitj2;
+
+        tr2.appendChild(tdNom2);
+        tr2.appendChild(tdCar2);
+        tr2.appendChild(tdMitj2);
+
+        table.appendChild(tr1);
+        table.appendChild(tr2);
+        list.appendChild(table);
       });
   }
 

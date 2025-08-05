@@ -158,6 +158,31 @@ td {
   white-space: nowrap;
 }
 
+.partida {
+  background: transparent;
+  box-shadow: none;
+  margin-bottom: 1rem;
+}
+
+.partida td {
+  border: none;
+  padding: 0.25rem 0.5rem;
+}
+
+.partida td:nth-child(1) {
+  text-align: left;
+}
+
+.partida td:nth-child(2),
+.partida td:nth-child(4) {
+  text-align: center;
+}
+
+.partida td[rowspan] {
+  text-align: center;
+  vertical-align: middle;
+}
+
 .agenda-table td:nth-child(3) {
   text-align: left;
 }
