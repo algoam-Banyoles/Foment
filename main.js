@@ -449,9 +449,68 @@ function mostraEvolucioJugador(jugador, nom) {
 
 }
 
-function mostraTorneig(dades) {
+function mostraPartides(partides) {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
+  if (!Array.isArray(partides)) {
+    cont.textContent = 'Dades de partides no vàlides.';
+    return;
+  }
+
+  const categories = [...new Set(partides.map(p => p["🏆 Categoria de la partida"]))].sort();
+
+  const select = document.createElement('select');
+  select.id = 'partides-categoria-select';
+  categories.forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = `Categoria ${cat}`;
+    select.appendChild(opt);
+  });
+  cont.appendChild(select);
+
+  const list = document.createElement('div');
+  cont.appendChild(list);
+
+  function render(cat) {
+    list.innerHTML = '';
+    partides
+      .filter(p => p["🏆 Categoria de la partida"] === cat)
+      .forEach(p => {
+        const nom1 = (p["🎱 Nom del Jugador 1"] || '').trim();
+        const nom2 = (p["🎱 Nom del Jugador 2"] || '').trim();
+        const car1 = parseInt(p["🔢 Caramboles del Jugador 1"], 10) || 0;
+        const car2 = parseInt(p["🔢 Caramboles del Jugador 2"], 10) || 0;
+        const entrades = p["⏱️ Entrades de la partida"] || '';
+        const mitj1 = (parseFloat(p["Mitjana J1"]) || 0).toFixed(3);
+        const mitj2 = (parseFloat(p["Mitjana J2"]) || 0).toFixed(3);
+        const emoji1 = car1 > car2 ? ' 🏆' : '';
+        const emoji2 = car2 > car1 ? ' 🏆' : '';
+
+        const p1 = document.createElement('p');
+        p1.textContent = `${nom1}${emoji1} - ${car1} - ${entrades} - ${mitj1}`;
+        const p2 = document.createElement('p');
+        p2.textContent = `${nom2}${emoji2} - ${car2} - ${mitj2}`;
+
+        list.appendChild(p1);
+        list.appendChild(p2);
+        list.appendChild(document.createElement('hr'));
+      });
+  }
+
+  select.addEventListener('change', () => render(select.value));
+  if (categories.length) {
+    render(categories[0]);
+  }
+}
+
+function mostraTorneig(dades, file) {
+  const cont = document.getElementById('content');
+  cont.innerHTML = '';
+  if (file === 'partides.json') {
+    mostraPartides(dades);
+    return;
+  }
   if (!dades) {
     return;
   }
@@ -601,7 +660,7 @@ document.querySelectorAll('#torneig-buttons button').forEach(btn => {
     const file = btn.dataset.file;
     fetch(`data/${file}`)
       .then(r => r.json())
-      .then(d => mostraTorneig(d))
+      .then(d => mostraTorneig(d, file))
       .catch(err => {
         console.error('Error carregant dades del torneig', err);
         document.getElementById('content').innerHTML = '<p>Error carregant dades.</p>';
