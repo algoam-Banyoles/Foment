@@ -162,17 +162,33 @@ td {
   background: transparent;
   box-shadow: none;
   margin-bottom: 1rem;
+  width: 100%;
+  border-collapse: collapse;
 }
 
+.partida col.jugadors {
+  width: 55%;
+}
+
+.partida col.c,
+.partida col.e,
+.partida col.m {
+  width: 15%;
+}
+
+.partida th,
 .partida td {
   border: none;
   padding: 0.25rem 0.5rem;
 }
 
+.partida th:nth-child(1),
 .partida td:nth-child(1) {
   text-align: left;
 }
 
+.partida th:nth-child(2),
+.partida th:nth-child(4),
 .partida td:nth-child(2),
 .partida td:nth-child(4) {
   text-align: center;

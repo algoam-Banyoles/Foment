@@ -477,7 +477,7 @@ function mostraPartides(partides) {
     list.innerHTML = '';
     partides
       .filter(p => p["🏆 Categoria de la partida"] === cat)
-      .forEach(p => {
+      .forEach((p, idx) => {
         const nom1 = (p["🎱 Nom del Jugador 1"] || '').trim();
         const nom2 = (p["🎱 Nom del Jugador 2"] || '').trim();
         const car1 = parseInt(p["🔢 Caramboles del Jugador 1"], 10) || 0;
@@ -491,6 +491,27 @@ function mostraPartides(partides) {
         const table = document.createElement('table');
         table.className = 'partida';
 
+        const colgroup = document.createElement('colgroup');
+        ['jugadors', 'c', 'e', 'm'].forEach(cl => {
+          const col = document.createElement('col');
+          col.className = cl;
+          colgroup.appendChild(col);
+        });
+        table.appendChild(colgroup);
+
+        if (idx === 0) {
+          const thead = document.createElement('thead');
+          const headerRow = document.createElement('tr');
+          ['Jugadors', 'C', 'E', 'M'].forEach(text => {
+            const th = document.createElement('th');
+            th.textContent = text;
+            headerRow.appendChild(th);
+          });
+          thead.appendChild(headerRow);
+          table.appendChild(thead);
+        }
+
+        const tbody = document.createElement('tbody');
         const tr1 = document.createElement('tr');
         const tr2 = document.createElement('tr');
 
@@ -520,8 +541,9 @@ function mostraPartides(partides) {
         tr2.appendChild(tdCar2);
         tr2.appendChild(tdMitj2);
 
-        table.appendChild(tr1);
-        table.appendChild(tr2);
+        tbody.appendChild(tr1);
+        tbody.appendChild(tr2);
+        table.appendChild(tbody);
         list.appendChild(table);
       });
   }
