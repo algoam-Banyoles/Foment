@@ -44,12 +44,15 @@ h1 {
 #menu {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: stretch;
   margin-bottom: 0.5rem;
 }
 
 #menu > button {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button {
@@ -62,6 +65,9 @@ button {
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button:hover {
