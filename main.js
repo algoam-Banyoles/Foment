@@ -670,7 +670,7 @@ function mostraPartides(partides) {
   const input = document.createElement('input');
   input.id = 'partides-player-filter';
   input.type = 'text';
-  input.placeholder = 'Nom del jugador';
+  input.placeholder = 'Filtre Nom Jugador';
   filters.appendChild(input);
 
   cont.appendChild(filters);
