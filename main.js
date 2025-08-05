@@ -136,19 +136,20 @@ function preparaSelectorsClassificacio() {
     });
   });
 
-  const catSel = document.getElementById('categoria-select');
-  catSel.innerHTML = '';
+  const catBtns = document.getElementById('categoria-buttons');
+  catBtns.innerHTML = '';
   const cats = [...new Set(classificacions.map(c => c.Categoria))].sort();
   cats.forEach(cat => {
-    const opt = document.createElement('option');
-    opt.value = cat;
-    opt.textContent = cat;
-    if (cat === classCategoriaSeleccionada) opt.selected = true;
-    catSel.appendChild(opt);
-  });
-  catSel.addEventListener('change', () => {
-    classCategoriaSeleccionada = catSel.value;
-    mostraClassificacio();
+    const btn = document.createElement('button');
+    btn.textContent = cat;
+    if (cat === classCategoriaSeleccionada) btn.classList.add('selected');
+    btn.addEventListener('click', () => {
+      classCategoriaSeleccionada = cat;
+      catBtns.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      mostraClassificacio();
+    });
+    catBtns.appendChild(btn);
   });
 }
 
