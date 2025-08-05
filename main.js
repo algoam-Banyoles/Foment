@@ -423,15 +423,41 @@ function mostraHorari() {
 function mostraEnllacos() {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
-  const ul = document.createElement('ul');
-  const li = document.createElement('li');
-  const a = document.createElement('a');
-  a.href = 'https://www.fomentmartinenc.org/';
-  a.textContent = 'Foment Martinenc';
-  a.target = '_blank';
-  li.appendChild(a);
-  ul.appendChild(li);
-  cont.appendChild(ul);
+  fetch('enllacos.json')
+    .then(r => r.json())
+    .then(d => {
+      const ul = document.createElement('ul');
+      d.forEach(item => {
+        // Try to find common property names for title and URL
+        const text =
+          item.Títol ||
+          item.Titol ||
+          item.Nom ||
+          item.Name ||
+          item.Text ||
+          Object.values(item)[0];
+        const url =
+          item.URL ||
+          item.Url ||
+          item.Enllaç ||
+          item.Enllac ||
+          item.Link ||
+          Object.values(item)[1];
+        if (!url) return; // skip invalid rows
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = url;
+        a.textContent = text || url;
+        a.target = '_blank';
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+      cont.appendChild(ul);
+    })
+    .catch(err => {
+      cont.textContent = "No s'han pogut carregar els enllaços.";
+      console.error('Error loading links', err);
+    });
 }
 
 
