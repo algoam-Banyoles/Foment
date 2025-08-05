@@ -27,7 +27,17 @@ python3 tools/update_sw_version.py
 
 ## Horari
 
-Pròximament disponibles els horaris de les activitats.
+- Dilluns: 9:00 a 21:30
+- Dimarts: 10:30 a 21:30
+- Dimecres: 9:00 a 21:30
+- Dijous: 9:00 a 21:30
+- Divendres: 10:30 a 21:30
+- Dissabte: 9:00 a 21:30
+- Diumenge: 9:00 a 21:30
+
+Agost tancat
+
+Aquests horaris poden patir alteracions en funció dels horaris d'obertura del bar del Foment.
 
 ## Enllaços
 
