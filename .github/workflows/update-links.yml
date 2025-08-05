@@ -2,11 +2,11 @@ name: Refresh links JSON
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch: {}
+    - cron: '0 */6 * * *'      # cada 6 hores
+  workflow_dispatch: {}         # llançament manual des de la UI
 
 permissions:
-  contents: write
+  contents: write               # necessari per fer push
 
 concurrency:
   group: refresh-links-json
@@ -42,3 +42,4 @@ jobs:
             git push
           else
             echo "No changes to commit."
+          fi        # ← fi que tancava el bloc if
