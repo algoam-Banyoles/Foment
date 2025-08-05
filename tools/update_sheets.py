@@ -107,7 +107,6 @@ def main() -> None:
     for tab in tabs:
         safe_tab = urllib.parse.quote(tab, safe="")       # evita “2:” → “2”
         url = f"{BASE}/{SHEET_ID}/{safe_tab}"
-        url=url[:-1]
 
         try:
             payload = fetch_json(url)
