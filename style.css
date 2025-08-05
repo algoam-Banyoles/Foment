@@ -160,6 +160,13 @@ button:active {
   overflow-x: auto;
 }
 
+/* Contenidor per fer les taules responsives */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
