@@ -624,8 +624,10 @@ function mostraTorneig(dades, file) {
     }, {});
     Object.keys(agrupats).sort().forEach(cat => {
       const h3 = document.createElement('h3');
-      const car = torneigCaramboles[cat] || '';
-      h3.textContent = `${cat}a categoria (${car} caramboles)`;
+      const car = torneigCaramboles[cat];
+      h3.textContent = car
+        ? `${cat}a categoria (${car} caramboles)`
+        : `${cat}a categoria`;
       cont.appendChild(h3);
       const ul = document.createElement('ul');
       agrupats[cat].forEach(nom => {
@@ -635,6 +637,61 @@ function mostraTorneig(dades, file) {
       });
       cont.appendChild(ul);
     });
+    return;
+  }
+
+  // Format específic per a la classificació del torneig
+  if (file === 'classificacio.json' && Array.isArray(dades) && dades[0] && 'Posició' in dades[0]) {
+    const agrupats = dades.reduce((acc, reg) => {
+      const cat = reg.Categoria || '';
+      if (!acc[cat]) acc[cat] = [];
+      acc[cat].push(reg);
+      return acc;
+    }, {});
+    Object.keys(agrupats)
+      .sort()
+      .forEach(cat => {
+        const h3 = document.createElement('h3');
+        const car = torneigCaramboles[cat];
+        h3.textContent = car
+          ? `${cat}a categoria (${car} caramboles)`
+          : `${cat}a categoria`;
+        cont.appendChild(h3);
+        const taula = document.createElement('table');
+        const cap = document.createElement('tr');
+        ['#', 'Jugador', 'PJ', 'P', 'C', 'E', 'MG', 'MM'].forEach(t => {
+          const th = document.createElement('th');
+          th.textContent = t;
+          cap.appendChild(th);
+        });
+        taula.appendChild(cap);
+        agrupats[cat]
+          .sort((a, b) => parseInt(a['Posició'], 10) - parseInt(b['Posició'], 10))
+          .forEach(reg => {
+            const tr = document.createElement('tr');
+            const camps = [
+              reg['Posició'],
+              reg['Nom'] || '',
+              reg['PartidesJugades'] || reg['Partides jugades'] || reg['PJ'] || '',
+              reg['Punts'],
+              reg['Caramboles'],
+              reg['Entrades'],
+              reg['MitjanaGeneral'] || reg['Mitjana'] || '',
+              reg['MitjanaParticular'] || reg['Millor mitjana'] || ''
+            ];
+            camps.forEach((valor, idx) => {
+              const td = document.createElement('td');
+              if (idx >= 6 && valor !== '') {
+                const num = Number.parseFloat(valor);
+                valor = Number.isNaN(num) ? valor : num.toFixed(3);
+              }
+              td.textContent = valor;
+              tr.appendChild(td);
+            });
+            taula.appendChild(tr);
+          });
+        cont.appendChild(taula);
+      });
     return;
   }
 
@@ -758,13 +815,18 @@ document.getElementById('btn-torneig').addEventListener('click', () => {
     .then(r => r.json())
     .then(d => {
       const modalObj = Array.isArray(d) ? (d[0] || {}) : (d || {});
+      torneigCaramboles = {};
+      Object.keys(modalObj).forEach(k => {
+        const m = k.match(/^(\d+)a$/);
+        if (m) {
+          torneigCaramboles[m[1]] = modalObj[k];
+        }
+      });
       torneigModalitat = Array.isArray(d)
         ? d.map(m => m.Modalitat).join(', ')
-
         : (d.Modalitat || '');
       title.textContent = `Social Modalitat ${torneigModalitat}`;
       title.style.display = 'block';
-
     })
     .catch(err => {
       console.error('Error carregant modalitat', err);
