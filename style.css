@@ -379,6 +379,11 @@ details summary {
   margin-top: 0.3rem;
 }
 
+.enllac-club > a {
+  color: #fff;
+  display: block;
+}
+
 .enllacos-list {
   list-style: none;
   padding-left: 0;

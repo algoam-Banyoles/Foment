@@ -475,15 +475,8 @@ function mostraEnllacos() {
 
         Object.entries(clubMap).forEach(([club, clubItems]) => {
           if (club) {
-            const clubDetails = document.createElement('details');
-            const clubSummary = document.createElement('summary');
-            clubSummary.textContent = club;
-            clubSummary.classList.add('enllac-club');
-            clubDetails.appendChild(clubSummary);
-
-            const ul = document.createElement('ul');
-            ul.classList.add('enllacos-list');
-            clubItems.forEach(ci => {
+            if (clubItems.length === 1) {
+              const ci = clubItems[0];
               const url =
                 ci.Enllaç ||
                 ci.Enllac ||
@@ -491,17 +484,43 @@ function mostraEnllacos() {
                 ci.Url ||
                 ci.Link;
               if (!url) return;
-              const li = document.createElement('li');
-              li.classList.add('enllac-url');
+              const p = document.createElement('p');
+              p.classList.add('enllac-club');
               const a = document.createElement('a');
               a.href = url;
               a.target = '_blank';
-              a.textContent = ci.Billar ? `Billar ${ci.Billar}` : club;
-              li.appendChild(a);
-              ul.appendChild(li);
-            });
-            clubDetails.appendChild(ul);
-            tipusDetails.appendChild(clubDetails);
+              a.textContent = club;
+              p.appendChild(a);
+              tipusDetails.appendChild(p);
+            } else {
+              const clubDetails = document.createElement('details');
+              const clubSummary = document.createElement('summary');
+              clubSummary.textContent = club;
+              clubSummary.classList.add('enllac-club');
+              clubDetails.appendChild(clubSummary);
+
+              const ul = document.createElement('ul');
+              ul.classList.add('enllacos-list');
+              clubItems.forEach(ci => {
+                const url =
+                  ci.Enllaç ||
+                  ci.Enllac ||
+                  ci.URL ||
+                  ci.Url ||
+                  ci.Link;
+                if (!url) return;
+                const li = document.createElement('li');
+                li.classList.add('enllac-url');
+                const a = document.createElement('a');
+                a.href = url;
+                a.target = '_blank';
+                a.textContent = ci.Billar ? `Billar ${ci.Billar}` : club;
+                li.appendChild(a);
+                ul.appendChild(li);
+              });
+              clubDetails.appendChild(ul);
+              tipusDetails.appendChild(clubDetails);
+            }
           } else {
             const ul = document.createElement('ul');
             ul.classList.add('enllacos-list');
