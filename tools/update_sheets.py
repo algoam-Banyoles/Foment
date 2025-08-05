@@ -67,7 +67,7 @@ def main():
         try:
             payload = fetch_json(url)
         except Exception as e:
-            print(f"Avís: no s’ha pogut descarregar '{tab}': {e}", file=sys.stderr)
+            print(f"Avís: no s’ha pogut descarregar '{tab}' {e}", file=sys.stderr)
             continue
 
         filename = f"{slugify(tab)}.json"
