@@ -453,11 +453,6 @@ function mostraEvolucioJugador(jugador, nom) {
 function mostraTorneig(dades) {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
-  if (torneigModalitat) {
-    const h2 = document.createElement('h2');
-    h2.textContent = `Social Modalitat ${torneigModalitat}`;
-    cont.appendChild(h2);
-  }
   if (!dades) {
     return;
   }
@@ -575,6 +570,7 @@ document.getElementById('btn-ranking').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'flex';
   document.getElementById('classificacio-filters').style.display = 'none';
   document.getElementById('torneig-buttons').style.display = 'none';
+  document.getElementById('torneig-title').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraRanquing();
 });
@@ -585,6 +581,7 @@ document.getElementById('btn-classificacio').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'none';
   document.getElementById('classificacio-filters').style.display = 'flex';
   document.getElementById('torneig-buttons').style.display = 'none';
+  document.getElementById('torneig-title').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraClassificacio();
 });
@@ -593,6 +590,7 @@ document.getElementById('btn-agenda').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'none';
   document.getElementById('classificacio-filters').style.display = 'none';
   document.getElementById('torneig-buttons').style.display = 'none';
+  document.getElementById('torneig-title').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraAgenda();
 });
@@ -601,6 +599,7 @@ document.getElementById('btn-torneig').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'none';
   document.getElementById('classificacio-filters').style.display = 'none';
   document.getElementById('torneig-buttons').style.display = 'flex';
+  const title = document.getElementById('torneig-title');
   const cont = document.getElementById('content');
   cont.style.display = 'block';
   cont.innerHTML = '';
@@ -610,18 +609,16 @@ document.getElementById('btn-torneig').addEventListener('click', () => {
       const modalObj = Array.isArray(d) ? (d[0] || {}) : (d || {});
       torneigModalitat = Array.isArray(d)
         ? d.map(m => m.Modalitat).join(', ')
-        : (modalObj.Modalitat || '');
-      torneigCaramboles = {
-        '1': modalObj['1a'],
-        '2': modalObj['2a'],
-        '3': modalObj['3a'],
-        '4': modalObj['4a']
-      };
-      mostraTorneig();
+
+        : (d.Modalitat || '');
+      title.textContent = `Social Modalitat ${torneigModalitat}`;
+      title.style.display = 'block';
+
     })
     .catch(err => {
       console.error('Error carregant modalitat', err);
       cont.innerHTML = '<p>Error carregant modalitat.</p>';
+      title.style.display = 'none';
     });
 });
 
