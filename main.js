@@ -452,33 +452,85 @@ function mostraEnllacos() {
   fetch('enllacos.json')
     .then(r => r.json())
     .then(d => {
-      const ul = document.createElement('ul');
+      const tipusMap = {};
       d.forEach(item => {
-        // Try to find common property names for title and URL
-        const text =
-          item.Títol ||
-          item.Titol ||
-          item.Nom ||
-          item.Name ||
-          item.Text ||
-          Object.values(item)[0];
-        const url =
-          item.URL ||
-          item.Url ||
-          item.Enllaç ||
-          item.Enllac ||
-          item.Link ||
-          Object.values(item)[1];
-        if (!url) return; // skip invalid rows
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = url;
-        a.textContent = text || url;
-        a.target = '_blank';
-        li.appendChild(a);
-        ul.appendChild(li);
+        const tipus = item.Tipus || 'Altres';
+        if (!tipusMap[tipus]) tipusMap[tipus] = [];
+        tipusMap[tipus].push(item);
       });
-      cont.appendChild(ul);
+
+      Object.entries(tipusMap).forEach(([tipus, items]) => {
+        const tipusDetails = document.createElement('details');
+        const tipusSummary = document.createElement('summary');
+        tipusSummary.textContent = tipus;
+        tipusDetails.appendChild(tipusSummary);
+
+        const clubMap = {};
+        items.forEach(it => {
+          const club = it.Club || '';
+          if (!clubMap[club]) clubMap[club] = [];
+          clubMap[club].push(it);
+        });
+
+        Object.entries(clubMap).forEach(([club, clubItems]) => {
+          if (club) {
+            const clubDetails = document.createElement('details');
+            const clubSummary = document.createElement('summary');
+            clubSummary.textContent = club;
+            clubDetails.appendChild(clubSummary);
+
+            const ul = document.createElement('ul');
+            clubItems.forEach(ci => {
+              const url =
+                ci.Enllaç ||
+                ci.Enllac ||
+                ci.URL ||
+                ci.Url ||
+                ci.Link;
+              if (!url) return;
+              const li = document.createElement('li');
+              const a = document.createElement('a');
+              a.href = url;
+              a.target = '_blank';
+              a.textContent = ci.Billar ? `Billar ${ci.Billar}` : club;
+              li.appendChild(a);
+              ul.appendChild(li);
+            });
+            clubDetails.appendChild(ul);
+            tipusDetails.appendChild(clubDetails);
+          } else {
+            const ul = document.createElement('ul');
+            clubItems.forEach(ci => {
+              const url =
+                ci.Enllaç ||
+                ci.Enllac ||
+                ci.URL ||
+                ci.Url ||
+                ci.Link;
+              if (!url) return;
+              const li = document.createElement('li');
+              const a = document.createElement('a');
+              a.href = url;
+              a.target = '_blank';
+              let text =
+                ci.Club ||
+                ci.Títol ||
+                ci.Titol ||
+                ci.Nom ||
+                ci.Name ||
+                ci.Text ||
+                url;
+              if (ci.Billar) text += ` - Billar ${ci.Billar}`;
+              a.textContent = text;
+              li.appendChild(a);
+              ul.appendChild(li);
+            });
+            tipusDetails.appendChild(ul);
+          }
+        });
+
+        cont.appendChild(tipusDetails);
+      });
     })
     .catch(err => {
       cont.textContent = "No s'han pogut carregar els enllaços.";
