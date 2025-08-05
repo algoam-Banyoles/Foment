@@ -24,3 +24,11 @@ service worker per garantir que els canvis es propaguin als clients.
 ```bash
 python3 tools/update_sw_version.py
 ```
+
+## Horari
+
+Pròximament disponibles els horaris de les activitats.
+
+## Enllaços
+
+- [Foment Martinenc](https://www.fomentmartinenc.org/)
