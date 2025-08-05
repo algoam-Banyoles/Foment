@@ -575,7 +575,10 @@ function mostraPartides(partides) {
     render(select.value, input.value.trim().toLowerCase());
   }
 
-  select.addEventListener('change', update);
+  select.addEventListener('change', () => {
+    input.value = '';
+    update();
+  });
   input.addEventListener('input', update);
   if (categories.length) {
     render(categories[0], input.value.trim().toLowerCase());
