@@ -459,6 +459,8 @@ function mostraPartides(partides) {
   }
 
   const categories = [...new Set(partides.map(p => p["🏆 Categoria de la partida"]))].sort();
+  const filters = document.createElement('div');
+  filters.id = 'partides-filters';
 
   const select = document.createElement('select');
   select.id = 'partides-categoria-select';
@@ -468,15 +470,28 @@ function mostraPartides(partides) {
     opt.textContent = `Categoria ${cat}`;
     select.appendChild(opt);
   });
-  cont.appendChild(select);
+  filters.appendChild(select);
+
+  const input = document.createElement('input');
+  input.id = 'partides-player-filter';
+  input.type = 'text';
+  input.placeholder = 'Nom del jugador';
+  filters.appendChild(input);
+
+  cont.appendChild(filters);
 
   const list = document.createElement('div');
   cont.appendChild(list);
 
-  function render(cat) {
+  function render(cat, filtre = '') {
     list.innerHTML = '';
     partides
       .filter(p => p["🏆 Categoria de la partida"] === cat)
+      .filter(p => {
+        const nom1 = (p["🎱 Nom del Jugador 1"] || '').toLowerCase();
+        const nom2 = (p["🎱 Nom del Jugador 2"] || '').toLowerCase();
+        return nom1.includes(filtre) || nom2.includes(filtre);
+      })
       .forEach(p => {
         const nom1 = (p["🎱 Nom del Jugador 1"] || '').trim();
         const nom2 = (p["🎱 Nom del Jugador 2"] || '').trim();
@@ -526,7 +541,12 @@ function mostraPartides(partides) {
       });
   }
 
-  select.addEventListener('change', () => render(select.value));
+  function update() {
+    render(select.value, input.value.trim().toLowerCase());
+  }
+
+  select.addEventListener('change', update);
+  input.addEventListener('input', update);
   if (categories.length) {
     render(categories[0]);
   }

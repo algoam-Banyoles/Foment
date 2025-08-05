@@ -97,7 +97,8 @@ button:active {
 
 #classificacio-year-select,
 #categoria-select,
-#partides-categoria-select {
+#partides-categoria-select,
+#partides-player-filter {
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 0.5rem;
@@ -117,6 +118,14 @@ button:active {
 }
 
 #classificacio-filters {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+#partides-filters {
   margin-top: 0.5rem;
   display: flex;
   align-items: center;
