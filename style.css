@@ -72,8 +72,16 @@ button:active {
   transform: scale(0.98);
 }
 
+
+/* Ensure grouped buttons are responsive and share equal width */
 .button-group {
-  display: inline-block;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.button-group button {
+  flex: 1;
 }
 
 .button-group button.selected {
