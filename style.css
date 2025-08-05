@@ -123,6 +123,14 @@ button:active {
   width: 100%;
 }
 
+#torneig-buttons {
+  margin-top: 0.5rem;
+  display: none;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
 #content {
   margin-top: 1rem;
   overflow-x: auto;
