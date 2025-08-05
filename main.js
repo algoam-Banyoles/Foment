@@ -136,19 +136,20 @@ function preparaSelectorsClassificacio() {
     });
   });
 
-  const catSel = document.getElementById('categoria-select');
-  catSel.innerHTML = '';
+  const catBtns = document.getElementById('categoria-buttons');
+  catBtns.innerHTML = '';
   const cats = [...new Set(classificacions.map(c => c.Categoria))].sort();
   cats.forEach(cat => {
-    const opt = document.createElement('option');
-    opt.value = cat;
-    opt.textContent = cat;
-    if (cat === classCategoriaSeleccionada) opt.selected = true;
-    catSel.appendChild(opt);
-  });
-  catSel.addEventListener('change', () => {
-    classCategoriaSeleccionada = catSel.value;
-    mostraClassificacio();
+    const btn = document.createElement('button');
+    btn.textContent = cat;
+    if (cat === classCategoriaSeleccionada) btn.classList.add('selected');
+    btn.addEventListener('click', () => {
+      classCategoriaSeleccionada = cat;
+      catBtns.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      mostraClassificacio();
+    });
+    catBtns.appendChild(btn);
   });
 }
 
@@ -640,7 +641,9 @@ function mostraTorneig(dades, file) {
   }
 
   // Format específic per a la classificació del torneig
-  if (file === 'classificacio.json' && Array.isArray(dades) && dades[0] && 'Punts' in dades[0]) {
+
+  if (file === 'classificacio.json' && Array.isArray(dades) && dades[0] && 'Posició' in dades[0]) {
+
     const agrupats = dades.reduce((acc, reg) => {
       const cat = reg.Categoria || '';
       if (!acc[cat]) acc[cat] = [];
@@ -648,7 +651,9 @@ function mostraTorneig(dades, file) {
       return acc;
     }, {});
     Object.keys(agrupats)
-      .sort((a, b) => parseInt(a, 10) - parseInt(b, 10))
+
+      .sort()
+
       .forEach(cat => {
         const h3 = document.createElement('h3');
         const car = torneigCaramboles[cat];
@@ -665,11 +670,13 @@ function mostraTorneig(dades, file) {
         });
         taula.appendChild(cap);
         agrupats[cat]
-          .sort((a, b) => parseFloat(b['Punts']) - parseFloat(a['Punts']))
-          .forEach((reg, idx) => {
+
+          .sort((a, b) => parseInt(a['Posició'], 10) - parseInt(b['Posició'], 10))
+          .forEach(reg => {
             const tr = document.createElement('tr');
             const camps = [
-              idx + 1,
+              reg['Posició'],
+
               reg['Nom'] || '',
               reg['PartidesJugades'] || reg['Partides jugades'] || reg['PJ'] || '',
               reg['Punts'],
