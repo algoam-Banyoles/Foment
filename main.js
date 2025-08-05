@@ -34,6 +34,13 @@ let torneigModalitat = '';
 let torneigCaramboles = {};
 let torneigCategoriaSeleccionada = null;
 
+function appendResponsiveTable(container, table) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'table-responsive';
+  wrapper.appendChild(table);
+  container.appendChild(wrapper);
+}
+
 function adjustChartSize() {
   const chartContainer = document.getElementById('player-chart');
   if (chartContainer) {
@@ -232,7 +239,7 @@ function mostraRanquing() {
     });
     taula.appendChild(tr);
   });
-  cont.appendChild(taula);
+  appendResponsiveTable(cont, taula);
 }
 
 function mostraClassificacio() {
@@ -279,7 +286,7 @@ function mostraClassificacio() {
     });
     taula.appendChild(tr);
   });
-  cont.appendChild(taula);
+  appendResponsiveTable(cont, taula);
 }
 
 function mostraAgenda() {
@@ -326,12 +333,12 @@ function mostraAgenda() {
   calTable.appendChild(headRow);
   const calBody = document.createElement('tbody');
   calTable.appendChild(calBody);
-  calContainer.appendChild(calTable);
+  appendResponsiveTable(calContainer, calTable);
   cont.appendChild(calContainer);
   const listTable = document.createElement('table');
   listTable.id = 'event-list';
   listTable.classList.add('agenda-table');
-  cont.appendChild(listTable);
+  appendResponsiveTable(cont, listTable);
   function renderCalendar() {
     calBody.innerHTML = '';
     const first = new Date(agendaAny, agendaMes, 1);
@@ -598,7 +605,7 @@ function mostraPartides(partides) {
       tbody.appendChild(tr1);
       tbody.appendChild(tr2);
       table.appendChild(tbody);
-      list.appendChild(table);
+      appendResponsiveTable(list, table);
     });
   }
 
@@ -720,7 +727,7 @@ function mostraTorneig(dades, file) {
           });
           taula.appendChild(tr);
         });
-      cont.appendChild(taula);
+      appendResponsiveTable(cont, taula);
     };
     preparaTorneigCategories(categories, render);
     return;
@@ -762,7 +769,7 @@ function mostraTorneig(dades, file) {
         });
         taula.appendChild(tr);
       });
-      cont.appendChild(taula);
+      appendResponsiveTable(cont, taula);
     };
     preparaTorneigCategories(categories, render);
     return;
@@ -789,7 +796,7 @@ function mostraTorneig(dades, file) {
       });
       taula.appendChild(tr);
     });
-    cont.appendChild(taula);
+    appendResponsiveTable(cont, taula);
     return;
   }
 
@@ -813,7 +820,7 @@ function mostraTorneig(dades, file) {
       });
       taula.appendChild(tr);
     });
-    cont.appendChild(taula);
+    appendResponsiveTable(cont, taula);
     return;
   }
 
@@ -837,7 +844,7 @@ function mostraTorneig(dades, file) {
       });
       taula.appendChild(tr);
     });
-    cont.appendChild(taula);
+    appendResponsiveTable(cont, taula);
     return;
   }
 
