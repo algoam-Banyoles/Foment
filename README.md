@@ -39,6 +39,6 @@ Agost tancat
 
 Aquests horaris poden patir alteracions en funció dels horaris d'obertura del bar del Foment.
 
-## Enllaços
+## Enllaços d'interès
 
 - [Foment Martinenc](https://www.fomentmartinenc.org/)
