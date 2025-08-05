@@ -458,6 +458,12 @@ function mostraPartides(partides) {
     return;
   }
 
+  partides.sort((a, b) => {
+    const dateA = new Date(a.Timestamp);
+    const dateB = new Date(b.Timestamp);
+    return dateB - dateA;
+  });
+
   const categories = [...new Set(partides.map(p => p["🏆 Categoria de la partida"]))].sort();
   const filters = document.createElement('div');
   filters.id = 'partides-filters';
