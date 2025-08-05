@@ -31,7 +31,7 @@ SHEET_ID = os.getenv("SHEET_ID", "").strip()   # ← cap valor per defecte
 
 SHEET_TABS = [t.strip() for t in os.getenv("SHEET_TABS", "").split(",") if t.strip()]
 
-OUTPUT_DIR   = os.getenv("OUTPUT_DIR", "public/data")
+OUTPUT_DIR   = os.getenv("OUTPUT_DIR", "data")
 BASE         = "https://opensheet.elk.sh"
 TIMEOUT      = int(os.getenv("HTTP_TIMEOUT", "30"))
 MAX_RETRIES  = int(os.getenv("HTTP_RETRIES", "5"))
