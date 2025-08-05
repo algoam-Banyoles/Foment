@@ -32,8 +32,8 @@ jobs:
       - name: Run updater
         env:
           SHEET_ID: "1Dc01H5hAxPwwhyY_GnRAVFP2-uINanwJS1jhtFs2syU"      # ← posa'l a Settings → Secrets
-          SHEET_TABS: "1,2,3,4"                  # índexs o noms separats per comes
-          OUTPUT_DIR: "public/data"              # carpeta on vols els .json
+          SHEET_TABS: "1,2,3,4,5"                  # índexs o noms separats per comes
+          OUTPUT_DIR: "data"              # carpeta on vols els .json
         run: |
           python tools/update_sheets.py
 
