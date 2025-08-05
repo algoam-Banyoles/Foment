@@ -111,7 +111,7 @@ def main() -> None:
         try:
             payload = fetch_json(url)
         except Exception as e:
-            print(f"Avís: no s’ha pogut descarregar '{tab}': {e}", file=sys.stderr)
+            print(f"Avís, no s’ha pogut descarregar '{tab}' {e}", file=sys.stderr)
             continue
 
         outpath = pathlib.Path(OUTPUT_DIR) / f"{slugify(tab)}.json"
