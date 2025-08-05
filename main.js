@@ -30,6 +30,7 @@ let classCategoriaSeleccionada = null;
 let events = [];
 let agendaMes = new Date().getMonth();
 let agendaAny = new Date().getFullYear();
+let torneigModalitat = '';
 
 function adjustChartSize() {
   const chartContainer = document.getElementById('player-chart');
@@ -451,8 +452,18 @@ function mostraEvolucioJugador(jugador, nom) {
 function mostraTorneig(dades) {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
-  if (!dades || (Array.isArray(dades) && dades.length === 0)) {
-    cont.innerHTML = '<p>No hi ha dades.</p>';
+  if (torneigModalitat) {
+    const h2 = document.createElement('h2');
+    h2.textContent = `Social Modalitat ${torneigModalitat}`;
+    cont.appendChild(h2);
+  }
+  if (!dades) {
+    return;
+  }
+  if (Array.isArray(dades) && dades.length === 0) {
+    const p = document.createElement('p');
+    p.textContent = 'No hi ha dades.';
+    cont.appendChild(p);
     return;
   }
 
@@ -565,8 +576,21 @@ document.getElementById('btn-torneig').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'none';
   document.getElementById('classificacio-filters').style.display = 'none';
   document.getElementById('torneig-buttons').style.display = 'flex';
-  document.getElementById('content').style.display = 'block';
-  document.getElementById('content').innerHTML = '';
+  const cont = document.getElementById('content');
+  cont.style.display = 'block';
+  cont.innerHTML = '';
+  fetch('data/modalitat.json')
+    .then(r => r.json())
+    .then(d => {
+      torneigModalitat = Array.isArray(d)
+        ? (d[0] && d[0].Modalitat) || ''
+        : (d.Modalitat || '');
+      mostraTorneig();
+    })
+    .catch(err => {
+      console.error('Error carregant modalitat', err);
+      cont.innerHTML = '<p>Error carregant modalitat.</p>';
+    });
 });
 
 document.querySelectorAll('#torneig-buttons button').forEach(btn => {
