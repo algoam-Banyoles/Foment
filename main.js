@@ -670,12 +670,18 @@ function mostraTorneig(dades, file) {
         });
         taula.appendChild(cap);
         agrupats[cat]
-
-          .sort((a, b) => parseInt(a['Posició'], 10) - parseInt(b['Posició'], 10))
-          .forEach(reg => {
+          .sort((a, b) => {
+            const puntsA = parseInt(a['Punts'], 10) || 0;
+            const puntsB = parseInt(b['Punts'], 10) || 0;
+            if (puntsB !== puntsA) return puntsB - puntsA;
+            const mitjanaA = parseFloat(a['MitjanaGeneral'] || a['Mitjana'] || '0');
+            const mitjanaB = parseFloat(b['MitjanaGeneral'] || b['Mitjana'] || '0');
+            return mitjanaB - mitjanaA;
+          })
+          .forEach((reg, idx) => {
             const tr = document.createElement('tr');
             const camps = [
-              reg['Posició'],
+              idx + 1,
 
               reg['Nom'] || '',
               reg['PartidesJugades'] || reg['Partides jugades'] || reg['PJ'] || '',
