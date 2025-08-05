@@ -56,7 +56,8 @@ def main():
         print("ERROR: cal definir SHEET_ID (ID del Google Sheet) via secrets o env.", file=sys.stderr)
         sys.exit(2)
 
-    tabs = SHEET_TABS[] or discover_tabs(SHEET_ID)
+    tabs = SHEET_TABS[:] or discover_tabs(SHEET_ID)
+    tabs = SHEET_TABS.setdefault(sheet_id, discover_tabs(sheet_id))
     if not tabs:
         print("ERROR: no s’han pogut obtenir les pestanyes. Defineix SHEET_TABS (coma-separat).", file=sys.stderr)
         sys.exit(3)
