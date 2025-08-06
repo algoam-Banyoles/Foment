@@ -99,7 +99,7 @@ function inicialitza() {
           dadesFestius.map(f => ({
             Data: f.Data,
             Hora: '',
-            Títol: f.Títol || '',
+            Títol: `Foment tancat (${f.Títol || ''})`,
             Tipus: 'festiu'
           }))
         );

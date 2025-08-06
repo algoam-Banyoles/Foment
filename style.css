@@ -8,11 +8,11 @@
   --background: #f9f9f9;
   --text-color: #222;
   --event-inici: #d1e7dd;
-  --event-fi: #f8d7da;
+  --event-fi: #f1aeb5;
   --event-other: #cfe2ff;
   --event-partida: #e2d9f3;
   --event-assemblea: #fff3cd;
-  --event-festiu: #f5c2c7;
+  --event-festiu: #e2e3e5;
 }
 
 body {
