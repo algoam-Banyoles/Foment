@@ -730,6 +730,7 @@ function mostraPartides(partides) {
   cont.appendChild(list);
 
   function render(filtre = '') {
+    filtre = (filtre || '').toLowerCase();
     list.innerHTML = '';
     const filtered = partides
       .filter(p => p["🏆 Categoria de la partida"] === torneigCategoriaSeleccionada)
@@ -866,6 +867,7 @@ function mostraCalendari(partides) {
   };
 
   function render(filtre = '') {
+    filtre = (filtre || '').toLowerCase();
     dataContainer.innerHTML = '';
 
     const progFiltrades = programades.filter(p => {
