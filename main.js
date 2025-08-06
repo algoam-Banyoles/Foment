@@ -406,7 +406,7 @@ function mostraAgenda() {
   function renderList() {
     listTable.innerHTML = '';
     const header = document.createElement('tr');
-    ['Data', 'Hora', 'Títol'].forEach(t => {
+    ['Data', 'Títol'].forEach(t => {
       const th = document.createElement('th');
       th.textContent = t;
       header.appendChild(th);
@@ -431,7 +431,7 @@ function mostraAgenda() {
         cls = 'event-inici';
       }
       tr.classList.add(cls);
-      ['Data', 'Hora', 'Títol'].forEach(clau => {
+      ['Data', 'Títol'].forEach(clau => {
         const td = document.createElement('td');
         td.textContent = ev[clau] || '';
         tr.appendChild(td);
