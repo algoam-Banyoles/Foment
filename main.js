@@ -375,12 +375,12 @@ function mostraAgenda() {
           cls = 'event-festiu';
         } else if (dayEvents.some(ev => ev.Tipus === 'assemblea')) {
           cls = 'event-assemblea';
+        } else if (dayEvents.some(ev => ev.Tipus === 'partida')) {
+          cls = 'event-partida';
         } else if (dayEvents.some(ev => ev['Títol'].includes('Fi'))) {
           cls = 'event-fi';
         } else if (dayEvents.some(ev => ev['Títol'].includes('Inici'))) {
           cls = 'event-inici';
-        } else if (dayEvents.some(ev => ev.Tipus === 'partida')) {
-          cls = 'event-partida';
         }
         cell.classList.add(cls);
         cell.addEventListener('click', () => highlightEvents(iso));
@@ -415,12 +415,12 @@ function mostraAgenda() {
         cls = 'event-festiu';
       } else if (ev.Tipus === 'assemblea') {
         cls = 'event-assemblea';
+      } else if (ev.Tipus === 'partida') {
+        cls = 'event-partida';
       } else if (ev['Títol'].includes('Fi')) {
         cls = 'event-fi';
       } else if (ev['Títol'].includes('Inici')) {
         cls = 'event-inici';
-      } else if (ev.Tipus === 'partida') {
-        cls = 'event-partida';
       }
       tr.classList.add(cls);
       ['Data', 'Hora', 'Títol'].forEach(clau => {
