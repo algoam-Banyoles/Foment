@@ -61,9 +61,10 @@ function inicialitza() {
   Promise.all([
     fetch('ranquing.json').then(r => r.json()),
     fetch('classificacions.json').then(r => r.json()).catch(() => []),
-    fetch('events.json').then(r => r.json()).catch(() => [])
+    fetch('events.json').then(r => r.json()).catch(() => []),
+    fetch('data/calendari.json').then(r => r.json()).catch(() => [])
   ])
-    .then(([dadesRanking, dadesClass, dadesEvents]) => {
+    .then(([dadesRanking, dadesClass, dadesEvents, dadesCalendari]) => {
       ranquing = dadesRanking;
       anys = [...new Set(dadesRanking.map(d => parseInt(d.Any, 10)))]
         .sort((a, b) => a - b);
@@ -76,7 +77,13 @@ function inicialitza() {
       const categories = new Set(dadesClass.map(d => d.Categoria));
       classCategoriaSeleccionada = categories.values().next().value || null;
 
-      events = dadesEvents;
+      events = dadesEvents.concat(
+        dadesCalendari.map(p => ({
+          Data: p.Data,
+          Hora: '',
+          Títol: `${p['Jugador A'].trim()} vs ${p['Jugador B'].trim()} (${p.Hora})`
+        }))
+      );
 
       preparaSelectors();
       preparaSelectorsClassificacio();
