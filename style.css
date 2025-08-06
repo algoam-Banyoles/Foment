@@ -283,6 +283,16 @@ td {
   width: 99%;
 }
 
+/* Allow event titles to wrap over two lines */
+.agenda-table td:last-child {
+  white-space: normal;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  word-break: break-word;
+}
+
 
 th {
   background: var(--primary);
