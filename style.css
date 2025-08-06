@@ -372,13 +372,14 @@ table:not(.agenda-table) tr:nth-child(even) {
   cursor: pointer;
 }
 
+
 .calendar-table td.event-partida {
-  background: #d1c4e9;
+  background: #b39ddb;
   cursor: pointer;
 }
 
 .calendar-table td.event-assemblea {
-  background: #fff59d;
+  background: #ffeb3b;
   cursor: pointer;
 }
 
@@ -399,12 +400,13 @@ table:not(.agenda-table) tr:nth-child(even) {
   background: #bbdefb;
 }
 
+
 .agenda-table tr.event-partida td {
-  background: #d1c4e9;
+  background: #b39ddb;
 }
 
 .agenda-table tr.event-assemblea td {
-  background: #fff59d;
+  background: #ffeb3b;
 }
 
 .agenda-table tr.event-festiu td {
