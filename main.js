@@ -767,12 +767,56 @@ function mostraPartides(partides) {
   render();
 }
 
+function mostraCalendari(partides) {
+  const cont = document.getElementById('content');
+  cont.innerHTML = '';
+  if (!Array.isArray(partides)) {
+    cont.textContent = 'Dades de calendari no vàlides.';
+    return;
+  }
+
+  partides.sort((a, b) => {
+    const dateA = new Date(`${a.Data}T${a.Hora}`);
+    const dateB = new Date(`${b.Data}T${b.Hora}`);
+    return dateA - dateB;
+  });
+
+  const taula = document.createElement('table');
+  const cap = document.createElement('tr');
+  ['Dia', 'Hora', 'Billar', 'J1', 'J2'].forEach(t => {
+    const th = document.createElement('th');
+    th.textContent = t;
+    cap.appendChild(th);
+  });
+  taula.appendChild(cap);
+
+  partides.forEach(p => {
+    const tr = document.createElement('tr');
+    const [yyyy, mm, dd] = (p.Data || '').split('-');
+    const dia = dd && mm && yyyy ? `${dd}/${mm}/${yyyy}` : '';
+    const billar = (p.Billar || '').replace('Billar ', 'B');
+    [dia, p.Hora || '', billar, (p['Jugador A'] || '').trim(), (p['Jugador B'] || '').trim()].forEach(val => {
+      const td = document.createElement('td');
+      td.textContent = val;
+      tr.appendChild(td);
+    });
+    taula.appendChild(tr);
+  });
+
+  appendResponsiveTable(cont, taula);
+}
+
 function mostraTorneig(dades, file) {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
   const catCont = document.getElementById('torneig-category-buttons');
   catCont.style.display = 'none';
   catCont.innerHTML = '';
+
+  if (file === 'calendari.json') {
+    mostraCalendari(dades);
+    return;
+  }
 
   if (file === 'partides.json') {
     const categories = [...new Set(dades.map(p => p["🏆 Categoria de la partida"]))];
