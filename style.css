@@ -250,6 +250,11 @@ td {
   vertical-align: middle;
 }
 
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
 .agenda-table td:nth-child(3) {
   text-align: left;
 }
