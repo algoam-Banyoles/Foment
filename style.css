@@ -7,6 +7,12 @@
   --category-dark: #5a3300;
   --background: #f9f9f9;
   --text-color: #222;
+  --event-inici: #d1e7dd;
+  --event-fi: #f8d7da;
+  --event-other: #cfe2ff;
+  --event-partida: #e2d9f3;
+  --event-assemblea: #fff3cd;
+  --event-festiu: #f5c2c7;
 }
 
 body {
@@ -387,59 +393,59 @@ table:not(.agenda-table) tr:nth-child(even) {
 }
 
 .calendar-table td.event-inici {
-  background: #c8e6c9;
+  background: var(--event-inici);
   cursor: pointer;
 }
 
 .calendar-table td.event-fi {
-  background: #ffcdd2;
+  background: var(--event-fi);
   cursor: pointer;
 }
 
 .calendar-table td.event-other {
-  background: #bbdefb;
+  background: var(--event-other);
   cursor: pointer;
 }
 
 
 .calendar-table td.event-partida {
-  background: #b39ddb;
+  background: var(--event-partida);
   cursor: pointer;
 }
 
 .calendar-table td.event-assemblea {
-  background: #ffeb3b;
+  background: var(--event-assemblea);
   cursor: pointer;
 }
 
 .calendar-table td.event-festiu {
-  background: #ef9a9a;
+  background: var(--event-festiu);
   cursor: pointer;
 }
 
 .agenda-table tr.event-inici td {
-  background: #c8e6c9;
+  background: var(--event-inici);
 }
 
 .agenda-table tr.event-fi td {
-  background: #ffcdd2;
+  background: var(--event-fi);
 }
 
 .agenda-table tr.event-other td {
-  background: #bbdefb;
+  background: var(--event-other);
 }
 
 
 .agenda-table tr.event-partida td {
-  background: #b39ddb;
+  background: var(--event-partida);
 }
 
 .agenda-table tr.event-assemblea td {
-  background: #ffeb3b;
+  background: var(--event-assemblea);
 }
 
 .agenda-table tr.event-festiu td {
-  background: #ef9a9a;
+  background: var(--event-festiu);
 }
 
 .selected-event {
