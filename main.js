@@ -821,9 +821,11 @@ function mostraCalendari(partides) {
       const tdDia = document.createElement('td');
       const [yyyy, mm, dd] = (p.Data || '').split('-');
       const diaNum = parseInt(dd, 10);
+
       const diaTxt =
         mm && diaNum ? `${diaNum}<br>${mesos[mm] || mm}` : '';
       tdDia.innerHTML = diaTxt;
+
       const count = dayCounts[p.Data];
       if (count > 1) {
         tdDia.rowSpan = count;
