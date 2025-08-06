@@ -202,6 +202,10 @@ td {
   white-space: nowrap;
 }
 
+.calendari-table tr.new-day td {
+  border-top: 2px solid var(--text-color);
+}
+
 .partida {
   background: transparent;
   box-shadow: none;
