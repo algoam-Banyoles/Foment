@@ -830,9 +830,10 @@ function mostraCalendari(partides) {
     }, {});
 
     const taula = document.createElement('table');
-    taula.classList.add('calendari-table');
+
     const cap = document.createElement('tr');
-    ['Dia', 'Hora', 'Billar', 'J1', 'J2'].forEach(t => {
+    ['D', 'H', 'B', 'J1', 'J2'].forEach(t => {
+
       const th = document.createElement('th');
       th.textContent = t;
       cap.appendChild(th);
@@ -843,7 +844,8 @@ function mostraCalendari(partides) {
     progFiltrades.forEach(p => {
       const tr = document.createElement('tr');
       if (p.Data !== lastData) {
-        tr.classList.add('new-day');
+
+
         const tdDia = document.createElement('td');
         const [yyyy, mm, dd] = (p.Data || '').split('-');
         const diaNum = parseInt(dd, 10);
@@ -860,8 +862,9 @@ function mostraCalendari(partides) {
         lastData = p.Data;
       }
       const billar = (p.Billar || '').replace('Billar ', 'B');
-      const hora = (p.Hora || '').replace(/:00$/, '');
-      [hora, billar, (p['Jugador A'] || '').trim(), (p['Jugador B'] || '').trim()].forEach(val => {
+
+      [p.Hora || '', billar, (p['Jugador A'] || '').trim(), (p['Jugador B'] || '').trim()].forEach(val => {
+
         const td = document.createElement('td');
         td.textContent = val;
         tr.appendChild(td);
