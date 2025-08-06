@@ -372,6 +372,36 @@ tr:nth-child(even) {
   cursor: pointer;
 }
 
+.calendar-table td.event-partida {
+  background: #d1c4e9;
+  cursor: pointer;
+}
+
+.calendar-table td.event-assemblea {
+  background: #fff59d;
+  cursor: pointer;
+}
+
+.agenda-table tr.event-inici td {
+  background: #c8e6c9;
+}
+
+.agenda-table tr.event-fi td {
+  background: #ffcdd2;
+}
+
+.agenda-table tr.event-other td {
+  background: #bbdefb;
+}
+
+.agenda-table tr.event-partida td {
+  background: #d1c4e9;
+}
+
+.agenda-table tr.event-assemblea td {
+  background: #fff59d;
+}
+
 .selected-event {
   background: #fff9c4 !important;
 }

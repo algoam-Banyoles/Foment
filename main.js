@@ -28,8 +28,12 @@ let classModalitatSeleccionada = '3 BANDES';
 let classCategoriaSeleccionada = null;
 
 let events = [];
-let agendaMes = new Date().getMonth();
-let agendaAny = new Date().getFullYear();
+let agendaSetmanaInici = (() => {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+  return d;
+})();
 let torneigModalitat = '';
 let torneigCaramboles = {};
 let torneigCategoriaSeleccionada = null;
@@ -77,11 +81,15 @@ function inicialitza() {
       const categories = new Set(dadesClass.map(d => d.Categoria));
       classCategoriaSeleccionada = categories.values().next().value || null;
 
-      events = dadesEvents.concat(
+      events = dadesEvents.map(ev => ({
+        ...ev,
+        Tipus: ev['Títol'].toLowerCase().includes('assemblea') ? 'assemblea' : 'altre'
+      })).concat(
         dadesCalendari.map(p => ({
           Data: p.Data,
           Hora: '',
-          Títol: `${p['Jugador A'].trim()} vs ${p['Jugador B'].trim()} (${p.Hora})`
+          Títol: `${p['Jugador A'].trim()} vs ${p['Jugador B'].trim()} (${p.Hora})`,
+          Tipus: 'partida'
         }))
       );
 
@@ -310,19 +318,11 @@ function mostraAgenda() {
   const label = document.createElement('span');
   label.id = 'calendar-month';
   prev.addEventListener('click', () => {
-    agendaMes--;
-    if (agendaMes < 0) {
-      agendaMes = 11;
-      agendaAny--;
-    }
+    agendaSetmanaInici.setDate(agendaSetmanaInici.getDate() - 7);
     render();
   });
   next.addEventListener('click', () => {
-    agendaMes++;
-    if (agendaMes > 11) {
-      agendaMes = 0;
-      agendaAny++;
-    }
+    agendaSetmanaInici.setDate(agendaSetmanaInici.getDate() + 7);
     render();
   });
   nav.appendChild(prev);
@@ -346,41 +346,37 @@ function mostraAgenda() {
   listTable.id = 'event-list';
   listTable.classList.add('agenda-table');
   appendResponsiveTable(cont, listTable);
+
   function renderCalendar() {
     calBody.innerHTML = '';
-    const first = new Date(agendaAny, agendaMes, 1);
-    const start = (first.getDay() + 6) % 7;
-    const daysInMonth = new Date(agendaAny, agendaMes + 1, 0).getDate();
-    let date = 1;
-    for (let i = 0; i < 6; i++) {
-      const row = document.createElement('tr');
-      for (let j = 0; j < 7; j++) {
-        const cell = document.createElement('td');
-        if ((i === 0 && j < start) || date > daysInMonth) {
-          cell.textContent = '';
-        } else {
-          const iso = new Date(Date.UTC(agendaAny, agendaMes, date)).toISOString().split('T')[0];
-          cell.textContent = date;
-          cell.dataset.date = iso;
-          const dayEvents = events.filter(ev => ev['Data'] === iso);
-          if (dayEvents.length > 0) {
-            let cls = 'event-other';
-            if (dayEvents.some(ev => ev['Títol'].includes('Fi'))) {
-              cls = 'event-fi';
-            } else if (dayEvents.some(ev => ev['Títol'].includes('Inici'))) {
-              cls = 'event-inici';
-            }
-            cell.classList.add(cls);
-            cell.addEventListener('click', () => highlightEvents(iso));
-          }
-          date++;
+    const row = document.createElement('tr');
+    for (let i = 0; i < 7; i++) {
+      const cell = document.createElement('td');
+      const date = new Date(agendaSetmanaInici);
+      date.setDate(agendaSetmanaInici.getDate() + i);
+      const iso = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())).toISOString().split('T')[0];
+      cell.textContent = date.getDate();
+      cell.dataset.date = iso;
+      const dayEvents = events.filter(ev => ev['Data'] === iso);
+      if (dayEvents.length > 0) {
+        let cls = 'event-other';
+        if (dayEvents.some(ev => ev.Tipus === 'assemblea')) {
+          cls = 'event-assemblea';
+        } else if (dayEvents.some(ev => ev['Títol'].includes('Fi'))) {
+          cls = 'event-fi';
+        } else if (dayEvents.some(ev => ev['Títol'].includes('Inici'))) {
+          cls = 'event-inici';
+        } else if (dayEvents.some(ev => ev.Tipus === 'partida')) {
+          cls = 'event-partida';
         }
-        row.appendChild(cell);
+        cell.classList.add(cls);
+        cell.addEventListener('click', () => highlightEvents(iso));
       }
-      calBody.appendChild(row);
-      if (date > daysInMonth) break;
+      row.appendChild(cell);
     }
+    calBody.appendChild(row);
   }
+
   function renderList() {
     listTable.innerHTML = '';
     const header = document.createElement('tr');
@@ -390,15 +386,28 @@ function mostraAgenda() {
       header.appendChild(th);
     });
     listTable.appendChild(header);
-    const monthEvents = events
+    const weekEnd = new Date(agendaSetmanaInici);
+    weekEnd.setDate(agendaSetmanaInici.getDate() + 7);
+    const weekEvents = events
       .filter(ev => {
         const d = new Date(ev['Data']);
-        return d.getFullYear() === agendaAny && d.getMonth() === agendaMes;
+        return d >= agendaSetmanaInici && d < weekEnd;
       })
       .sort((a, b) => new Date(a['Data']) - new Date(b['Data']));
-    monthEvents.forEach(ev => {
+    weekEvents.forEach(ev => {
       const tr = document.createElement('tr');
       tr.dataset.date = ev['Data'];
+      let cls = 'event-other';
+      if (ev.Tipus === 'assemblea') {
+        cls = 'event-assemblea';
+      } else if (ev['Títol'].includes('Fi')) {
+        cls = 'event-fi';
+      } else if (ev['Títol'].includes('Inici')) {
+        cls = 'event-inici';
+      } else if (ev.Tipus === 'partida') {
+        cls = 'event-partida';
+      }
+      tr.classList.add(cls);
       ['Data', 'Hora', 'Títol'].forEach(clau => {
         const td = document.createElement('td');
         td.textContent = ev[clau] || '';
@@ -407,15 +416,22 @@ function mostraAgenda() {
       listTable.appendChild(tr);
     });
   }
+
   function highlightEvents(dateStr) {
     listTable.querySelectorAll('tr').forEach(tr => tr.classList.remove('selected-event'));
     listTable.querySelectorAll(`tr[data-date='${dateStr}']`).forEach(tr => tr.classList.add('selected-event'));
   }
+
   function render() {
-    label.textContent = new Date(agendaAny, agendaMes).toLocaleDateString('ca-ES', { month: 'long', year: 'numeric' });
+    const end = new Date(agendaSetmanaInici);
+    end.setDate(agendaSetmanaInici.getDate() + 6);
+    const startStr = agendaSetmanaInici.toLocaleDateString('ca-ES', { day: 'numeric', month: 'short' });
+    const endStr = end.toLocaleDateString('ca-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+    label.textContent = `${startStr} - ${endStr}`;
     renderCalendar();
     renderList();
   }
+
   render();
 }
 
