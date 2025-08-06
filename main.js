@@ -791,11 +791,18 @@ function mostraTorneig(dades, file) {
   }
 
   // Format específic per als inscrits: array d'objectes amb categoria i nom
-  if (Array.isArray(dades) && dades[0] && 'Categoria jugador' in dades[0] && 'Nom jugador' in dades[0]) {
+  if (
+    Array.isArray(dades) &&
+    dades[0] &&
+    (('Categoria jugador' in dades[0] && 'Nom jugador' in dades[0]) ||
+      ('Categoria' in dades[0] && 'Nom' in dades[0]))
+  ) {
+    const catField = 'Categoria jugador' in dades[0] ? 'Categoria jugador' : 'Categoria';
+    const nomField = 'Nom jugador' in dades[0] ? 'Nom jugador' : 'Nom';
     const agrupats = dades.reduce((acc, reg) => {
-      const cat = reg['Categoria jugador'];
+      const cat = reg[catField];
       if (!acc[cat]) acc[cat] = [];
-      acc[cat].push((reg['Nom jugador'] || '').trim());
+      acc[cat].push((reg[nomField] || '').trim());
       return acc;
     }, {});
     const categories = Object.keys(agrupats);
