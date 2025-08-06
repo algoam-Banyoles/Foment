@@ -774,8 +774,10 @@ function mostraCalendari(partides) {
     cont.textContent = 'Dades de calendari no vàlides.';
     return;
   }
+  const programades = partides.filter(p => p.Data);
+  const pendents = partides.filter(p => !p.Data);
 
-  partides.sort((a, b) => {
+  programades.sort((a, b) => {
     const dataDiff = (a.Data || '').localeCompare(b.Data || '');
     if (dataDiff !== 0) return dataDiff;
     const horaDiff = (a.Hora || '').localeCompare(b.Hora || '');
@@ -800,7 +802,7 @@ function mostraCalendari(partides) {
     '12': 'des'
   };
 
-  const dayCounts = partides.reduce((acc, p) => {
+  const dayCounts = programades.reduce((acc, p) => {
     acc[p.Data] = (acc[p.Data] || 0) + 1;
     return acc;
   }, {});
@@ -815,7 +817,7 @@ function mostraCalendari(partides) {
   taula.appendChild(cap);
 
   let lastData = null;
-  partides.forEach(p => {
+  programades.forEach(p => {
     const tr = document.createElement('tr');
     if (p.Data !== lastData) {
       const tdDia = document.createElement('td');
@@ -844,6 +846,42 @@ function mostraCalendari(partides) {
   });
 
   appendResponsiveTable(cont, taula);
+
+  if (pendents.length > 0) {
+    const h3 = document.createElement('h3');
+    h3.textContent = 'Pendent de programar';
+    cont.appendChild(h3);
+
+    const taulaPend = document.createElement('table');
+    const capPend = document.createElement('tr');
+    ['Jornada', 'J1', 'J2'].forEach(t => {
+      const th = document.createElement('th');
+      th.textContent = t;
+      capPend.appendChild(th);
+    });
+    taulaPend.appendChild(capPend);
+
+    pendents
+      .sort(
+        (a, b) =>
+          (parseInt(a.Jornada, 10) || 0) - (parseInt(b.Jornada, 10) || 0)
+      )
+      .forEach(p => {
+        const tr = document.createElement('tr');
+        [
+          p.Jornada || '',
+          (p['Jugador A'] || '').trim(),
+          (p['Jugador B'] || '').trim()
+        ].forEach(val => {
+          const td = document.createElement('td');
+          td.textContent = val;
+          tr.appendChild(td);
+        });
+        taulaPend.appendChild(tr);
+      });
+
+    appendResponsiveTable(cont, taulaPend);
+  }
 }
 
 function mostraTorneig(dades, file) {
