@@ -863,7 +863,12 @@ function mostraCalendari(partides) {
       }
       const billar = (p.Billar || '').replace('Billar ', 'B');
 
-      [p.Hora || '', billar, (p['Jugador A'] || '').trim(), (p['Jugador B'] || '').trim()].forEach(val => {
+      let hora = p.Hora || '';
+      if (/^\d{1,2}:00$/.test(hora)) {
+        hora = hora.split(':')[0];
+      }
+
+      [hora, billar, (p['Jugador A'] || '').trim(), (p['Jugador B'] || '').trim()].forEach(val => {
 
         const td = document.createElement('td');
         td.textContent = val;
