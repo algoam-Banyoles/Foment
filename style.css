@@ -268,7 +268,7 @@ td {
   text-orientation: mixed;
 }
 
-.agenda-table td:nth-child(3) {
+.agenda-table td:nth-child(2) {
   text-align: left;
 }
 
