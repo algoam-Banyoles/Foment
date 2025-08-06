@@ -126,7 +126,8 @@ button:active {
 
 #classificacio-year-select,
 #partides-categoria-select,
-#partides-player-filter {
+#partides-player-filter,
+#calendari-player-filter {
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 0.5rem;
@@ -154,6 +155,14 @@ button:active {
 }
 
 #partides-filters {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+#calendari-filters {
   margin-top: 0.5rem;
   display: flex;
   align-items: center;
