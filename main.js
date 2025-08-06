@@ -955,6 +955,7 @@ function mostraTorneig(dades, file) {
 
   // Format específic per als inscrits: array d'objectes amb categoria i nom
   if (
+    file !== 'classificacio.json' &&
     Array.isArray(dades) &&
     dades[0] &&
     (('Categoria jugador' in dades[0] && 'Nom jugador' in dades[0]) ||
