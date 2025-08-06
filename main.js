@@ -358,6 +358,11 @@ function mostraAgenda() {
   listTable.classList.add('agenda-table');
   appendResponsiveTable(cont, listTable);
 
+  const today = new Date();
+  let selectedDate = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()))
+    .toISOString()
+    .split('T')[0];
+
   function renderCalendar() {
     calBody.innerHTML = '';
     const row = document.createElement('tr');
@@ -365,7 +370,9 @@ function mostraAgenda() {
       const cell = document.createElement('td');
       const date = new Date(agendaSetmanaInici);
       date.setDate(agendaSetmanaInici.getDate() + i);
-      const iso = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())).toISOString().split('T')[0];
+      const iso = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
+        .toISOString()
+        .split('T')[0];
       cell.textContent = date.getDate();
       cell.dataset.date = iso;
       const dayEvents = events.filter(ev => ev['Data'] === iso);
@@ -383,8 +390,14 @@ function mostraAgenda() {
           cls = 'event-inici';
         }
         cell.classList.add(cls);
-        cell.addEventListener('click', () => highlightEvents(iso));
       }
+      if (iso === selectedDate) {
+        cell.classList.add('selected-day');
+      }
+      cell.addEventListener('click', () => {
+        selectedDate = iso;
+        render();
+      });
       row.appendChild(cell);
     }
     calBody.appendChild(row);
@@ -399,15 +412,10 @@ function mostraAgenda() {
       header.appendChild(th);
     });
     listTable.appendChild(header);
-    const weekEnd = new Date(agendaSetmanaInici);
-    weekEnd.setDate(agendaSetmanaInici.getDate() + 7);
-    const weekEvents = events
-      .filter(ev => {
-        const d = new Date(ev['Data']);
-        return d >= agendaSetmanaInici && d < weekEnd;
-      })
-      .sort((a, b) => new Date(a['Data']) - new Date(b['Data']));
-    weekEvents.forEach(ev => {
+    const dayEvents = events
+      .filter(ev => ev['Data'] === selectedDate)
+      .sort((a, b) => (a['Hora'] || '').localeCompare(b['Hora'] || ''));
+    dayEvents.forEach(ev => {
       const tr = document.createElement('tr');
       tr.dataset.date = ev['Data'];
       let cls = 'event-other';
@@ -432,14 +440,14 @@ function mostraAgenda() {
     });
   }
 
-  function highlightEvents(dateStr) {
-    listTable.querySelectorAll('tr').forEach(tr => tr.classList.remove('selected-event'));
-    listTable.querySelectorAll(`tr[data-date='${dateStr}']`).forEach(tr => tr.classList.add('selected-event'));
-  }
-
   function render() {
     const end = new Date(agendaSetmanaInici);
     end.setDate(agendaSetmanaInici.getDate() + 6);
+    const weekEnd = new Date(agendaSetmanaInici);
+    weekEnd.setDate(agendaSetmanaInici.getDate() + 7);
+    if (new Date(selectedDate) < agendaSetmanaInici || new Date(selectedDate) >= weekEnd) {
+      selectedDate = agendaSetmanaInici.toISOString().split('T')[0];
+    }
     const startStr = agendaSetmanaInici.toLocaleDateString('ca-ES', { day: 'numeric', month: 'short' });
     const endStr = end.toLocaleDateString('ca-ES', { day: 'numeric', month: 'short', year: 'numeric' });
     label.textContent = `${startStr} - ${endStr}`;

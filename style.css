@@ -357,6 +357,14 @@ table:not(.agenda-table) tr:nth-child(even) {
   text-align: center;
 }
 
+.calendar-table td {
+  cursor: pointer;
+}
+
+.calendar-table td.selected-day {
+  outline: 2px solid #000;
+}
+
 .calendar-table td.event-inici {
   background: #c8e6c9;
   cursor: pointer;
