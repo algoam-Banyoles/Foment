@@ -433,7 +433,12 @@ function mostraAgenda() {
       tr.classList.add(cls);
       ['Data', 'Títol'].forEach(clau => {
         const td = document.createElement('td');
-        td.textContent = ev[clau] || '';
+        if (clau === 'Data') {
+          const [y, m, d] = (ev['Data'] || '').split('-');
+          td.textContent = `${d}/${m}`;
+        } else {
+          td.textContent = ev[clau] || '';
+        }
         tr.appendChild(td);
       });
       listTable.appendChild(tr);

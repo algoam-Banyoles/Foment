@@ -272,6 +272,17 @@ td {
   text-align: left;
 }
 
+.agenda-table th:first-child,
+.agenda-table td:first-child {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.agenda-table th:last-child,
+.agenda-table td:last-child {
+  width: 99%;
+}
+
 
 th {
   background: var(--primary);
