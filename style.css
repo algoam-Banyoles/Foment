@@ -278,7 +278,7 @@ th {
   color: #fff;
 }
 
-tr:nth-child(even) {
+table:not(.agenda-table) tr:nth-child(even) {
   background: #f5f5f5;
 }
 
@@ -382,6 +382,11 @@ tr:nth-child(even) {
   cursor: pointer;
 }
 
+.calendar-table td.event-festiu {
+  background: #ef9a9a;
+  cursor: pointer;
+}
+
 .agenda-table tr.event-inici td {
   background: #c8e6c9;
 }
@@ -400,6 +405,10 @@ tr:nth-child(even) {
 
 .agenda-table tr.event-assemblea td {
   background: #fff59d;
+}
+
+.agenda-table tr.event-festiu td {
+  background: #ef9a9a;
 }
 
 .selected-event {

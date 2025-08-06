@@ -66,9 +66,10 @@ function inicialitza() {
     fetch('ranquing.json').then(r => r.json()),
     fetch('classificacions.json').then(r => r.json()).catch(() => []),
     fetch('events.json').then(r => r.json()).catch(() => []),
-    fetch('data/calendari.json').then(r => r.json()).catch(() => [])
+    fetch('data/calendari.json').then(r => r.json()).catch(() => []),
+    fetch('festius.json').then(r => r.json()).catch(() => [])
   ])
-    .then(([dadesRanking, dadesClass, dadesEvents, dadesCalendari]) => {
+    .then(([dadesRanking, dadesClass, dadesEvents, dadesCalendari, dadesFestius]) => {
       ranquing = dadesRanking;
       anys = [...new Set(dadesRanking.map(d => parseInt(d.Any, 10)))]
         .sort((a, b) => a - b);
@@ -81,17 +82,27 @@ function inicialitza() {
       const categories = new Set(dadesClass.map(d => d.Categoria));
       classCategoriaSeleccionada = categories.values().next().value || null;
 
-      events = dadesEvents.map(ev => ({
-        ...ev,
-        Tipus: ev['Títol'].toLowerCase().includes('assemblea') ? 'assemblea' : 'altre'
-      })).concat(
-        dadesCalendari.map(p => ({
-          Data: p.Data,
-          Hora: '',
-          Títol: `${p['Jugador A'].trim()} vs ${p['Jugador B'].trim()} (${p.Hora})`,
-          Tipus: 'partida'
+      events = dadesEvents
+        .map(ev => ({
+          ...ev,
+          Tipus: ev['Títol'].toLowerCase().includes('assemblea') ? 'assemblea' : 'altre'
         }))
-      );
+        .concat(
+          dadesCalendari.map(p => ({
+            Data: p.Data,
+            Hora: '',
+            Títol: `${p['Jugador A'].trim()} vs ${p['Jugador B'].trim()} (${p.Hora})`,
+            Tipus: 'partida'
+          }))
+        )
+        .concat(
+          dadesFestius.map(f => ({
+            Data: f.Data,
+            Hora: '',
+            Títol: f.Títol || '',
+            Tipus: 'festiu'
+          }))
+        );
 
       preparaSelectors();
       preparaSelectorsClassificacio();
@@ -360,7 +371,9 @@ function mostraAgenda() {
       const dayEvents = events.filter(ev => ev['Data'] === iso);
       if (dayEvents.length > 0) {
         let cls = 'event-other';
-        if (dayEvents.some(ev => ev.Tipus === 'assemblea')) {
+        if (dayEvents.some(ev => ev.Tipus === 'festiu')) {
+          cls = 'event-festiu';
+        } else if (dayEvents.some(ev => ev.Tipus === 'assemblea')) {
           cls = 'event-assemblea';
         } else if (dayEvents.some(ev => ev['Títol'].includes('Fi'))) {
           cls = 'event-fi';
@@ -398,7 +411,9 @@ function mostraAgenda() {
       const tr = document.createElement('tr');
       tr.dataset.date = ev['Data'];
       let cls = 'event-other';
-      if (ev.Tipus === 'assemblea') {
+      if (ev.Tipus === 'festiu') {
+        cls = 'event-festiu';
+      } else if (ev.Tipus === 'assemblea') {
         cls = 'event-assemblea';
       } else if (ev['Títol'].includes('Fi')) {
         cls = 'event-fi';
