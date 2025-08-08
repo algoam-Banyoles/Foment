@@ -18,6 +18,20 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+document.getElementById('btn-update').addEventListener('click', () => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistration().then(reg => {
+      if (reg) {
+        reg.update().then(() => {
+          if (reg.waiting) {
+            reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+        });
+      }
+    });
+  }
+});
+
 let ranquing = [];
 let anys = [];
 let anySeleccionat = null;
