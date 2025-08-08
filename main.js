@@ -3,6 +3,9 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js')
       .then(reg => {
         console.log('SW registrat!', reg);
+        // Força una comprovació d'actualitzacions diària
+        reg.update();
+        setInterval(() => reg.update(), 24 * 60 * 60 * 1000);
       })
       .catch(err => console.error('Error al registrar el SW:', err));
 
