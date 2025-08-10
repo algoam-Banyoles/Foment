@@ -522,7 +522,7 @@ function mostraHorari() {
 
     <ul>
       <li>Jugar a fantasia.</li>
-      <li>Menjar a les sales.</li>
+      <li>Menjar mentre s'està jugant.</li>
       <li>Posar begudes sobre cap element del billar.</li>
     </ul>
   </div>
