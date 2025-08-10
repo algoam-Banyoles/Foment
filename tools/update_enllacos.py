@@ -6,13 +6,13 @@ content changed. Environment variables allow customisation, similar to
 `update_sheets.py`.
 
 Required env vars:
-  • LINKS_SHEET_ID – Google Sheet identifier
+  • SHEETS_ID   – Google Sheet identifier
 
 Optional env vars:
-  • LINKS_SHEET_TAB – sheet tab name or index (default: "1")
-  • OUTPUT_FILE     – path of the JSON file (default: "enllacos.json")
-  • HTTP_TIMEOUT    – request timeout in seconds (default: 30)
-  • HTTP_RETRIES    – number of fetch retries (default: 5)
+  • SHEETS_TAB  – sheet tab name or index (default: "1")
+  • OUTPUT_FILE – path of the JSON file (default: "enllacos.json")
+  • HTTP_TIMEOUT – request timeout in seconds (default: 30)
+  • HTTP_RETRIES – number of fetch retries (default: 5)
 """
 
 from __future__ import annotations
@@ -29,8 +29,8 @@ import urllib.request
 from typing import Any
 
 BASE = "https://opensheet.elk.sh"
-SHEET_ID = os.getenv("LINKS_SHEET_ID", "").strip()
-SHEET_TAB = os.getenv("LINKS_SHEET_TAB", "1").strip() or "1"
+SHEET_ID = os.getenv("SHEETS_ID", "").strip()
+SHEET_TAB = os.getenv("SHEETS_TAB", "1").strip() or "1"
 OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "enllacos.json"))
 TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "30"))
 MAX_RETRIES = int(os.getenv("HTTP_RETRIES", "5"))
@@ -78,7 +78,7 @@ def write_if_changed(path: pathlib.Path, data_obj: Any) -> bool:
 def main() -> None:
     if not SHEET_ID:
         print(
-            "ERROR: variable d'entorn LINKS_SHEET_ID no definida.",
+            "ERROR: variable d'entorn SHEETS_ID no definida.",
             file=sys.stderr,
         )
         sys.exit(2)

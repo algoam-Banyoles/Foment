@@ -5,13 +5,13 @@ Fetches rows via the OpenSheet service and writes a JSON file only if
 content changed.  Inspired by ``update_enllacos.py``.
 
 Required env vars:
-  • AGENDA_SHEET_ID – Google Sheet identifier
+  • AGENDA_ID    – Google Sheet identifier
 
 Optional env vars:
-  • AGENDA_SHEET_TAB – sheet tab name or index (default: "1")
-  • OUTPUT_FILE      – path of the JSON file (default: "events.json")
-  • HTTP_TIMEOUT     – request timeout in seconds (default: 30)
-  • HTTP_RETRIES     – number of fetch retries (default: 5)
+  • AGENDA_TAB   – sheet tab name or index (default: "1")
+  • OUTPUT_FILE  – path of the JSON file (default: "events.json")
+  • HTTP_TIMEOUT – request timeout in seconds (default: 30)
+  • HTTP_RETRIES – number of fetch retries (default: 5)
 """
 
 from __future__ import annotations
@@ -29,8 +29,8 @@ from datetime import datetime
 from typing import Any, Dict, List
 
 BASE = "https://opensheet.elk.sh"
-SHEET_ID = os.getenv("AGENDA_SHEET_ID", "").strip()
-SHEET_TAB = os.getenv("AGENDA_SHEET_TAB", "1").strip() or "1"
+SHEET_ID = os.getenv("AGENDA_ID", "").strip()
+SHEET_TAB = os.getenv("AGENDA_TAB", "1").strip() or "1"
 OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "events.json"))
 TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "30"))
 MAX_RETRIES = int(os.getenv("HTTP_RETRIES", "5"))
@@ -104,7 +104,7 @@ def normalise_rows(payload: List[Dict[str, str]]) -> List[Dict[str, str]]:
 def main() -> None:
     if not SHEET_ID:
         print(
-            "ERROR: variable d'entorn AGENDA_SHEET_ID no definida.",
+            "ERROR: variable d'entorn AGENDA_ID no definida.",
             file=sys.stderr,
         )
         sys.exit(2)
