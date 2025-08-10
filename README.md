@@ -43,7 +43,7 @@ python3 tools/update_sw_version.py
 
 
 - Jugar a fantasia.
-- Menjar a les sales.
+- Menjar mentre s'està jugant.
 - Posar begudes sobre cap element del billar.
 
 ### Inscripció a les partides
