@@ -1,77 +1,128 @@
-import zipfile
-import xml.etree.ElementTree as ET
+#!/usr/bin/env python3
+"""Sync event data from a public Google Sheet to ``events.json``.
+
+Fetches rows via the OpenSheet service and writes a JSON file only if
+content changed.  Inspired by ``update_enllacos.py``.
+
+Required env vars:
+  • AGENDA_SHEET_ID – Google Sheet identifier
+
+Optional env vars:
+  • AGENDA_SHEET_TAB – sheet tab name or index (default: "1")
+  • OUTPUT_FILE      – path of the JSON file (default: "events.json")
+  • HTTP_TIMEOUT     – request timeout in seconds (default: 30)
+  • HTTP_RETRIES     – number of fetch retries (default: 5)
+"""
+
+from __future__ import annotations
+
+import hashlib
 import json
-from pathlib import Path
-from datetime import datetime, timedelta
+import os
+import pathlib
+import sys
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+from datetime import datetime
+from typing import Any, Dict, List
 
-# Input Excel file with events. The date column uses dd/mm/aaaa format,
-# but Excel stores it as a numeric serial. Use the exact file name.
-XLSX_FILE = Path('Agenda.xlsx')
-JSON_FILE = Path('events.json')
+BASE = "https://opensheet.elk.sh"
+SHEET_ID = os.getenv("AGENDA_SHEET_ID", "").strip()
+SHEET_TAB = os.getenv("AGENDA_SHEET_TAB", "1").strip() or "1"
+OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "events.json"))
+TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "30"))
+MAX_RETRIES = int(os.getenv("HTTP_RETRIES", "5"))
 
-NS = {'a': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (compatible; AgendaSync/1.0; +https://github.com/<repo>)"
+    ),
+    "Accept": "application/json",
+}
 
-def load_shared_strings(z):
-    data = z.read('xl/sharedStrings.xml')
-    tree = ET.fromstring(data)
-    strings = []
-    for t in tree.findall('.//a:t', NS):
-        strings.append(t.text or '')
-    return strings
 
-def cell_value(cell, strings):
-    v = cell.find('a:v', NS)
-    if v is None:
-        return ''
-    val = v.text or ''
-    if cell.get('t') == 's':
-        idx = int(val)
-        return strings[idx]
-    return val
+def fetch_json(url: str, tries: int = MAX_RETRIES, timeout: int = TIMEOUT) -> Any:
+    """GET helper with custom headers and exponential backoff."""
+    last_err: Exception | None = None
+    for i in range(tries):
+        try:
+            req = urllib.request.Request(url, headers=HEADERS)
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                charset = resp.headers.get_content_charset() or "utf-8"
+                return json.loads(resp.read().decode(charset))
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
+            last_err = e
+            if isinstance(e, urllib.error.HTTPError) and e.code == 403:
+                break
+            time.sleep(2**i)
+    raise RuntimeError(f"Failed to GET {url}: {last_err}") from last_err
+
+
+def write_if_changed(path: pathlib.Path, data_obj: Any) -> bool:
+    """Write JSON file only when content changes (SHA-256 check)."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    new_bytes = json.dumps(data_obj, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    if path.exists() and hashlib.sha256(path.read_bytes()).digest() == hashlib.sha256(
+        new_bytes
+    ).digest():
+        return False
+    path.write_bytes(new_bytes)
+    return True
 
 
 def to_iso_date(value: str) -> str:
-    """Convert an Excel cell value to ISO date string."""
+    """Convert dd/mm/yyyy or ISO dates to ISO format."""
     value = value.strip()
     if not value:
-        return ''
-    # Try numeric Excel serial first
+        return ""
     try:
-        days = float(value)
-        # Excel's day zero is 1899-12-30
-        date = datetime(1899, 12, 30) + timedelta(days=days)
-        return date.strftime('%Y-%m-%d')
+        # try dd/mm/yyyy
+        return datetime.strptime(value, "%d/%m/%Y").strftime("%Y-%m-%d")
     except ValueError:
         pass
-    # Try dd/mm/yyyy format
     try:
-        date = datetime.strptime(value, '%d/%m/%Y')
-        return date.strftime('%Y-%m-%d')
+        return datetime.fromisoformat(value).date().isoformat()
     except ValueError:
         return value
 
-def update():
-    with zipfile.ZipFile(XLSX_FILE) as z:
-        strings = load_shared_strings(z)
-        sheet_xml = z.read('xl/worksheets/sheet1.xml')
-    sheet = ET.fromstring(sheet_xml)
-    sheet_data = sheet.find('a:sheetData', NS)
-    rows = []
-    for row in sheet_data.findall('a:row', NS):
-        r_index = int(row.get('r'))
-        if r_index == 1:
-            continue  # header row
-        cells = {c.get('r')[0]: c for c in row.findall('a:c', NS)}
-        raw_date = cell_value(cells.get('A', ET.Element('c')), strings)
+
+def normalise_rows(payload: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    rows: List[Dict[str, str]] = []
+    for row in payload:
         record = {
-            'Data': to_iso_date(raw_date),
-            'Hora': cell_value(cells.get('B', ET.Element('c')), strings),
-            'Títol': cell_value(cells.get('C', ET.Element('c')), strings),
+            "Data": to_iso_date(row.get("Data", "")),
+            "Hora": row.get("Hora", ""),
+            "Títol": row.get("Títol") or row.get("Titol", ""),
         }
-        # ignore completely empty rows
         if any(record.values()):
             rows.append(record)
-    JSON_FILE.write_text(json.dumps(rows, ensure_ascii=False, indent=2))
+    return rows
 
-if __name__ == '__main__':
-    update()
+
+def main() -> None:
+    if not SHEET_ID:
+        print(
+            "ERROR: variable d'entorn AGENDA_SHEET_ID no definida.",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+
+    url = f"{BASE}/{SHEET_ID}/{urllib.parse.quote(SHEET_TAB, safe='')}"
+    try:
+        payload = fetch_json(url)
+    except Exception as e:
+        print(f"Avís: error baixant dades: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    data = normalise_rows(payload if isinstance(payload, list) else [])
+    if write_if_changed(OUTPUT_FILE, data):
+        print(f"Fitxer actualitzat: {OUTPUT_FILE}")
+    else:
+        print("Sense canvis.")
+
+
+if __name__ == "__main__":
+    main()
+
