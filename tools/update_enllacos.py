@@ -28,6 +28,11 @@ import urllib.parse
 import urllib.request
 from typing import Any
 
+# Disable proxies unless explicitly re-enabled
+if os.getenv("DISABLE_PROXY", "1") != "0":
+    for key in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY"):
+        os.environ.pop(key, None)
+
 BASE = "https://opensheet.elk.sh"
 SHEET_ID = os.getenv("LINKS_SHEET_ID", "").strip()
 SHEET_TAB = os.getenv("LINKS_SHEET_TAB", "1").strip() or "1"
