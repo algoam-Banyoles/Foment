@@ -544,6 +544,15 @@ details summary {
   color: #d90000;
 }
 
+.normes-card.prohibit {
+  background: var(--event-fi);
+  border: 2px solid #ff4d4d;
+}
+
+.normes-card.prohibit h3 {
+  color: #d90000;
+}
+
 .normes-card ul {
   margin-top: 0;
 }
