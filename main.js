@@ -500,10 +500,20 @@ function mostraHorari() {
 
   <!-- Norma Obligatòria -->
   <div class="normes-card obligatori">
-    <h3>🚨 OBLIGATORI</h3>
+    <h3>✅ OBLIGATORI</h3>
     <p class="obligatori-text">
-      Netejar taula i boles abans de començar amb el material que la secció posa a disposició dels socis.
+      Netejar el billar i les boles abans de començar cada partida amb el material que la Secció posa a disposició de tots els socis.
     </p>
+  </div>
+
+  <!-- Prohibicions -->
+  <div class="normes-card prohibit">
+    <h3>🚫 Prohibit</h3>
+    <ul>
+      <li>Jugar a fantasia.</li>
+      <li>Menjar a les sales.</li>
+      <li>Posar begudes sobre cap element del billar.</li>
+    </ul>
   </div>
 
   <!-- Inscripció -->
