@@ -1,7 +1,7 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.3/workbox-sw.js');
 
 // This value is replaced at build time by tools/update_sw_version.py
-const CACHE_VERSION = '20250808085201';
+const CACHE_VERSION = '20250810162041';
 
 self.addEventListener('install', () => self.skipWaiting());
 
@@ -26,9 +26,9 @@ workbox.precaching.precacheAndRoute([
   { url: './style.css', revision: CACHE_VERSION },
   { url: './main.js', revision: CACHE_VERSION },
   { url: 'https://cdn.jsdelivr.net/npm/chart.js', revision: null },
-  { url: './ranquing.json', revision: CACHE_VERSION },
+  { url: './data/ranquing.json', revision: CACHE_VERSION },
   { url: './classificacions.json', revision: CACHE_VERSION },
-  { url: './events.json', revision: CACHE_VERSION },
+  { url: './data/events.json', revision: CACHE_VERSION },
   { url: './icons/icon-192.png', revision: CACHE_VERSION },
   { url: './icons/icon-512.png', revision: CACHE_VERSION }
 ]);
