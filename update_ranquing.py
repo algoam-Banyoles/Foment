@@ -1,9 +1,11 @@
-import zipfile
+"""Update ranquing.json from the remote Google Sheet."""
+
 import xml.etree.ElementTree as ET
 import json
 from pathlib import Path
 
-XLSX_FILE = Path('Ranquing.xlsx')
+from opensheets import open_sheet_from_env
+
 JSON_FILE = Path('ranquing.json')
 
 NS = {'a': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
@@ -27,7 +29,7 @@ def cell_value(cell, strings):
     return val
 
 def update():
-    with zipfile.ZipFile(XLSX_FILE) as z:
+    with open_sheet_from_env('RANK_ID') as z:
         strings = load_shared_strings(z)
         sheet_xml = z.read('xl/worksheets/sheet1.xml')
     sheet = ET.fromstring(sheet_xml)
