@@ -34,9 +34,15 @@ python3 tools/update_sw_version.py
 
 *L’horari pot canviar.*
 
-### OBLIGATORI
+### ✅ OBLIGATORI
 
-- Netejar taula i boles abans de començar amb el material que la secció posa a disposició dels socis.
+- Netejar el billar i les boles abans de començar cada partida amb el material que la Secció posa a disposició de tots els socis.
+
+### 🚫 PROHIBIT
+
+- Jugar a fantasia.
+- Menjar a les sales.
+- Posar begudes sobre cap element del billar.
 
 ### Inscripció a les partides
 
@@ -51,7 +57,7 @@ python3 tools/update_sw_version.py
 ### Temps de joc
 
 - Màxim **1 hora** per partida (sol o en grup).
-- **Prohibit** posar monedes per allargar el temps, encara que hi hagi taules lliures.
+- **PROHIBIT** posar monedes per allargar el temps, encara que hi hagi taules lliures.
 
 ### Tornar a jugar
 
