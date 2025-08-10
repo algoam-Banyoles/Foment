@@ -536,12 +536,13 @@ details summary {
 }
 
 .normes-card.obligatori {
-  background: var(--event-inici);
-  border: 2px solid #28a745;
+  background: #FFD700;
+  border: 2px solid #000;
+  color: #000;
 }
 
 .normes-card.obligatori h3 {
-  color: #1e7e34;
+  color: #000;
 }
 
 .normes-card.prohibit {
@@ -569,6 +570,7 @@ details summary {
   font-weight: bold;
   margin: 0;
   text-align: center;
+  color: #000;
 }
 
 
