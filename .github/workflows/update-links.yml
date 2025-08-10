@@ -26,8 +26,8 @@ jobs:
 
       - name: Run updater
         env:
-          LINKS_SHEET_ID: "11OYEE5abd8l5jrgJRcSOmvzE5vhYJCgkBIJpgEPS43k"
-          LINKS_SHEET_TAB: "1"
+          SHEETS_ID: ${{ secrets.SHEETS_ID }}
+          SHEETS_TAB: "1"
           OUTPUT_FILE: "enllacos.json"
         run: |
           python tools/update_enllacos.py

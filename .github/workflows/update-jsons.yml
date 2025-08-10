@@ -27,7 +27,9 @@ jobs:
 
       - name: Run update scripts
         env:
-          AGENDA_SHEET_ID: "1IkA50UI7OpFd_VYUb5kNe9V0jj-MZKqu"
+          CLAS_ID: ${{ secrets.CLAS_ID }}
+          RANK_ID: ${{ secrets.RANK_ID }}
+          AGENDA_ID: ${{ secrets.AGENDA_ID }}
         run: |
           python tools/update_classificacions.py
           python tools/update_ranquing.py

@@ -31,7 +31,7 @@ jobs:
       # 3) Executa l’script d’actualització
       - name: Run updater
         env:
-          SHEET_ID: "1Dc01H5hAxPwwhyY_GnRAVFP2-uINanwJS1jhtFs2syU"      # ← posa'l a Settings → Secrets
+          SHEET_ID: ${{ secrets.SHEET_ID }}          # ← defineix-lo a Secrets
           SHEET_TABS: "1,2,3,4,5"                  # índexs o noms separats per comes
           OUTPUT_DIR: "data"              # carpeta on vols els .json
         run: |
