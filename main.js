@@ -482,36 +482,66 @@ function mostraAgenda() {
 
 function mostraHorari() {
   const cont = document.getElementById('content');
-  cont.innerHTML = '';
+  cont.innerHTML = `
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
+  <h2 style="text-align:center;">🎱 Normes d’ús i horari</h2>
 
-  const ul = document.createElement('ul');
+  <!-- Horari -->
+  <div style="background:#eef6ff; border-radius:12px; padding:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+    <h3>🕒 Horari d'obertura</h3>
+    <ul style="margin-top:0;">
+      <li><b>Dilluns, dimecres, dijous, dissabte i diumenge:</b> 9:00 – 21:30</li>
+      <li><b>Dimarts i divendres:</b> 10:30 – 21:30</li>
+    </ul>
+    <p style="font-size:0.9em; color:#555; margin-top:5px;">
+      *L’horari pot canviar.
+    </p>
+  </div>
 
-  const hores = [
-    ['Dilluns', '9:00 a 21:30'],
-    ['Dimarts', '10:30 a 21:30'],
-    ['Dimecres', '9:00 a 21:30'],
-    ['Dijous', '9:00 a 21:30'],
-    ['Divendres', '10:30 a 21:30'],
-    ['Dissabte', '9:00 a 21:30'],
-    ['Diumenge', '9:00 a 21:30']
-  ];
-  hores.forEach(([dia, hora]) => {
+  <!-- Norma Obligatòria -->
+  <div style="background:#fff3f3; border:2px solid #ff4d4d; border-radius:12px; padding:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+    <h3 style="color:#d90000;">🚨 OBLIGATORI</h3>
+    <p style="font-size:1.1em; font-weight:bold; margin:0;">
+      Netejar taula i boles abans de començar amb el material que la secció posa a disposició dels socis.
+    </p>
+  </div>
 
-    const li = document.createElement('li');
-    li.textContent = `${dia}: ${hora}`;
-    ul.appendChild(li);
-  });
-  cont.appendChild(ul);
+  <!-- Inscripció -->
+  <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+    <h3>📝 Inscripció a les partides</h3>
+    <ul>
+      <li>Apunta’t a la pissarra única de <b>PARTIDES SOCIALS</b>.</li>
+      <li>Els companys no cal que s’apuntin; si ho fan, que sigui al costat del primer jugador.</li>
+    </ul>
+  </div>
 
+  <!-- Assignació de taula -->
+  <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+    <h3>🗂 Assignació de taula</h3>
+    <ul>
+      <li>Quan hi hagi una taula lliure, ratlla el teu nom i juga.</li>
+      <li>Si vols una taula concreta ocupada, <b>passa el torn</b> fins que s’alliberi.</li>
+    </ul>
+  </div>
 
-  const pAgost = document.createElement('p');
-  pAgost.textContent = 'Agost tancat';
-  cont.appendChild(pAgost);
+  <!-- Temps de joc -->
+  <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+    <h3>⏳ Temps de joc</h3>
+    <ul>
+      <li>Màxim <b>1 hora</b> per partida (sol o en grup).</li>
+      <li><b>Prohibit</b> posar monedes per allargar el temps, encara que hi hagi taules lliures.</li>
+    </ul>
+  </div>
 
-  const pNotes = document.createElement('p');
-  pNotes.textContent =
-    "Aquests horaris poden patir alteracions en funció dels horaris d'obertura del bar del Foment.";
-  cont.appendChild(pNotes);
+  <!-- Tornar a jugar -->
+  <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+    <h3>🔄 Tornar a jugar</h3>
+    <ul>
+      <li>Només pots repetir si <b>no hi ha ningú apuntat</b> i hi ha una taula lliure.</li>
+    </ul>
+  </div>
+</div>
+  `;
 }
 
 function mostraEnllacos() {
