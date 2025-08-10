@@ -10,10 +10,10 @@ python3 server.py
 Aquesta ordre arrenca un petit servidor web a `http://localhost:8000`.
 La informació de rànquing i classificacions s'ha d'actualitzar
 externament mitjançant una aplicació d'escriptori. De la mateixa manera,
-els esdeveniments s'obtenen de `agenda.xlsx` executant:
+els esdeveniments es sincronitzen d'un Google Sheet públic executant:
 
 ```bash
-python3 update_events.py
+AGENDA_SHEET_ID=1IkA50UI7OpFd_VYUb5kNe9V0jj-MZKqu python3 tools/update_events.py
 ```
 
 ### Actualitzar la versió del service worker
