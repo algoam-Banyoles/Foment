@@ -44,6 +44,15 @@ python3 tools/update_sw_version.py
 - Menjar a les sales.
 - Posar begudes sobre cap element del billar.
 
+
+### 🚫 Prohibit
+
+
+
+- Jugar a fantasia.
+- Menjar a les sales.
+- Posar begudes sobre cap element del billar.
+
 ### Inscripció a les partides
 
 - Apunta’t a la pissarra única de **PARTIDES SOCIALS**.
