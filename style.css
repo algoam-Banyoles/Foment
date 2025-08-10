@@ -513,4 +513,51 @@ details summary {
   color: #fff;
 }
 
+/* Normes i horari */
+.normes-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.normes-title {
+  text-align: center;
+}
+
+.normes-card {
+  background: #f8f8f8;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.normes-card.horari {
+  background: var(--event-other);
+}
+
+.normes-card.obligatori {
+  background: var(--event-fi);
+  border: 2px solid #ff4d4d;
+}
+
+.normes-card.obligatori h3 {
+  color: #d90000;
+}
+
+.normes-card ul {
+  margin-top: 0;
+}
+
+.normes-note {
+  font-size: 0.9em;
+  color: #555;
+  margin-top: 5px;
+}
+
+.obligatori-text {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 0;
+}
+
 
