@@ -34,9 +34,15 @@ python3 tools/update_sw_version.py
 
 *L’horari pot canviar.*
 
-### OBLIGATORI
+### ✅ OBLIGATORI
 
 - Netejar taula i boles abans de començar amb el material que la secció posa a disposició dels socis.
+
+### 🚫 Prohibit
+
+- Jugar a fantasia.
+- Menjar a les sales.
+- Posar begudes sobre cap element del billar.
 
 ### Inscripció a les partides
 
