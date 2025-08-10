@@ -508,7 +508,9 @@ function mostraHorari() {
 
   <!-- Prohibicions -->
   <div class="normes-card prohibit">
+
     <h3>🚫 PROHIBIT</h3>
+
     <ul>
       <li>Jugar a fantasia.</li>
       <li>Menjar a les sales.</li>

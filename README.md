@@ -40,6 +40,7 @@ python3 tools/update_sw_version.py
 
 ### 🚫 PROHIBIT
 
+
 - Jugar a fantasia.
 - Menjar a les sales.
 - Posar begudes sobre cap element del billar.
