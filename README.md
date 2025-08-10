@@ -25,19 +25,37 @@ service worker per garantir que els canvis es propaguin als clients.
 python3 tools/update_sw_version.py
 ```
 
-## Horari
+## Normativa i Horari
 
-- Dilluns: 9:00 a 21:30
-- Dimarts: 10:30 a 21:30
-- Dimecres: 9:00 a 21:30
-- Dijous: 9:00 a 21:30
-- Divendres: 10:30 a 21:30
-- Dissabte: 9:00 a 21:30
-- Diumenge: 9:00 a 21:30
+### Horari d'obertura
 
-Agost tancat
+- Dilluns, dimecres, dijous, dissabte i diumenge: 9:00 – 21:30
+- Dimarts i divendres: 10:30 – 21:30
 
-Aquests horaris poden patir alteracions en funció dels horaris d'obertura del bar del Foment.
+*L’horari pot canviar.*
+
+### OBLIGATORI
+
+- Netejar taula i boles abans de començar amb el material que la secció posa a disposició dels socis.
+
+### Inscripció a les partides
+
+- Apunta’t a la pissarra única de **PARTIDES SOCIALS**.
+- Els companys no cal que s’apuntin; si ho fan, que sigui al costat del primer jugador.
+
+### Assignació de taula
+
+- Quan hi hagi una taula lliure, ratlla el teu nom i juga.
+- Si vols una taula concreta ocupada, **passa el torn** fins que s’alliberi.
+
+### Temps de joc
+
+- Màxim **1 hora** per partida (sol o en grup).
+- **Prohibit** posar monedes per allargar el temps, encara que hi hagi taules lliures.
+
+### Tornar a jugar
+
+- Només pots repetir si **no hi ha ningú apuntat** i hi ha una taula lliure.
 
 ## Enllaços
 
