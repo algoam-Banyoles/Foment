@@ -506,6 +506,16 @@ function mostraHorari() {
     </p>
   </div>
 
+  <!-- Prohibicions -->
+  <div class="normes-card prohibit">
+    <h3>🚫 Prohibit</h3>
+    <ul>
+      <li>Jugar a fantasia.</li>
+      <li>Menjar a les sales.</li>
+      <li>Posar begudes sobre cap element del billar.</li>
+    </ul>
+  </div>
+
   <!-- Inscripció -->
   <div class="normes-card">
     <h3>📝 Inscripció a les partides</h3>
