@@ -3,9 +3,18 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js')
       .then(reg => {
         console.log('SW registrat!', reg);
+        // Comprova si hi ha una versió nova i aplica-la immediatament
+        const checkForUpdate = () => {
+          reg.update().then(() => {
+            if (reg.waiting) {
+              reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+            }
+          });
+        };
+
+        checkForUpdate();
         // Força una comprovació d'actualitzacions diària
-        reg.update();
-        setInterval(() => reg.update(), 24 * 60 * 60 * 1000);
+        setInterval(checkForUpdate, 24 * 60 * 60 * 1000);
       })
       .catch(err => console.error('Error al registrar el SW:', err));
 

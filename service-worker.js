@@ -3,9 +3,7 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.3/workbox
 // This value is replaced at build time by tools/update_sw_version.py
 const CACHE_VERSION = '20250808085201';
 
-// Activate new service worker as soon as it's finished installing
-workbox.core.skipWaiting();
-workbox.core.clientsClaim();
+self.addEventListener('install', () => self.skipWaiting());
 
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
@@ -16,9 +14,11 @@ self.addEventListener('message', (event) => {
 // Notify clients when a new version of the service worker is active
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    self.clients.matchAll({ type: 'window' }).then((clients) => {
-      clients.forEach((client) => client.postMessage({ type: 'NEW_VERSION' }));
-    })
+    (async () => {
+      await self.clients.claim();
+      const clientList = await self.clients.matchAll({ type: 'window' });
+      clientList.forEach((client) => client.postMessage({ type: 'NEW_VERSION' }));
+    })()
   );
 });
 
