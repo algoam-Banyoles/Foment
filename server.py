@@ -11,7 +11,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/update-ranking':
             try:
-                subprocess.run(['python3', 'tools/update_ranquing.py'], check=True, env=dict(os.environ, OUTPUT_FILE='data/ranquing.json'))
+                subprocess.run(['python3', 'update_ranquing.py'], check=True)
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
@@ -22,7 +22,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return
         if self.path == '/update-classificacions':
             try:
-                subprocess.run(['python3', 'tools/update_classificacions.py'], check=True)
+                subprocess.run(['python3', 'update_classificacions.py'], check=True)
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
@@ -33,7 +33,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             return
         if self.path == '/update-events':
             try:
-                subprocess.run(['python3', 'tools/update_events.py'], check=True, env=dict(os.environ, OUTPUT_FILE='data/events.json'))
+                subprocess.run(['python3', 'update_events.py'], check=True)
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
