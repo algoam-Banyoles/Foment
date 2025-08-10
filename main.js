@@ -488,15 +488,14 @@ function mostraHorari() {
 
   <!-- Horari -->
   <div class="normes-card horari">
-    <h3>🕒 Horari d'obertura</h3>
+    <h3>🕒 Horari d'obertura de la Secció</h3>
     <ul>
       <li><b>Dilluns, dimecres, dijous, dissabte i diumenge:</b> 9:00 – 21:30</li>
       <li><b>Dimarts i divendres:</b> 10:30 – 21:30</li>
+      <li>L'horari d'obertura pot canviar en funció dels horaris d'obertura del <b>Bar del Foment</b>.</li>
+      <li>L'horari del <b>Foment</b> és de <b>DILLUNS A DIVENDRES de 9:00 a 13:00 i de 16:00 a 20:00</b>. <b>AGOST I FESTIUS TANCAT.</b></li>
+      <li><b>La secció romandrà tancada els dies de tancament del FOMENT.</b></li>
     </ul>
-      <p class="normes-note">
-        *L'horari d'obertura pot canviar en funció dels horaris d'obertura del Bar del Foment.<br>
-        **L'horari del Foment és de dilluns a divendres de 9:00 a 13:00 i de 16:00 a 20:00. Agost i festius tancat.
-      </p>
   </div>
 
   <!-- Norma Obligatòria -->

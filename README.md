@@ -27,13 +27,13 @@ python3 tools/update_sw_version.py
 
 ## Normativa i Horari
 
-### Horari d'obertura
+### Horari d'obertura de la Secció
 
 - Dilluns, dimecres, dijous, dissabte i diumenge: 9:00 – 21:30
 - Dimarts i divendres: 10:30 – 21:30
-
-\*L'horari d'obertura pot canviar en funció dels horaris d'obertura del Bar del Foment.  
-\*\*L'horari del Foment és de dilluns a divendres de 9:00 a 13:00 i de 16:00 a 20:00. Agost i festius tancat.
+- L'horari d'obertura pot canviar en funció dels horaris d'obertura del **Bar del Foment**.
+- L'horari del **Foment** és de **DILLUNS A DIVENDRES de 9:00 a 13:00 i de 16:00 a 20:00**. **AGOST I FESTIUS TANCAT.**
+- **La secció romandrà tancada els dies de tancament del FOMENT.**
 
 ### ✅ OBLIGATORI
 
