@@ -502,7 +502,7 @@ function mostraHorari() {
   <div class="normes-card obligatori">
     <h3>✅ OBLIGATORI</h3>
     <p class="obligatori-text">
-      Netejar taula i boles abans de començar amb el material que la secció posa a disposició dels socis.
+      Netejar el billar i les boles abans de començar cada partida amb el material que la Secció posa a disposició de tots els socis.
     </p>
   </div>
 

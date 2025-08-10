@@ -550,15 +550,8 @@ details summary {
 }
 
 .normes-card.prohibit h3 {
-  color: #d90000;
-}
 
-.normes-card.prohibit {
-  background: var(--event-fi);
-  border: 2px solid #ff4d4d;
-}
 
-.normes-card.prohibit h3 {
   color: #d90000;
 }
 
@@ -576,6 +569,7 @@ details summary {
   font-size: 1.1em;
   font-weight: bold;
   margin: 0;
+  text-align: center;
 }
 
 
