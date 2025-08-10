@@ -508,7 +508,9 @@ function mostraHorari() {
 
   <!-- Prohibicions -->
   <div class="normes-card prohibit">
-    <h3>🚫 Prohibit</h3>
+
+    <h3>🚫 PROHIBIT</h3>
+
     <ul>
       <li>Jugar a fantasia.</li>
       <li>Menjar a les sales.</li>
@@ -539,7 +541,7 @@ function mostraHorari() {
     <h3>⏳ Temps de joc</h3>
     <ul>
       <li>Màxim <b>1 hora</b> per partida (sol o en grup).</li>
-      <li><b>Prohibit</b> posar monedes per allargar el temps, encara que hi hagi taules lliures.</li>
+      <li><b>PROHIBIT</b> posar monedes per allargar el temps, encara que hi hagi taules lliures.</li>
     </ul>
   </div>
 

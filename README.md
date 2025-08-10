@@ -38,15 +38,7 @@ python3 tools/update_sw_version.py
 
 - Netejar el billar i les boles abans de començar cada partida amb el material que la Secció posa a disposició de tots els socis.
 
-### 🚫 Prohibit
-
-- Jugar a fantasia.
-- Menjar a les sales.
-- Posar begudes sobre cap element del billar.
-
-
-### 🚫 Prohibit
-
+### 🚫 PROHIBIT
 
 
 - Jugar a fantasia.
@@ -66,7 +58,7 @@ python3 tools/update_sw_version.py
 ### Temps de joc
 
 - Màxim **1 hora** per partida (sol o en grup).
-- **Prohibit** posar monedes per allargar el temps, encara que hi hagi taules lliures.
+- **PROHIBIT** posar monedes per allargar el temps, encara que hi hagi taules lliures.
 
 ### Tornar a jugar
 
