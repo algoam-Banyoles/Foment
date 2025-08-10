@@ -493,9 +493,10 @@ function mostraHorari() {
       <li><b>Dilluns, dimecres, dijous, dissabte i diumenge:</b> 9:00 – 21:30</li>
       <li><b>Dimarts i divendres:</b> 10:30 – 21:30</li>
     </ul>
-    <p class="normes-note">
-      *L’horari pot canviar.
-    </p>
+      <p class="normes-note">
+        *L'horari d'obertura pot canviar en funció dels horaris d'obertura del Bar del Foment.<br>
+        **L'horari del Foment és de dilluns a divendres de 9:00 a 13:00 i de 16:00 a 20:00. Agost i festius tancat.
+      </p>
   </div>
 
   <!-- Norma Obligatòria -->
