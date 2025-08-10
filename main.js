@@ -89,9 +89,9 @@ function adjustChartSize() {
 
 function inicialitza() {
   Promise.all([
-    fetch('ranquing.json').then(r => r.json()),
+    fetch('data/ranquing.json').then(r => r.json()),
     fetch('classificacions.json').then(r => r.json()).catch(() => []),
-    fetch('events.json').then(r => r.json()).catch(() => []),
+    fetch('data/events.json').then(r => r.json()).catch(() => []),
     fetch('data/calendari.json').then(r => r.json()).catch(() => []),
     fetch('festius.json').then(r => r.json()).catch(() => [])
   ])
@@ -568,7 +568,7 @@ function mostraHorari() {
 function mostraEnllacos() {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
-  fetch('enllacos.json')
+  fetch('data/enllacos.json')
     .then(r => r.json())
     .then(d => {
       const tipusMap = {};
