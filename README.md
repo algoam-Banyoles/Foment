@@ -68,3 +68,17 @@ python3 tools/update_sw_version.py
 ## Enllaços
 
 - [Foment Martinenc](https://www.fomentmartinenc.org/)
+
+## Sync sheet data
+
+This repo mirrors a public Google Sheet to JSON files.
+
+1. Add secret `SHEET_ID` in **Settings → Secrets and variables → Actions**.
+2. The workflow fetches tabs `1,2,3,4,5` into `data/`.
+3. Test locally:
+```bash
+SHEET_ID=... SHEET_TABS=1,2,3,4,5 OUTPUT_DIR=data python3 tools/update_sheets.py
+```
+Notes: the sheet must be public and OpenSheet caches ~30 s.  
+The script already uses a friendly User-Agent to avoid most 403 errors.  
+Set `FORCE_IPV4=1` if your network only allows IPv4.
