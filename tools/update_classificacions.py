@@ -1,62 +1,121 @@
-import zipfile
-import xml.etree.ElementTree as ET
+#!/usr/bin/env python3
+"""Sync classification data from a Google Sheet via OpenSheet.
+
+Fetches rows from the spreadsheet identified by ``CLAS_ID`` and writes
+``classificacions.json`` only when content changes.
+
+Required environment variables:
+    • CLAS_ID       – Google Sheet identifier
+
+Optional environment variables:
+    • CLAS_TAB      – sheet tab name or index (default: "2")
+    • OUTPUT_FILE   – path of the JSON file (default: "classificacions.json")
+    • HTTP_TIMEOUT  – request timeout in seconds (default: 30)
+    • HTTP_RETRIES  – number of fetch retries (default: 5)
+"""
+
+from __future__ import annotations
+
+import hashlib
 import json
-from pathlib import Path
+import os
+import pathlib
+import sys
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+from typing import Any, Dict, List
 
-XLSX_FILE = Path('Classificacions.xlsx')
-JSON_FILE = Path('classificacions.json')
+BASE = "https://opensheet.elk.sh"
+SHEET_ID = os.getenv("CLAS_ID", "").strip()
+SHEET_TAB = os.getenv("CLAS_TAB", "2").strip() or "2"
+OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "classificacions.json"))
+TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "30"))
+MAX_RETRIES = int(os.getenv("HTTP_RETRIES", "5"))
 
-NS = {'a': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (compatible; ClassificacionsSync/1.0;"
+        " +https://github.com/<repo>)"
+    ),
+    "Accept": "application/json",
+}
 
-def load_shared_strings(z):
-    data = z.read('xl/sharedStrings.xml')
-    tree = ET.fromstring(data)
-    strings = []
-    for t in tree.findall('.//a:t', NS):
-        strings.append(t.text or '')
-    return strings
 
-def cell_value(cell, strings):
-    v = cell.find('a:v', NS)
-    if v is None:
-        return ''
-    val = v.text or ''
-    if cell.get('t') == 's':
-        idx = int(val)
-        return strings[idx]
-    return val
+def fetch_json(url: str, tries: int = MAX_RETRIES, timeout: int = TIMEOUT) -> Any:
+    """GET helper with custom headers and exponential backoff."""
+    last_err: Exception | None = None
+    for i in range(tries):
+        try:
+            req = urllib.request.Request(url, headers=HEADERS)
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                charset = resp.headers.get_content_charset() or "utf-8"
+                return json.loads(resp.read().decode(charset))
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as e:
+            last_err = e
+            if isinstance(e, urllib.error.HTTPError) and e.code == 403:
+                break
+            time.sleep(2**i)
+    raise RuntimeError(f"Failed to GET {url}: {last_err}") from last_err
 
-def update():
-    with zipfile.ZipFile(XLSX_FILE) as z:
-        strings = load_shared_strings(z)
-        # The relevant data is stored in the second sheet of the workbook.
-        # sheet1 contains a pivot table which should be ignored.
-        sheet_xml = z.read('xl/worksheets/sheet2.xml')
-    sheet = ET.fromstring(sheet_xml)
-    sheet_data = sheet.find('a:sheetData', NS)
-    rows = []
-    for row in sheet_data.findall('a:row', NS):
-        r_index = int(row.get('r'))
-        if r_index == 1:
-            continue  # header row
-        cells = {c.get('r')[0]: c for c in row.findall('a:c', NS)}
+
+def write_if_changed(path: pathlib.Path, data_obj: Any) -> bool:
+    """Write JSON file only when content changes (SHA-256 check)."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    new_bytes = json.dumps(data_obj, ensure_ascii=False, sort_keys=True).encode(
+        "utf-8"
+    )
+    if path.exists() and hashlib.sha256(path.read_bytes()).digest() == hashlib.sha256(
+        new_bytes
+    ).digest():
+        return False
+    path.write_bytes(new_bytes)
+    return True
+
+
+def normalise_rows(payload: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    rows: List[Dict[str, str]] = []
+    for row in payload:
         record = {
-            'Any': cell_value(cells.get('A', ET.Element('c')), strings),
-            'Modalitat': cell_value(cells.get('B', ET.Element('c')), strings),
-            'Categoria': cell_value(cells.get('C', ET.Element('c')), strings),
-            'Posició': cell_value(cells.get('D', ET.Element('c')), strings),
-            'Jugador': cell_value(cells.get('E', ET.Element('c')), strings),
-            # The new Excel sheet no longer contains the number of games played
-            # (PJ).  Only the score related fields are included from column F
-            # onwards.
-            'Punts': cell_value(cells.get('F', ET.Element('c')), strings),
-            'Caramboles': cell_value(cells.get('G', ET.Element('c')), strings),
-            'Entrades': cell_value(cells.get('H', ET.Element('c')), strings),
-            'MitjanaGeneral': cell_value(cells.get('I', ET.Element('c')), strings),
-            'MitjanaParticular': cell_value(cells.get('J', ET.Element('c')), strings),
+            "Any": row.get("Any", ""),
+            "Modalitat": row.get("Modalitat", ""),
+            "Categoria": row.get("Categoria", ""),
+            "Posició": row.get("Posició") or row.get("Posicio", ""),
+            "Jugador": row.get("Jugador", ""),
+            "Punts": row.get("Punts", ""),
+            "Caramboles": row.get("Caramboles", ""),
+            "Entrades": row.get("Entrades", ""),
+            "MitjanaGeneral": row.get("MitjanaGeneral", ""),
+            "MitjanaParticular": row.get("MitjanaParticular", ""),
         }
-        rows.append(record)
-    JSON_FILE.write_text(json.dumps(rows, ensure_ascii=False, indent=2))
+        if any(record.values()):
+            rows.append(record)
+    return rows
 
-if __name__ == '__main__':
-    update()
+
+def main() -> None:
+    if not SHEET_ID:
+        print(
+            "ERROR: variable d'entorn CLAS_ID no definida.",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+
+    url = f"{BASE}/{SHEET_ID}/{urllib.parse.quote(SHEET_TAB, safe='')}"
+    try:
+        payload = fetch_json(url)
+    except Exception as e:
+        print(f"Avís: error baixant dades: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    data = normalise_rows(payload if isinstance(payload, list) else [])
+    if write_if_changed(OUTPUT_FILE, data):
+        print(f"Fitxer actualitzat: {OUTPUT_FILE}")
+    else:
+        print("Sense canvis.")
+
+
+if __name__ == "__main__":
+    main()
+

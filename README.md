@@ -13,7 +13,7 @@ externament mitjançant una aplicació d'escriptori. De la mateixa manera,
 els esdeveniments es sincronitzen d'un Google Sheet públic executant:
 
 ```bash
-AGENDA_SHEET_ID=1IkA50UI7OpFd_VYUb5kNe9V0jj-MZKqu python3 tools/update_events.py
+AGENDA_ID=1IkA50UI7OpFd_VYUb5kNe9V0jj-MZKqu python3 tools/update_events.py
 ```
 
 ### Actualitzar la versió del service worker
