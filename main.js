@@ -483,31 +483,31 @@ function mostraAgenda() {
 function mostraHorari() {
   const cont = document.getElementById('content');
   cont.innerHTML = `
-<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
-  <h2 style="text-align:center;">🎱 Normes d’ús i horari</h2>
+<div class="normes-container">
+  <h2 class="normes-title">Normes d’ús i horari</h2>
 
   <!-- Horari -->
-  <div style="background:#eef6ff; border-radius:12px; padding:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+  <div class="normes-card horari">
     <h3>🕒 Horari d'obertura</h3>
-    <ul style="margin-top:0;">
+    <ul>
       <li><b>Dilluns, dimecres, dijous, dissabte i diumenge:</b> 9:00 – 21:30</li>
       <li><b>Dimarts i divendres:</b> 10:30 – 21:30</li>
     </ul>
-    <p style="font-size:0.9em; color:#555; margin-top:5px;">
+    <p class="normes-note">
       *L’horari pot canviar.
     </p>
   </div>
 
   <!-- Norma Obligatòria -->
-  <div style="background:#fff3f3; border:2px solid #ff4d4d; border-radius:12px; padding:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-    <h3 style="color:#d90000;">🚨 OBLIGATORI</h3>
-    <p style="font-size:1.1em; font-weight:bold; margin:0;">
+  <div class="normes-card obligatori">
+    <h3>🚨 OBLIGATORI</h3>
+    <p class="obligatori-text">
       Netejar taula i boles abans de començar amb el material que la secció posa a disposició dels socis.
     </p>
   </div>
 
   <!-- Inscripció -->
-  <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+  <div class="normes-card">
     <h3>📝 Inscripció a les partides</h3>
     <ul>
       <li>Apunta’t a la pissarra única de <b>PARTIDES SOCIALS</b>.</li>
@@ -516,7 +516,7 @@ function mostraHorari() {
   </div>
 
   <!-- Assignació de taula -->
-  <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+  <div class="normes-card">
     <h3>🗂 Assignació de taula</h3>
     <ul>
       <li>Quan hi hagi una taula lliure, ratlla el teu nom i juga.</li>
@@ -525,7 +525,7 @@ function mostraHorari() {
   </div>
 
   <!-- Temps de joc -->
-  <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+  <div class="normes-card">
     <h3>⏳ Temps de joc</h3>
     <ul>
       <li>Màxim <b>1 hora</b> per partida (sol o en grup).</li>
@@ -534,7 +534,7 @@ function mostraHorari() {
   </div>
 
   <!-- Tornar a jugar -->
-  <div style="background:#f8f8f8; border-radius:12px; padding:15px; margin-bottom:15px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+  <div class="normes-card">
     <h3>🔄 Tornar a jugar</h3>
     <ul>
       <li>Només pots repetir si <b>no hi ha ningú apuntat</b> i hi ha una taula lliure.</li>
