@@ -32,7 +32,8 @@ python3 tools/update_sw_version.py
 - Dilluns, dimecres, dijous, dissabte i diumenge: 9:00 – 21:30
 - Dimarts i divendres: 10:30 – 21:30
 
-*L’horari pot canviar.*
+\*L'horari d'obertura pot canviar en funció dels horaris d'obertura del Bar del Foment.  
+\*\*L'horari del Foment és de dilluns a divendres de 9:00 a 13:00 i de 16:00 a 20:00. Agost i festius tancat.
 
 ### ✅ OBLIGATORI
 
