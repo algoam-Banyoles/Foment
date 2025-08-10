@@ -27,6 +27,11 @@ import urllib.parse
 import urllib.request
 from typing import List
 
+# Disable proxies unless explicitly re-enabled
+if os.getenv("DISABLE_PROXY", "1") != "0":
+    for key in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY"):
+        os.environ.pop(key, None)
+
 # ─── CONFIGURACIÓ PER DEFECTE ──────────────────────────────────────────────────
 SHEET_ID    = os.getenv("SHEET_ID", "").strip()          # ← obligatori via env
 SHEET_TABS  = [t.strip() for t in os.getenv("SHEET_TABS", "").split(",") if t.strip()]
