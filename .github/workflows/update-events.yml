@@ -11,18 +11,33 @@ permissions:
   contents: write
   pull-requests: write
 
+concurrency:
+  group: sync-events
+  cancel-in-progress: true
+
 jobs:
   sync:
     runs-on: ubuntu-latest
     env:
       AGENDA_ID: ${{ secrets.AGENDA_ID }}
+      SHEET_ID: ${{ secrets.AGENDA_ID }}
       GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-      AGENDA_TABS: "1"
+      SHEET_TABS: "1"
       OUTPUT_DIR: data
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Prepare bot branch
+        run: |
+          set -e
+          git fetch origin data-bot/update-events || true
+          if git show-ref --verify --quiet refs/remotes/origin/data-bot/update-events; then
+            git checkout -B data-bot/update-events origin/data-bot/update-events
+          else
+            git checkout -B data-bot/update-events
+          fi
 
       - uses: actions/setup-python@v5
         with:
@@ -31,23 +46,16 @@ jobs:
       - name: Install deps
         run: pip install --upgrade google-api-python-client google-auth
 
-      - name: Run sync script
+      - name: Run sync
         run: python3 tools/update_events.py
 
-      # (Opcional) comprova si hi ha canvis staged/unstaged abans de crear PR
-      - name: Show git status (debug)
-        run: |
-          git status --porcelain || true
-          git --no-pager diff --name-only || true
-
-      # Fes commit i push a una branca del bot
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: 'chore: update events from Google Sheet'
           branch: data-bot/update-events
-          create_branch: true
+          create_branch: false
+          push_options: --force-with-lease
 
-      # Crea/actualitza la PR i mostra'n el resultat
       - id: cpr
         uses: peter-evans/create-pull-request@v6
         with:
@@ -56,10 +64,10 @@ jobs:
           title: 'chore: update events (bot)'
           body: 'Actualització automàtica d’esdeveniments'
           labels: 'automation'
-          delete-branch: false
 
       - name: Print PR info
         run: |
           echo "operation: ${{ steps.cpr.outputs.pull-request-operation }}"
           echo "number:    ${{ steps.cpr.outputs.pull-request-number }}"
           echo "url:       ${{ steps.cpr.outputs.pull-request-url }}"
+
