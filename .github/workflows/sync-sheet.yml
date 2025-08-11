@@ -1,26 +1,29 @@
-name: Sync Google Sheet
+# yamllint disable rule:truthy
+---
+name: Sync Google Sheets (API)
 
 on:
+  workflow_dispatch: {}  # yamllint disable-line truthy
   schedule:
     - cron: '0 */6 * * *'
-  workflow_dispatch:
 
 jobs:
   sync:
     runs-on: ubuntu-latest
+    env:
+      SHEET_ID: ${{ secrets.SHEET_ID }}
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+      SHEET_TABS: 1,2,3,4,5
+      OUTPUT_DIR: data
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
-      - name: Update JSON files
-        env:
-          SHEET_ID: ${{ secrets.SHEET_ID }}
-          SHEET_TABS: "1,2,3,4,5"
-          OUTPUT_DIR: data
-          # HTTP_PROXY: ${{ vars.HTTP_PROXY }}
-          # HTTPS_PROXY: ${{ vars.HTTPS_PROXY }}
-        run: python3 tools/update_sheets.py
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install --upgrade google-api-python-client google-auth
+      - name: Run sync
+        run: python3 tools/update_sheets_api.py
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'chore(data): sync sheets'
+          commit_message: 'chore: update data from Google Sheets API'
