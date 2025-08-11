@@ -3,10 +3,10 @@
 
 Fetches data via the OpenSheet service and writes a JSON file only if
 content changed. Environment variables allow customisation, similar to
-`update_sheets.py`.
+`tools/update_sheets.py`.
 
 Required env vars:
-  • LINKS_SHEET_ID – Google Sheet identifier
+  • LINKS_ID – Google Sheet identifier
 
 Optional env vars:
   • LINKS_SHEET_TAB – sheet tab name or index (default: "1")
@@ -35,7 +35,7 @@ if os.getenv("DISABLE_PROXY", "1") != "0":
 
 # Allow overriding the OpenSheet endpoint, e.g. via a caching worker.
 BASE = os.getenv("OPENSHEET_BASE", "https://opensheet.elk.sh").rstrip("/")
-SHEET_ID = os.getenv("LINKS_SHEET_ID", "").strip()
+SHEET_ID = os.getenv("LINKS_ID", "").strip()
 SHEET_TAB = os.getenv("LINKS_SHEET_TAB", "1").strip() or "1"
 OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "enllacos.json"))
 TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "30"))
@@ -84,7 +84,7 @@ def write_if_changed(path: pathlib.Path, data_obj: Any) -> bool:
 def main() -> None:
     if not SHEET_ID:
         print(
-            "ERROR: variable d'entorn LINKS_SHEET_ID no definida.",
+            "ERROR: variable d'entorn LINKS_ID no definida.",
             file=sys.stderr,
         )
         sys.exit(2)
