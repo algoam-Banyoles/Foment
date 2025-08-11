@@ -31,3 +31,12 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: 'chore: update events from Google Sheet'
+          branch: data-bot/update-events     
+          create_branch: true
+
+      - uses: peter-evans/create-pull-request@v6
+        with:
+          branch: data-bot/update-events
+          title: 'chore: update events (bot)'
+          body: 'Actualització automàtica d’esdeveniments'
+          labels: 'automation'
