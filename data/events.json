@@ -5,11 +5,6 @@
     "Titol": "Inici inscripció campionat continu Rànquing 3 Bandes"
   },
   {
-    "Data": "2025-10-15",
-    "Hora": "",
-    "Titol": "Fi inscripció campionat continu Rànquing 3 Bandes"
-  },
-  {
     "Data": "2025-09-15",
     "Hora": "",
     "Titol": "Inici inscripció Social 3 Bandes"
@@ -30,9 +25,29 @@
     "Titol": "Inici Social 3 Bandes"
   },
   {
-    "Data": "2025-11-28",
+    "Data": "2025-10-04",
     "Hora": "",
-    "Titol": "Fi Social 3 Bandes"
+    "Titol": "1r Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2025-10-05",
+    "Hora": "",
+    "Titol": "1r Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2025-10-15",
+    "Hora": "",
+    "Titol": "Fi inscripció campionat continu Rànquing 3 Bandes"
+  },
+  {
+    "Data": "2025-10-25",
+    "Hora": "",
+    "Titol": "2n Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2025-10-26",
+    "Hora": "",
+    "Titol": "2n Exprés 9 Modalitats"
   },
   {
     "Data": "2025-11-24",
@@ -40,9 +55,24 @@
     "Titol": "Inici inscripció Social Lliure"
   },
   {
+    "Data": "2025-11-28",
+    "Hora": "",
+    "Titol": "Fi Social 3 Bandes"
+  },
+  {
     "Data": "2025-12-03",
     "Hora": "",
     "Titol": "Fi inscripció Social Lliure"
+  },
+  {
+    "Data": "2025-12-06",
+    "Hora": "",
+    "Titol": "3r Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2025-12-07",
+    "Hora": "",
+    "Titol": "3r Exprés 9 Modalitats"
   },
   {
     "Data": "2025-12-09",
@@ -53,6 +83,16 @@
     "Data": "2025-12-11",
     "Hora": "",
     "Titol": "Assemblea Secció Billar"
+  },
+  {
+    "Data": "2026-01-31",
+    "Hora": "",
+    "Titol": "4t Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2026-02-01",
+    "Hora": "",
+    "Titol": "4t Exprés 9 Modalitats"
   },
   {
     "Data": "2026-02-13",
@@ -73,6 +113,16 @@
     "Data": "2026-03-02",
     "Hora": "",
     "Titol": "Inici Social Banda"
+  },
+  {
+    "Data": "2026-04-11",
+    "Hora": "",
+    "Titol": "5è Exprés 9 Modalitats"
+  },
+  {
+    "Data": "2026-04-12",
+    "Hora": "",
+    "Titol": "5è Exprés 9 Modalitats"
   },
   {
     "Data": "2026-04-30",
@@ -98,55 +148,5 @@
     "Data": "2026-06-23",
     "Hora": "",
     "Titol": "Fi Hàndicap"
-  },
-  {
-    "Data": "2025-10-04",
-    "Hora": "",
-    "Titol": "1r Exprés 9 Modalitats"
-  },
-  {
-    "Data": "2025-10-05",
-    "Hora": "",
-    "Titol": "1r Exprés 9 Modalitats"
-  },
-  {
-    "Data": "2025-10-25",
-    "Hora": "",
-    "Titol": "2n Exprés 9 Modalitats"
-  },
-  {
-    "Data": "2025-10-26",
-    "Hora": "",
-    "Titol": "2n Exprés 9 Modalitats"
-  },
-  {
-    "Data": "2025-12-06",
-    "Hora": "",
-    "Titol": "3r Exprés 9 Modalitats"
-  },
-  {
-    "Data": "2025-12-07",
-    "Hora": "",
-    "Titol": "3r Exprés 9 Modalitats"
-  },
-  {
-    "Data": "2026-01-31",
-    "Hora": "",
-    "Titol": "4t Exprés 9 Modalitats"
-  },
-  {
-    "Data": "2026-02-01",
-    "Hora": "",
-    "Titol": "4t Exprés 9 Modalitats"
-  },
-  {
-    "Data": "2026-04-11",
-    "Hora": "",
-    "Titol": "5è Exprés 9 Modalitats"
-  },
-  {
-    "Data": "2026-04-12",
-    "Hora": "",
-    "Titol": "5è Exprés 9 Modalitats"
   }
 ]
