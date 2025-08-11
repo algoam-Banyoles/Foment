@@ -23,7 +23,7 @@ jobs:
       - name: Install deps
         run: pip install --upgrade google-api-python-client google-auth
       - name: Run sync
-        run: python3 tools/update_sheets_api.py
+        run: python3 tools/update_sheets.py
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: 'chore: update data from Google Sheets API'
