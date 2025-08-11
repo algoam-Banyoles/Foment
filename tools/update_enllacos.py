@@ -35,8 +35,17 @@ if os.getenv("DISABLE_PROXY", "1") != "0":
 
 # Allow overriding the OpenSheet endpoint, e.g. via a caching worker.
 BASE = os.getenv("OPENSHEET_BASE", "https://opensheet.elk.sh").rstrip("/")
-SHEET_ID = os.getenv("LINKS_ID", "").strip()
-SHEET_TAB = os.getenv("LINKS_SHEET_TAB", "1").strip() or "1"
+# Accepta LINKS_ID, LINKS_SHEET_ID o SHEET_ID
+SHEET_ID = (
+    os.getenv("LINKS_ID")
+    or os.getenv("LINKS_SHEET_ID")
+    or os.getenv("SHEET_ID")
+    or ""
+).strip()
+
+# Accepta LINKS_TAB o LINKS_SHEET_TAB
+SHEET_TAB = (os.getenv("LINKS_TAB") or os.getenv("LINKS_SHEET_TAB") or "1").strip() or "1"
+
 OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "enllacos.json"))
 TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "30"))
 MAX_RETRIES = int(os.getenv("HTTP_RETRIES", "5"))
