@@ -1,0 +1,24 @@
+# yamllint disable rule:truthy
+---
+name: Sync Events Sheet
+
+on:
+  workflow_dispatch: {}  # yamllint disable-line truthy
+  schedule:
+    - cron: '0 */8 * * *'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      AGENDA_ID: ${{ secrets.AGENDA_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run sync
+        run: python3 tools/update_events.py
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'chore: update events from Google Sheet'
