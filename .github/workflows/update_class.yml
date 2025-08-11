@@ -14,7 +14,7 @@ jobs:
       CLAS_ID: ${{ secrets.CLAS_ID }}
       GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
       CLAS_TAB: 1
-      OUTPUT_FILE: data/classificacions.json
+      OUTPUT_FILE: classificacions.json
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
