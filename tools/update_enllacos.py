@@ -3,7 +3,7 @@
 
 Fetches data via the OpenSheet service and writes a JSON file only if
 content changed. Environment variables allow customisation, similar to
-`update_sheets.py`.
+`tools/update_sheets.py`.
 
 Required env vars:
   • LINKS_ID – Google Sheet identifier
