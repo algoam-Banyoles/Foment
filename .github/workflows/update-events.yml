@@ -1,73 +1,31 @@
 # yamllint disable rule:truthy
 ---
-name: Sync Events Sheet
+name: Sync Agenda Sheet (API)
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch: {}  # yamllint disable-line truthy
   schedule:
-    - cron: '0 */8 * * *'
-
-permissions:
-  contents: write
-  pull-requests: write
-
-concurrency:
-  group: sync-events
-  cancel-in-progress: true
+    - cron: '0 */6 * * *'
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     env:
       AGENDA_ID: ${{ secrets.AGENDA_ID }}
-      SHEET_ID: ${{ secrets.AGENDA_ID }}
       GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-      SHEET_TABS: "1"
-      OUTPUT_DIR: data
+      AGENDA_TAB: 1
+      OUTPUT_FILE: events.json
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Prepare bot branch
-        run: |
-          set -e
-          git fetch origin data-bot/update-events || true
-          if git show-ref --verify --quiet refs/remotes/origin/data-bot/update-events; then
-            git checkout -B data-bot/update-events origin/data-bot/update-events
-          else
-            git checkout -B data-bot/update-events
-          fi
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Install deps
         run: pip install --upgrade google-api-python-client google-auth
-
       - name: Run sync
         run: python3 tools/update_events.py
-
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'chore: update events from Google Sheet'
-          branch: data-bot/update-events
-          create_branch: false
-          push_options: --force-with-lease
+          commit_message: 'chore: update links from Google Sheets API'
 
-      - id: cpr
-        uses: peter-evans/create-pull-request@v6
-        with:
-          branch: data-bot/update-events
-          base: main
-          title: 'chore: update events (bot)'
-          body: 'Actualització automàtica d’esdeveniments'
-          labels: 'automation'
-
-      - name: Print PR info
-        run: |
-          echo "operation: ${{ steps.cpr.outputs.pull-request-operation }}"
-          echo "number:    ${{ steps.cpr.outputs.pull-request-number }}"
-          echo "url:       ${{ steps.cpr.outputs.pull-request-url }}"
-
+          
