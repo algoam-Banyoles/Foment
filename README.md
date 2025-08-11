@@ -8,9 +8,15 @@ python3 server.py
 ```
 
 Aquesta ordre arrenca un petit servidor web a `http://localhost:8000`.
-La informació de rànquing i classificacions s'ha d'actualitzar
-externament mitjançant una aplicació d'escriptori. De la mateixa manera,
-els esdeveniments es sincronitzen d'un Google Sheet públic executant:
+La informació de classificacions s'ha d'actualitzar externament
+mitjançant una aplicació d'escriptori. El rànquing es pot sincronitzar
+d'un Google Sheet públic executant:
+
+```bash
+RANK_ID=... python3 tools/update_ranquing.py
+```
+
+De la mateixa manera, els esdeveniments es sincronitzen d'un Google Sheet públic executant:
 
 ```bash
 AGENDA_ID=1IkA50UI7OpFd_VYUb5kNe9V0jj-MZKqu python3 tools/update_events.py
