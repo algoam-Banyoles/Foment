@@ -3,40 +3,63 @@
 name: Sync Events Sheet
 
 on:
-  workflow_dispatch: {}  # yamllint disable-line truthy
+  workflow_dispatch: {}
   schedule:
     - cron: '0 */8 * * *'
 
 permissions:
   contents: write
   pull-requests: write
-  
+
 jobs:
   sync:
     runs-on: ubuntu-latest
     env:
       AGENDA_ID: ${{ secrets.AGENDA_ID }}
       GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-      AGENDA_TABS: 1
-      OUTPUT_DIR: data      
+      AGENDA_TABS: "1"
+      OUTPUT_DIR: data
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Install deps
-        run: pip install --upgrade google-api-python-client google-auth          
-      - name: Run sync
+        run: pip install --upgrade google-api-python-client google-auth
+
+      - name: Run sync script
         run: python3 tools/update_events.py
+
+      # (Opcional) comprova si hi ha canvis staged/unstaged abans de crear PR
+      - name: Show git status (debug)
+        run: |
+          git status --porcelain || true
+          git --no-pager diff --name-only || true
+
+      # Fes commit i push a una branca del bot
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: 'chore: update events from Google Sheet'
-          branch: data-bot/update-events     
+          branch: data-bot/update-events
           create_branch: true
 
-      - uses: peter-evans/create-pull-request@v6
+      # Crea/actualitza la PR i mostra'n el resultat
+      - id: cpr
+        uses: peter-evans/create-pull-request@v6
         with:
           branch: data-bot/update-events
+          base: main
           title: 'chore: update events (bot)'
           body: 'Actualització automàtica d’esdeveniments'
           labels: 'automation'
+          delete-branch: false
+
+      - name: Print PR info
+        run: |
+          echo "operation: ${{ steps.cpr.outputs.pull-request-operation }}"
+          echo "number:    ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "url:       ${{ steps.cpr.outputs.pull-request-url }}"
