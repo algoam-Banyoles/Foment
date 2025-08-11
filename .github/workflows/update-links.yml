@@ -11,7 +11,7 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     env:
-      LINKS_SHEET_ID: ${{ secrets.LINKS_SHEET_ID }}
+      LINKS_SHEET_ID: ${{ secrets.LINKS_ID }}
       GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
       LINKS_SHEET_TAB: 1
       OUTPUT_FILE: enllacos.json
