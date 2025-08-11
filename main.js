@@ -109,10 +109,14 @@ function inicialitza() {
       classCategoriaSeleccionada = categories.values().next().value || null;
 
       events = dadesEvents
-        .map(ev => ({
-          ...ev,
-          Tipus: ev['Títol'].toLowerCase().includes('assemblea') ? 'assemblea' : 'altre'
-        }))
+        .map(ev => {
+          const titol = ev['Títol'] || ev['Titol'] || '';
+          return {
+            ...ev,
+            'Títol': titol,
+            Tipus: titol.toLowerCase().includes('assemblea') ? 'assemblea' : 'altre'
+          };
+        })
         .concat(
           dadesCalendari.map(p => ({
             Data: p.Data,
