@@ -33,7 +33,8 @@ if os.getenv("DISABLE_PROXY", "1") != "0":
     for key in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY"):
         os.environ.pop(key, None)
 
-BASE = "https://opensheet.elk.sh"
+# Allow overriding the OpenSheet endpoint, e.g. via a caching worker.
+BASE = os.getenv("OPENSHEET_BASE", "https://opensheet.elk.sh").rstrip("/")
 SHEET_ID = os.getenv("LINKS_SHEET_ID", "").strip()
 SHEET_TAB = os.getenv("LINKS_SHEET_TAB", "1").strip() or "1"
 OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "enllacos.json"))

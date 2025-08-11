@@ -79,6 +79,19 @@ This repo mirrors a public Google Sheet to JSON files.
 ```bash
 SHEET_ID=... SHEET_TABS=1,2,3,4,5 OUTPUT_DIR=data python3 tools/update_sheets.py
 ```
-Notes: the sheet must be public and OpenSheet caches ~30 s.  
-The script already uses a friendly User-Agent to avoid most 403 errors.  
+Notes: the sheet must be public and OpenSheet caches ~30 s.
+The script already uses a friendly User-Agent to avoid most 403 errors.
 Set `FORCE_IPV4=1` if your network only allows IPv4.
+
+### Optional caching proxy
+
+To avoid rate limits from `opensheet.elk.sh`, you can deploy the
+[`opensheet-worker.js`](./opensheet-worker.js) on Cloudflare Workers (or
+similar) which proxies requests and caches them for an hour. Point the
+tools to this worker by setting `OPENSHEET_BASE`:
+
+```bash
+OPENSHEET_BASE=https://your-worker.example.com SHEET_ID=... python3 tools/update_sheets.py
+```
+
+The same environment variable also works with `update_enllacos.py`.

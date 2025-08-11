@@ -15,7 +15,8 @@ import urllib.parse
 import urllib.request
 from typing import Any, Iterable, List
 
-BASE = "https://opensheet.elk.sh"
+# Allow using a caching proxy for OpenSheet. Defaults to the public service.
+BASE = os.getenv("OPENSHEET_BASE", "https://opensheet.elk.sh").rstrip("/")
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; SheetSync/1.1; +https://github.com/<repo>)",
     "Accept": "application/json",
