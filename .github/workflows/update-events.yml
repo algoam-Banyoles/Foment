@@ -7,13 +7,16 @@ on:
   schedule:
     - cron: '0 */8 * * *'
 
+permissions:
+  contents: write
+  
 jobs:
   sync:
     runs-on: ubuntu-latest
     env:
       AGENDA_ID: ${{ secrets.AGENDA_ID }}
       GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-      SHEET_TABS: 1
+      AGENDA_TABS: 1
       OUTPUT_DIR: data      
     steps:
       - uses: actions/checkout@v4
