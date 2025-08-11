@@ -1,77 +1,160 @@
-import zipfile
-import xml.etree.ElementTree as ET
+#!/usr/bin/env python3
+"""Sync events from a Google Sheet to ``events.json``.
+
+Fetches data via the OpenSheet service and writes the resulting JSON file
+only when content changes.  Inspired by ``update_sheets.py``.
+
+Required environment variables:
+    AGENDA_ID – Google Sheet identifier.
+
+Optional environment variables:
+    AGENDA_TAB      – sheet tab name or index (default: "1")
+    OUTPUT_FILE     – path of the JSON file (default: "events.json")
+    HTTP_TIMEOUT    – request timeout in seconds (default: 30)
+    HTTP_RETRIES    – number of fetch retries (default: 5)
+    FORCE_IPV4      – set to "1" to force IPv4 DNS resolution
+"""
+
+from __future__ import annotations
+
+import hashlib
 import json
-from pathlib import Path
+import os
+import pathlib
+import sys
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
 from datetime import datetime, timedelta
+from typing import Any
 
-# Input Excel file with events. The date column uses dd/mm/aaaa format,
-# but Excel stores it as a numeric serial. Use the exact file name.
-XLSX_FILE = Path('Agenda.xlsx')
-JSON_FILE = Path('events.json')
+# Disable proxies unless explicitly re-enabled
+if os.getenv("DISABLE_PROXY", "1") != "0":
+    for key in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY"):
+        os.environ.pop(key, None)
 
-NS = {'a': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
+# Allow overriding the OpenSheet endpoint, e.g. via a caching worker
+BASE = os.getenv("OPENSHEET_BASE", "https://opensheet.elk.sh").rstrip("/")
 
-def load_shared_strings(z):
-    data = z.read('xl/sharedStrings.xml')
-    tree = ET.fromstring(data)
-    strings = []
-    for t in tree.findall('.//a:t', NS):
-        strings.append(t.text or '')
-    return strings
+# Sheet configuration
+SHEET_ID = os.getenv("AGENDA_ID", "").strip()
+SHEET_TAB = (os.getenv("AGENDA_TAB") or "1").strip() or "1"
 
-def cell_value(cell, strings):
-    v = cell.find('a:v', NS)
-    if v is None:
-        return ''
-    val = v.text or ''
-    if cell.get('t') == 's':
-        idx = int(val)
-        return strings[idx]
-    return val
+# Output and HTTP settings
+OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "events.json"))
+TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "30"))
+MAX_RETRIES = int(os.getenv("HTTP_RETRIES", "5"))
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (compatible; EventSync/1.0; +https://github.com/<repo>)",
+    "Accept": "application/json",
+}
+
+
+def force_ipv4() -> None:
+    import socket
+
+    orig = socket.getaddrinfo
+
+    def getaddrinfo_ipv4(host, port, family=0, type=0, proto=0, flags=0):
+        return orig(host, port, socket.AF_INET, type, proto, flags)
+
+    socket.getaddrinfo = getaddrinfo_ipv4  # type: ignore[assignment]
+
+
+def fetch_json(url: str, timeout: int, retries: int) -> Any:
+    """GET JSON with headers and retry/backoff. Stops on 403."""
+    delay = 1.0
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(url, headers=HEADERS)
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                if resp.status == 403:
+                    raise urllib.error.HTTPError(url, 403, "Forbidden", resp.headers, None)
+                charset = resp.headers.get_content_charset() or "utf-8"
+                return json.loads(resp.read().decode(charset))
+        except urllib.error.HTTPError as e:
+            if e.code == 403:
+                raise
+            err = e
+        except Exception as e:  # noqa: BLE001 - broad for retry
+            err = e
+        if attempt == retries - 1:
+            raise err
+        time.sleep(delay)
+        delay *= 2
+
+
+def write_if_changed(path: pathlib.Path, data: Any) -> bool:
+    """Write JSON file only if content changed."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    content = json.dumps(data, ensure_ascii=False, sort_keys=True, indent=2).encode(
+        "utf-8"
+    )
+    new_hash = hashlib.sha256(content).digest()
+    try:
+        old_hash = hashlib.sha256(path.read_bytes()).digest()
+        if new_hash == old_hash:
+            return False
+    except FileNotFoundError:
+        pass
+    path.write_bytes(content)
+    return True
 
 
 def to_iso_date(value: str) -> str:
-    """Convert an Excel cell value to ISO date string."""
+    """Convert a cell value to ISO date string."""
     value = value.strip()
     if not value:
-        return ''
+        return ""
     # Try numeric Excel serial first
     try:
         days = float(value)
-        # Excel's day zero is 1899-12-30
         date = datetime(1899, 12, 30) + timedelta(days=days)
-        return date.strftime('%Y-%m-%d')
+        return date.strftime("%Y-%m-%d")
     except ValueError:
         pass
     # Try dd/mm/yyyy format
+    for fmt in ("%d/%m/%Y", "%Y-%m-%d"):
+        try:
+            date = datetime.strptime(value, fmt)
+            return date.strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+    return value
+
+
+def main() -> None:
+    if not SHEET_ID:
+        print("Falta AGENDA_ID", file=sys.stderr)
+        sys.exit(2)
+
+    if os.getenv("FORCE_IPV4", "0") == "1":
+        force_ipv4()
+
+    url = f"{BASE}/{SHEET_ID}/{urllib.parse.quote(SHEET_TAB, safe='')}"
     try:
-        date = datetime.strptime(value, '%d/%m/%Y')
-        return date.strftime('%Y-%m-%d')
-    except ValueError:
-        return value
+        data = fetch_json(url, TIMEOUT, MAX_RETRIES)
+    except Exception as e:
+        print(f"Avís: error baixant dades: {e}", file=sys.stderr)
+        sys.exit(1)
 
-def update():
-    with zipfile.ZipFile(XLSX_FILE) as z:
-        strings = load_shared_strings(z)
-        sheet_xml = z.read('xl/worksheets/sheet1.xml')
-    sheet = ET.fromstring(sheet_xml)
-    sheet_data = sheet.find('a:sheetData', NS)
-    rows = []
-    for row in sheet_data.findall('a:row', NS):
-        r_index = int(row.get('r'))
-        if r_index == 1:
-            continue  # header row
-        cells = {c.get('r')[0]: c for c in row.findall('a:c', NS)}
-        raw_date = cell_value(cells.get('A', ET.Element('c')), strings)
-        record = {
-            'Data': to_iso_date(raw_date),
-            'Hora': cell_value(cells.get('B', ET.Element('c')), strings),
-            'Títol': cell_value(cells.get('C', ET.Element('c')), strings),
-        }
-        # ignore completely empty rows
-        if any(record.values()):
-            rows.append(record)
-    JSON_FILE.write_text(json.dumps(rows, ensure_ascii=False, indent=2))
+    rows: list[dict[str, Any]] = []
+    if isinstance(data, list):
+        for entry in data:
+            if isinstance(entry, dict):
+                row = dict(entry)
+                if "Data" in row:
+                    row["Data"] = to_iso_date(str(row.get("Data", "")))
+                rows.append(row)
 
-if __name__ == '__main__':
-    update()
+    if write_if_changed(OUTPUT_FILE, rows if rows else data):
+        print(f"Fitxer actualitzat: {OUTPUT_FILE}")
+    else:
+        print("Sense canvis.")
+
+
+if __name__ == "__main__":
+    main()
+
