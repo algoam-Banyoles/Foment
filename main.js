@@ -1409,40 +1409,6 @@ document.getElementById('btn-torneig').addEventListener('click', () => {
     });
 });
 
-document.getElementById('btn-tc3b').addEventListener('click', () => {
-  history.pushState({}, '', '/ordre');
-  mostraOrdre();
-});
-
-function mostraOrdre() {
-  document.getElementById('filters-row').style.display = 'none';
-  document.getElementById('classificacio-filters').style.display = 'none';
-  document.getElementById('torneig-buttons').style.display = 'none';
-  document.getElementById('torneig-title').style.display = 'none';
-  document.getElementById('torneig-category-buttons').style.display = 'none';
-  const cont = document.getElementById('content');
-  cont.style.display = 'block';
-  cont.innerHTML = '';
-  Promise.all([
-    import('./pages/Ordre.jsx'),
-    import('react'),
-    import('react-dom/client')
-  ])
-    .then(([mod, React, ReactDOM]) => {
-      const root = ReactDOM.createRoot(cont);
-      root.render(React.createElement(mod.default));
-    })
-    .catch(err => {
-      cont.innerHTML = '<p>Error carregant dades.</p>';
-      console.error('Error carregant Ordre', err);
-    });
-}
-
-window.addEventListener('popstate', () => {
-  if (location.pathname === '/ordre') {
-    mostraOrdre();
-  }
-});
 
 
 
@@ -1482,6 +1448,3 @@ window.addEventListener('resize', () => {
 });
 
 inicialitza();
-if (location.pathname === '/ordre') {
-  mostraOrdre();
-}
