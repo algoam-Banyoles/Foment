@@ -2,8 +2,8 @@
 """Sync classification data from a public Google Sheet to ``classificacions.json``.
 
 Fetches data via the OpenSheet service using ``CLAS_ID`` and writes the
-resulting JSON only when the content changes. Inspired by
-``update_ranquing.py``.
+resulting JSON only when the content changes. Mitjana fields are
+normalised to dot-based decimals. Inspired by ``update_ranquing.py``.
 """
 
 from __future__ import annotations
@@ -12,6 +12,7 @@ import hashlib
 import json
 import os
 import pathlib
+import re
 import sys
 import time
 import urllib.error
@@ -30,6 +31,7 @@ SHEET_TAB = os.getenv("CLAS_TAB", "1").strip() or "1"
 OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "classificacions.json"))
 TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "30"))
 RETRIES = int(os.getenv("HTTP_RETRIES", "5"))
+MITJANA_RE = re.compile(r"^\d+(\.\d+)?$")
 
 
 def fetch_json(url: str, timeout: int, retries: int) -> Any:
@@ -71,9 +73,21 @@ def write_if_changed(path: pathlib.Path, data: Any) -> bool:
 
 
 def normalise_rows(rows: List[dict[str, str]]) -> List[dict[str, str]]:
-    """Ensure required fields are present."""
+    """Ensure required fields and normalise ``Mitjana*`` to dot decimals."""
     out: List[dict[str, str]] = []
     for row in rows:
+        mitjana_general = str(row.get("MitjanaGeneral", "")).replace(",", ".")
+        if mitjana_general:
+            try:
+                mitjana_general = str(float(mitjana_general))
+            except ValueError:
+                pass
+        mitjana_particular = str(row.get("MitjanaParticular", "")).replace(",", ".")
+        if mitjana_particular:
+            try:
+                mitjana_particular = str(float(mitjana_particular))
+            except ValueError:
+                pass
         record = {
             "Any": row.get("Any", ""),
             "Modalitat": row.get("Modalitat", ""),
@@ -83,8 +97,8 @@ def normalise_rows(rows: List[dict[str, str]]) -> List[dict[str, str]]:
             "Punts": row.get("Punts", ""),
             "Caramboles": row.get("Caramboles", ""),
             "Entrades": row.get("Entrades", ""),
-            "MitjanaGeneral": row.get("MitjanaGeneral", ""),
-            "MitjanaParticular": row.get("MitjanaParticular", ""),
+            "MitjanaGeneral": mitjana_general,  # Mitjana fields use dot decimals
+            "MitjanaParticular": mitjana_particular,
         }
         out.append(record)
     return out
@@ -103,6 +117,8 @@ def main() -> None:
         sys.exit(1)
 
     rows = normalise_rows(data if isinstance(data, list) else [])
+    assert all((not r["MitjanaGeneral"]) or MITJANA_RE.match(r["MitjanaGeneral"]) for r in rows), "MitjanaGeneral format error"
+    assert all((not r["MitjanaParticular"]) or MITJANA_RE.match(r["MitjanaParticular"]) for r in rows), "MitjanaParticular format error"
     if write_if_changed(OUTPUT_FILE, rows):
         print(f"Fitxer actualitzat: {OUTPUT_FILE}")
     else:

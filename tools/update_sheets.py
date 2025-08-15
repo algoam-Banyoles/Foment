@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Sync Google Sheet tabs to JSON files using OpenSheet."""
+"""Sync Google Sheet tabs to JSON files using OpenSheet.
+
+Any fields containing ``Mitjana`` are normalised to dot-based decimals.
+"""
 
 from __future__ import annotations
 
@@ -7,6 +10,7 @@ import hashlib
 import json
 import os
 import pathlib
+import re
 import sys
 import time
 import unicodedata
@@ -21,6 +25,7 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; SheetSync/1.1; +https://github.com/<repo>)",
     "Accept": "application/json",
 }
+MITJANA_RE = re.compile(r"^\d+(\.\d+)?$")
 
 FILENAME_MAP = {
     "1": "modalitat.json", "modalitat": "modalitat.json",
@@ -41,6 +46,27 @@ def canonical_filename(tab: str) -> str:
     """Map sheet tab to final file name."""
     key = slugify(tab)
     return FILENAME_MAP.get(key, f"{key}.json")
+
+
+def normalise_mitjana_fields(obj: Any) -> None:
+    """Normalise ``Mitjana`` keys to dot-based decimals."""
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if "Mitjana" in k:
+                mitjana = str(v).replace(",", ".")
+                if mitjana:
+                    try:
+                        mitjana = str(float(mitjana))
+                    except ValueError:
+                        pass
+                if mitjana and not MITJANA_RE.match(mitjana):
+                    raise AssertionError("Mitjana format error")
+                obj[k] = mitjana
+            else:
+                normalise_mitjana_fields(v)
+    elif isinstance(obj, list):
+        for item in obj:
+            normalise_mitjana_fields(item)
 
 
 def fetch_json(url: str, timeout: int, retries: int) -> Any:
@@ -131,6 +157,7 @@ def main() -> None:
             print(f"Avís: error baixant '{tab}': {e}", file=sys.stderr)
             continue
         filename = canonical_filename(tab)
+        normalise_mitjana_fields(data)
         if write_if_changed(pathlib.Path(output_dir) / filename, data):
             updated.append(filename)
 

@@ -2,7 +2,8 @@
 """Sync link data from a public Google Sheet to enllacos.json.
 
 Fetches data via the OpenSheet service and writes a JSON file only if
-content changed. Environment variables allow customisation, similar to
+content changed. Fields named ``Mitjana`` are normalised to dot-based
+decimals. Environment variables allow customisation, similar to
 `tools/update_sheets.py`.
 
 Required env vars:
@@ -21,6 +22,7 @@ import hashlib
 import json
 import os
 import pathlib
+import re
 import sys
 import time
 import urllib.error
@@ -56,6 +58,7 @@ HEADERS = {
     ),
     "Accept": "application/json",
 }
+MITJANA_RE = re.compile(r"^\d+(\.\d+)?$")
 
 
 def fetch_json(url: str, tries: int = MAX_RETRIES, timeout: int = TIMEOUT) -> Any:
@@ -90,6 +93,27 @@ def write_if_changed(path: pathlib.Path, data_obj: Any) -> bool:
     return True
 
 
+def normalise_mitjana_fields(obj: Any) -> None:
+    """Normalise ``Mitjana`` keys to dot-based decimals."""
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if "Mitjana" in k:
+                mitjana = str(v).replace(",", ".")
+                if mitjana:
+                    try:
+                        mitjana = str(float(mitjana))
+                    except ValueError:
+                        pass
+                if mitjana and not MITJANA_RE.match(mitjana):
+                    raise AssertionError("Mitjana format error")
+                obj[k] = mitjana
+            else:
+                normalise_mitjana_fields(v)
+    elif isinstance(obj, list):
+        for item in obj:
+            normalise_mitjana_fields(item)
+
+
 def main() -> None:
     if not SHEET_ID:
         print(
@@ -104,7 +128,7 @@ def main() -> None:
     except Exception as e:
         print(f"Avís: error baixant dades: {e}", file=sys.stderr)
         sys.exit(1)
-
+    normalise_mitjana_fields(payload)
     if write_if_changed(OUTPUT_FILE, payload):
         print(f"Fitxer actualitzat: {OUTPUT_FILE}")
     else:
