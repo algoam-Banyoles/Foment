@@ -67,20 +67,24 @@ h1 {
 }
 
 #menu {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
 
+#menu button {
+  flex: 1;
+}
+
 .submenu {
   display: none;
-  flex-direction: column;
+  flex-wrap: wrap;
   margin-top: 0.5rem;
 }
 
 .submenu button {
-  width: 100%;
+  flex: 1;
   background: var(--secondary);
 }
 
