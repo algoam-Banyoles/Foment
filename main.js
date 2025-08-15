@@ -709,17 +709,22 @@ function mostraContinu3B() {
       rankTitle.textContent = 'Rànquing actual';
       cont.appendChild(rankTitle);
       if (Array.isArray(ranking) && ranking.length) {
-        const ul = document.createElement('ul');
+
+        const div = document.createElement('div');
         ranking
           .slice()
           .sort((a, b) => parseInt(a.posicio, 10) - parseInt(b.posicio, 10))
           .forEach(r => {
-            const li = document.createElement('li');
+            const btn = document.createElement('button');
             const nom = mapJugadors[r.jugador_id] || r.jugador_id;
-            li.textContent = `${r.posicio}. ${nom}`;
-            ul.appendChild(li);
+            btn.textContent = `${r.posicio}. ${nom}`;
+            btn.addEventListener('click', () =>
+              mostraEvolucioJugador(r.jugador_id, nom)
+            );
+            div.appendChild(btn);
           });
-        cont.appendChild(ul);
+        cont.appendChild(div);
+
       } else {
         const p = document.createElement('p');
         p.textContent = 'No hi ha rànquing disponible.';
@@ -783,17 +788,24 @@ function mostraContinu3B() {
       llistaTitle.textContent = "Llista d'espera";
       cont.appendChild(llistaTitle);
       if (Array.isArray(llista) && llista.length) {
-        const ul = document.createElement('ul');
+        const div = document.createElement('div');
+
+
         llista
           .slice()
           .sort((a, b) => parseInt(a.ordre, 10) - parseInt(b.ordre, 10))
           .forEach(l => {
-            const li = document.createElement('li');
+
+            const btn = document.createElement('button');
             const nom = mapJugadors[l.jugador_id] || l.jugador_id;
-            li.textContent = `${l.ordre}. ${nom}`;
-            ul.appendChild(li);
+            btn.textContent = `${l.ordre}. ${nom}`;
+            btn.addEventListener('click', () =>
+              mostraEvolucioJugador(l.jugador_id, nom)
+            );
+            div.appendChild(btn);
           });
-        cont.appendChild(ul);
+        cont.appendChild(div);
+
       } else {
         const p = document.createElement('p');
         p.textContent = "No hi ha jugadors en llista d'espera.";
