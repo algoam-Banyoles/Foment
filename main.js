@@ -709,6 +709,7 @@ function mostraContinu3B() {
       rankTitle.textContent = 'Rànquing actual';
       cont.appendChild(rankTitle);
       if (Array.isArray(ranking) && ranking.length) {
+
         const div = document.createElement('div');
         ranking
           .slice()
@@ -723,6 +724,7 @@ function mostraContinu3B() {
             div.appendChild(btn);
           });
         cont.appendChild(div);
+
       } else {
         const p = document.createElement('p');
         p.textContent = 'No hi ha rànquing disponible.';
@@ -787,10 +789,13 @@ function mostraContinu3B() {
       cont.appendChild(llistaTitle);
       if (Array.isArray(llista) && llista.length) {
         const div = document.createElement('div');
+
+
         llista
           .slice()
           .sort((a, b) => parseInt(a.ordre, 10) - parseInt(b.ordre, 10))
           .forEach(l => {
+
             const btn = document.createElement('button');
             const nom = mapJugadors[l.jugador_id] || l.jugador_id;
             btn.textContent = `${l.ordre}. ${nom}`;
@@ -800,6 +805,7 @@ function mostraContinu3B() {
             div.appendChild(btn);
           });
         cont.appendChild(div);
+
       } else {
         const p = document.createElement('p');
         p.textContent = "No hi ha jugadors en llista d'espera.";
