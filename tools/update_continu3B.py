@@ -39,7 +39,7 @@ TABS = [
     "LlistaEspera",
     "Partides",
     "Historic",
-    "Auditori",
+    "Auditoria",
 ]
 
 

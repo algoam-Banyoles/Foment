@@ -2,6 +2,10 @@
 ---
 name: Sync Continu3B Sheet (API)
 
+# Tabs: Paràmetres, Jugadors, RankingActiu, Reptes, LlistaEspera,
+#       Partides, Historic, Auditoria
+
+
 on:
   workflow_dispatch: {}  # yamllint disable-line truthy
   schedule:
