@@ -1,3 +1,5 @@
+import { apiGetClassificacio } from "./api.js";
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js')
@@ -1408,6 +1410,30 @@ document.getElementById('btn-torneig').addEventListener('click', () => {
       title.style.display = 'none';
     });
 });
+
+document.getElementById('btn-tc3b').addEventListener('click', () => {
+  document.getElementById('filters-row').style.display = 'none';
+  document.getElementById('classificacio-filters').style.display = 'none';
+  document.getElementById('torneig-buttons').style.display = 'none';
+  document.getElementById('torneig-title').style.display = 'none';
+  document.getElementById('torneig-category-buttons').style.display = 'none';
+  const cont = document.getElementById('content');
+  cont.style.display = 'block';
+  cont.textContent = 'Carregant...';
+  apiGetClassificacio()
+    .then(data => {
+      const pre = document.createElement('pre');
+      pre.textContent = JSON.stringify(data, null, 2);
+      cont.innerHTML = '';
+      cont.appendChild(pre);
+    })
+    .catch(err => {
+      cont.innerHTML = '<p>Error carregant dades.</p>';
+      console.error('Error API TC3B', err);
+    });
+});
+
+
 
 document.querySelectorAll('#torneig-buttons button').forEach(btn => {
   btn.addEventListener('click', () => {
