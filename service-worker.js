@@ -25,6 +25,9 @@ self.addEventListener('activate', (event) => {
 workbox.precaching.precacheAndRoute([
   { url: './style.css', revision: CACHE_VERSION },
   { url: './main.js', revision: CACHE_VERSION },
+  { url: './pages/Ordre.jsx', revision: CACHE_VERSION },
+  { url: './components/OrdreTable.jsx', revision: CACHE_VERSION },
+  { url: './components/OrdreToolbar.jsx', revision: CACHE_VERSION },
   { url: 'https://cdn.jsdelivr.net/npm/chart.js', revision: null },
   { url: './data/ranquing.json', revision: CACHE_VERSION },
   { url: './classificacions.json', revision: CACHE_VERSION },
