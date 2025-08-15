@@ -18,6 +18,7 @@ export default function Ordre() {
         if (json.error) {
           setError(json.error);
           setData([]);
+
           return;
         }
         const items = Array.isArray(json.items) ? json.items : [];
