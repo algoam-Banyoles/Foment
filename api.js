@@ -1,8 +1,14 @@
 // api.js — client per la PWA del Torneig Continu 3B
 // Usa les rutes tc3b/* i envia el token automàticament
 
-const API_BASE = import.meta.env.VITE_APPS_SCRIPT_URL; // ex. "https://script.google.com/macros/s/XXXX/exec"
-const API_TOKEN = import.meta.env.VITE_API_TOKEN;      // ex. "abcd1234"
+// "import.meta.env" només existeix quan l'app s'empra amb un bundler com Vite.
+// En executar el codi directament al navegador, "import.meta.env" és undefined
+// i intentant accedir-hi provocava un error que aturava tota la inicialització
+// de la PWA.  Fem servir valors buits per defecte quan les variables no hi són,
+// de manera que la resta de funcionalitats (rànquing, agenda, etc.) continuïn
+// funcionant encara que les crides a l'API del torneig no estiguin configurades.
+const API_BASE = (import.meta.env && import.meta.env.VITE_APPS_SCRIPT_URL) || '';
+const API_TOKEN = (import.meta.env && import.meta.env.VITE_API_TOKEN) || '';
 
 async function apiRequest(path, method = 'GET', body = null) {
   const url = `${API_BASE}?path=${encodeURIComponent(path)}`;
