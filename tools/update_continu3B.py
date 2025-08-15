@@ -34,7 +34,7 @@ MITJANA_RE = re.compile(r"^\d+(\.\d+)?$")
 TABS = [
     "Paràmetres",
     "Jugadors",
-    "RanquingActiu",
+    "RankingActiu",
     "Reptes",
     "LlistaEspera",
     "Partides",
