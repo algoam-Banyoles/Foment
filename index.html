@@ -15,12 +15,32 @@
       <button id="btn-update" aria-label="Actualitza" title="Actualitza">🔄</button>
     </h1>
     <div id="menu">
-    <button id="btn-agenda">Agenda Billar</button>
-    <button id="btn-torneig">Social en curs</button>
-    <button id="btn-ranking">Rànquings Històric</button>
-    <button id="btn-classificacio">Històric Classif.</button>
-    <button id="btn-horari">Normativa i Horari</button>
-    <button id="btn-enllacos">Enllaços Billar</button>
+    <div class="menu-group">
+      <button class="menu-toggle" data-target="submenu-billar">Secció Billar</button>
+      <div id="submenu-billar" class="submenu">
+        <button id="btn-agenda">Agenda Billar</button>
+        <button id="btn-horari">Normativa i Horari</button>
+      </div>
+    </div>
+    <div class="menu-group">
+      <button class="menu-toggle" data-target="submenu-campionats">Campionats en curs</button>
+      <div id="submenu-campionats" class="submenu">
+        <button id="btn-torneig">Social en curs</button>
+      </div>
+    </div>
+    <div class="menu-group">
+      <button class="menu-toggle" data-target="submenu-historic">Històric</button>
+      <div id="submenu-historic" class="submenu">
+        <button id="btn-ranking">Rànquings</button>
+        <button id="btn-classificacio">Classificacions Socials</button>
+      </div>
+    </div>
+    <div class="menu-group">
+      <button class="menu-toggle" data-target="submenu-multimedia">Multimedia</button>
+      <div id="submenu-multimedia" class="submenu">
+        <button id="btn-enllacos">Enllaços Billar</button>
+      </div>
+    </div>
     <div id="filters-row" style="display:none">
       <select id="year-select"></select>
       <div id="modalitat-buttons" class="button-group secondary-buttons">
