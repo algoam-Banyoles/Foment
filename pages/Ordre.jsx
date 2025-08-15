@@ -16,7 +16,8 @@ export default function Ordre() {
     apiGetClassificacio()
       .then(json => {
         if (json.error) {
-          throw new Error(json.error);
+          setError(json.error);
+          return;
         }
         const items = Array.isArray(json.items) ? json.items : [];
         const ordered = items.sort((a, b) => a.posicio - b.posicio);

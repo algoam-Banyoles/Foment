@@ -11,6 +11,9 @@ const API_BASE = (import.meta.env && import.meta.env.VITE_APPS_SCRIPT_URL) || ''
 const API_TOKEN = (import.meta.env && import.meta.env.VITE_API_TOKEN) || '';
 
 async function apiRequest(path, method = 'GET', body = null) {
+  if (!API_BASE) {
+    return { error: 'API no configurada' };
+  }
   const url = `${API_BASE}?path=${encodeURIComponent(path)}`;
   const opts = {
     method,
