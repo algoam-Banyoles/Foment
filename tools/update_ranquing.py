@@ -12,6 +12,7 @@ import hashlib
 import json
 import os
 import pathlib
+import re
 import sys
 import time
 import urllib.error
@@ -30,6 +31,8 @@ SHEET_TAB = os.getenv("RANK_TAB", "1").strip() or "1"
 OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "ranquing.json"))
 TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "30"))
 RETRIES = int(os.getenv("HTTP_RETRIES", "5"))
+
+MITJANA_RE = re.compile(r"^\d+(?:\.\d+)?$")
 
 
 def fetch_json(url: str, timeout: int, retries: int) -> Any:
@@ -71,15 +74,23 @@ def write_if_changed(path: pathlib.Path, data: Any) -> bool:
 
 
 def normalise_rows(rows: List[dict[str, str]]) -> List[dict[str, str]]:
-    """Ensure required fields and compute ``NomComplet``."""
+    """Ensure required fields, compute ``NomComplet`` and normalise
+    ``Mitjana`` to dot-based decimals."""
+
     out: List[dict[str, str]] = []
     for row in rows:
+        mitjana = str(row.get("Mitjana", "")).replace(",", ".")
+        if mitjana:
+            try:
+                mitjana = str(float(mitjana))
+            except ValueError:
+                pass  # Keep original if it cannot be parsed
         record = {
             "Any": row.get("Any", ""),
             "Modalitat": row.get("Modalitat", ""),
             "Posició": row.get("Posició", ""),
             "Jugador": row.get("Jugador", ""),
-            "Mitjana": row.get("Mitjana", ""),
+            "Mitjana": mitjana,  # Mitjana is normalized to dot-based decimals
             "Soci": row.get("Soci", ""),
             "Nom": row.get("Nom", ""),
             "Cognom1": row.get("Cognom1", ""),
@@ -105,6 +116,7 @@ def main() -> None:
         sys.exit(1)
 
     rows = normalise_rows(data if isinstance(data, list) else [])
+    assert all(MITJANA_RE.match(r["Mitjana"]) for r in rows), "Mitjana format error"
     if write_if_changed(OUTPUT_FILE, rows):
         print(f"Fitxer actualitzat: {OUTPUT_FILE}")
     else:
