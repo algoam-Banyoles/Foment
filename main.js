@@ -687,6 +687,38 @@ function mostraEnllacos() {
 }
 
 
+
+function mostraContinu3B(dades) {
+  const cont = document.getElementById('content');
+  cont.innerHTML = '';
+  if (!Array.isArray(dades) || dades.length === 0) {
+    cont.innerHTML = '<p>No hi ha dades disponibles.</p>';
+    return;
+  }
+  const table = document.createElement('table');
+  const thead = document.createElement('thead');
+  const headerRow = document.createElement('tr');
+  Object.keys(dades[0]).forEach(k => {
+    const th = document.createElement('th');
+    th.textContent = k;
+    headerRow.appendChild(th);
+  });
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+  const tbody = document.createElement('tbody');
+  dades.forEach(row => {
+    const tr = document.createElement('tr');
+    Object.values(row).forEach(val => {
+      const td = document.createElement('td');
+      td.textContent = val;
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  appendResponsiveTable(cont, table);
+}
+
 function mostraEvolucioJugador(jugador, nom) {
   const modalitats = ['3 BANDES', 'BANDA', 'LLIURE'];
   const dadesPerMod = modalitats.map(mod =>
@@ -1373,6 +1405,23 @@ document.getElementById('btn-enllacos').addEventListener('click', () => {
   document.getElementById('torneig-category-buttons').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraEnllacos();
+});
+
+document.getElementById('btn-continu3b').addEventListener('click', () => {
+  document.getElementById('filters-row').style.display = 'none';
+  document.getElementById('classificacio-filters').style.display = 'none';
+  document.getElementById('torneig-buttons').style.display = 'none';
+  document.getElementById('torneig-title').style.display = 'none';
+  document.getElementById('torneig-category-buttons').style.display = 'none';
+  const cont = document.getElementById('content');
+  cont.style.display = 'block';
+  fetch('data/continu3b.json')
+    .then(r => r.json())
+    .then(d => mostraContinu3B(d))
+    .catch(err => {
+      console.error('Error carregant continu 3B', err);
+      cont.innerHTML = '<p>Error carregant dades.</p>';
+    });
 });
 
 document.getElementById('btn-torneig').addEventListener('click', () => {
