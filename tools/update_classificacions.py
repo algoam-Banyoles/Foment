@@ -76,13 +76,13 @@ def normalise_rows(rows: List[dict[str, str]]) -> List[dict[str, str]]:
     """Ensure required fields and normalise ``Mitjana*`` to dot decimals."""
     out: List[dict[str, str]] = []
     for row in rows:
-        mitjana_general = str(row.get("MitjanaGeneral", "")).replace(",", ".")
+        mitjana_general = str(row.get("Mitjana General", "")).replace(",", ".")
         if mitjana_general:
             try:
                 mitjana_general = str(float(mitjana_general))
             except ValueError:
                 pass
-        mitjana_particular = str(row.get("MitjanaParticular", "")).replace(",", ".")
+        mitjana_particular = str(row.get("Mitjana Particular", "")).replace(",", ".")
         if mitjana_particular:
             try:
                 mitjana_particular = str(float(mitjana_particular))
