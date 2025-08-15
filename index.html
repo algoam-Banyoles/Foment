@@ -15,28 +15,23 @@
       <button id="btn-update" aria-label="Actualitza" title="Actualitza">🔄</button>
     </h1>
     <div id="menu">
-    <div class="menu-group">
       <button class="menu-toggle" data-target="submenu-billar">Secció Billar</button>
+      <button class="menu-toggle" data-target="submenu-campionats">Campionats en curs</button>
+      <button class="menu-toggle" data-target="submenu-historic">Històric</button>
+      <button class="menu-toggle" data-target="submenu-multimedia">Multimedia</button>
+    </div>
+    <div id="submenu-container">
       <div id="submenu-billar" class="submenu">
         <button id="btn-agenda">Agenda Billar</button>
         <button id="btn-horari">Normativa i Horari</button>
       </div>
-    </div>
-    <div class="menu-group">
-      <button class="menu-toggle" data-target="submenu-campionats">Campionats en curs</button>
       <div id="submenu-campionats" class="submenu">
         <button id="btn-torneig">Social en curs</button>
       </div>
-    </div>
-    <div class="menu-group">
-      <button class="menu-toggle" data-target="submenu-historic">Històric</button>
       <div id="submenu-historic" class="submenu">
         <button id="btn-ranking">Rànquings</button>
         <button id="btn-classificacio">Classificacions Socials</button>
       </div>
-    </div>
-    <div class="menu-group">
-      <button class="menu-toggle" data-target="submenu-multimedia">Multimedia</button>
       <div id="submenu-multimedia" class="submenu">
         <button id="btn-enllacos">Enllaços Billar</button>
       </div>
@@ -67,7 +62,6 @@
     </div>
     <div id="torneig-category-buttons" class="button-group category-buttons" style="display:none"></div>
     <!-- aquí es poden afegir més botons en el futur -->
-    </div>
     <div id="content"></div>
 
   </div>
