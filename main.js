@@ -1306,6 +1306,23 @@ function mostraTorneig(dades, file) {
   cont.appendChild(pre);
 }
 
+document.querySelectorAll('.menu-toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = document.getElementById(btn.dataset.target);
+    const isVisible = target.style.display === 'flex';
+    document.querySelectorAll('.submenu').forEach(sm => {
+      sm.style.display = 'none';
+    });
+    target.style.display = isVisible ? 'none' : 'flex';
+    document.getElementById('filters-row').style.display = 'none';
+    document.getElementById('classificacio-filters').style.display = 'none';
+    document.getElementById('torneig-buttons').style.display = 'none';
+    document.getElementById('torneig-title').style.display = 'none';
+    document.getElementById('torneig-category-buttons').style.display = 'none';
+    document.getElementById('content').style.display = 'none';
+  });
+});
+
 document.getElementById('btn-ranking').addEventListener('click', () => {
   document.getElementById('filters-row').style.display = 'flex';
   document.getElementById('classificacio-filters').style.display = 'none';

@@ -66,16 +66,22 @@ h1 {
 
 #menu {
   display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
+  flex-direction: column;
   margin-bottom: 0.5rem;
 }
 
-#menu > button {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.menu-group > button {
+  width: 100%;
+}
+
+.submenu {
+  display: none;
+  margin-left: 0.5rem;
+  flex-direction: column;
+}
+
+.submenu button {
+  width: 100%;
 }
 
 button {
