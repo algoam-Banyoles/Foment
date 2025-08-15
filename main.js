@@ -1,3 +1,4 @@
+import { apiGetRanking } from "./api.js";
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js')
@@ -89,7 +90,7 @@ function adjustChartSize() {
 
 function inicialitza() {
   Promise.all([
-    fetch('data/ranquing.json').then(r => r.json()),
+    apiGetRanking().catch(() => fetch('data/ranquing.json').then(r => r.json())),
     fetch('classificacions.json').then(r => r.json()).catch(() => []),
     fetch('data/events.json').then(r => r.json()).catch(() => []),
     fetch('data/calendari.json').then(r => r.json()).catch(() => []),
