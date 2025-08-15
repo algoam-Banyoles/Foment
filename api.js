@@ -12,7 +12,9 @@ const API_TOKEN = (import.meta.env && import.meta.env.VITE_API_TOKEN) || '';
 
 async function apiRequest(path, method = 'GET', body = null) {
   if (!API_BASE) {
-    return { error: 'API no configurada' };
+
+    return Promise.resolve({ error: 'API no configurada' });
+
   }
   const url = `${API_BASE}?path=${encodeURIComponent(path)}`;
   const opts = {
