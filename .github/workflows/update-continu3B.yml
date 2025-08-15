@@ -1,0 +1,29 @@
+# yamllint disable rule:truthy
+---
+name: Sync Continu3B Sheet (API)
+# Tabs: Paràmetres, Jugadors, RankingActiu, Reptes, LlistaEspera,
+#       Partides, Historic, Auditoria
+
+on:
+  workflow_dispatch: {}  # yamllint disable-line truthy
+  schedule:
+    - cron: '0 */6 * * *'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      CONTINU_ID: ${{ secrets.CONTINU_ID }}
+      OUTPUT_DIR: data
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install --upgrade google-api-python-client google-auth
+      - name: Run sync
+        run: python3 tools/update_continu3B.py
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'chore: update Continu3B from Google Sheets API'
