@@ -2,7 +2,8 @@
 """Sync events from a Google Sheet to ``events.json``.
 
 Fetches data via the OpenSheet service and writes the resulting JSON file
-only when content changes.  Inspired by ``update_sheets.py``.
+only when content changes. Mitjana fields, if present, are normalised to
+dot-based decimals. Inspired by ``update_sheets.py``.
 
 Required environment variables:
     AGENDA_ID – Google Sheet identifier.
@@ -21,6 +22,7 @@ import hashlib
 import json
 import os
 import pathlib
+import re
 import sys
 import time
 import urllib.error
@@ -50,6 +52,7 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; EventSync/1.0; +https://github.com/<repo>)",
     "Accept": "application/json",
 }
+MITJANA_RE = re.compile(r"^\d+(\.\d+)?$")
 
 
 def force_ipv4() -> None:
@@ -103,6 +106,27 @@ def write_if_changed(path: pathlib.Path, data: Any) -> bool:
     return True
 
 
+def normalise_mitjana_fields(obj: Any) -> None:
+    """Normalise ``Mitjana`` keys to dot-based decimals."""
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if "Mitjana" in k:
+                mitjana = str(v).replace(",", ".")
+                if mitjana:
+                    try:
+                        mitjana = str(float(mitjana))
+                    except ValueError:
+                        pass
+                if mitjana and not MITJANA_RE.match(mitjana):
+                    raise AssertionError("Mitjana format error")
+                obj[k] = mitjana
+            else:
+                normalise_mitjana_fields(v)
+    elif isinstance(obj, list):
+        for item in obj:
+            normalise_mitjana_fields(item)
+
+
 def to_iso_date(value: str) -> str:
     """Convert a cell value to ISO date string."""
     value = value.strip()
@@ -148,7 +172,7 @@ def main() -> None:
                 if "Data" in row:
                     row["Data"] = to_iso_date(str(row.get("Data", "")))
                 rows.append(row)
-
+    normalise_mitjana_fields(rows if rows else data)
     if write_if_changed(OUTPUT_FILE, rows if rows else data):
         print(f"Fitxer actualitzat: {OUTPUT_FILE}")
     else:
