@@ -23,7 +23,7 @@ export default function Ordre() {
         setData(ordered);
         setUpdatedAt(Date.now());
       })
-      .catch(() => setError('Error carregant dades.'))
+      .catch(error => setError(error.message || 'Error carregant dades.'))
       .finally(() => setLoading(false));
   };
 

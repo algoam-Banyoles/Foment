@@ -20,7 +20,15 @@ async function apiRequest(path, method = 'GET', body = null) {
     // sempre incloem el token a POST
     opts.body = JSON.stringify({ token: API_TOKEN, ...body });
   }
-  return fetch(url, opts).then(r => r.json());
+  return fetch(url, opts).then(async r => {
+    const text = await r.text();
+    try {
+      return JSON.parse(text);
+    } catch (err) {
+      console.error('API response parse error:', text);
+      throw new Error(text);
+    }
+  });
 }
 
 // ----------- ENDPOINTS NOUS tc3b/* -----------
