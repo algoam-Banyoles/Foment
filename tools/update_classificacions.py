@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sync classification data from a public Google Sheet to ``classificacions.json``.
+"""Sync classification data from a public Google Sheet to ``data/classificacions.json``.
 
 Fetches data via the OpenSheet service using ``CLAS_ID`` and writes the
 resulting JSON only when the content changes. Mitjana fields are
@@ -28,7 +28,7 @@ HEADERS = {
 
 SHEET_ID = os.getenv("CLAS_ID", "").strip()
 SHEET_TAB = os.getenv("CLAS_TAB", "1").strip() or "1"
-OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "classificacions.json"))
+OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "data/classificacions.json"))
 TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "30"))
 RETRIES = int(os.getenv("HTTP_RETRIES", "5"))
 MITJANA_RE = re.compile(r"^\d+(\.\d+)?$")

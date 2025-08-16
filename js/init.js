@@ -54,10 +54,10 @@ export function adjustChartSize() {
 export function inicialitza() {
   Promise.all([
     fetch('data/ranquing.json').then(r => r.json()),
-    fetch('classificacions.json').then(r => r.json()).catch(() => []),
+    fetch('data/classificacions.json').then(r => r.json()).catch(() => []),
     fetch('data/events.json').then(r => r.json()).catch(() => []),
     fetch('data/calendari.json').then(r => r.json()).catch(() => []),
-    fetch('festius.json').then(r => r.json()).catch(() => [])
+    fetch('data/festius.json').then(r => r.json()).catch(() => [])
   ])
     .then(([dadesRanking, dadesClass, dadesEvents, dadesCalendari, dadesFestius]) => {
       ranquing = dadesRanking;

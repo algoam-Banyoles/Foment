@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sync link data from a public Google Sheet to enllacos.json.
+"""Sync link data from a public Google Sheet to ``data/enllacos.json``.
 
 Fetches data via the OpenSheet service and writes a JSON file only if
 content changed. Fields named ``Mitjana`` are normalised to dot-based
@@ -11,7 +11,7 @@ Required env vars:
 
 Optional env vars:
   • LINKS_SHEET_TAB – sheet tab name or index (default: "1")
-  • OUTPUT_FILE     – path of the JSON file (default: "enllacos.json")
+  • OUTPUT_FILE     – path of the JSON file (default: "data/enllacos.json")
   • HTTP_TIMEOUT    – request timeout in seconds (default: 30)
   • HTTP_RETRIES    – number of fetch retries (default: 5)
 """
@@ -48,7 +48,7 @@ SHEET_ID = (
 # Accepta LINKS_TAB o LINKS_SHEET_TAB
 SHEET_TAB = (os.getenv("LINKS_TAB") or os.getenv("LINKS_SHEET_TAB") or "1").strip() or "1"
 
-OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "enllacos.json"))
+OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "data/enllacos.json"))
 TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "30"))
 MAX_RETRIES = int(os.getenv("HTTP_RETRIES", "5"))
 

@@ -27,7 +27,7 @@ workbox.precaching.precacheAndRoute([
   { url: './main.js', revision: CACHE_VERSION },
   { url: 'https://cdn.jsdelivr.net/npm/chart.js', revision: null },
   { url: './data/ranquing.json', revision: CACHE_VERSION },
-  { url: './classificacions.json', revision: CACHE_VERSION },
+  { url: './data/classificacions.json', revision: CACHE_VERSION },
   { url: './data/events.json', revision: CACHE_VERSION },
   { url: './data/continu3b.json', revision: CACHE_VERSION },
   { url: './icons/icon-192.png', revision: CACHE_VERSION },
