@@ -27,12 +27,14 @@ export function mostraContinu3B() {
           10
         ) || 7;
 
+
       const potReptar = (id, dataStr, posicio) => {
         if (parseInt(posicio, 10) === 1) return false;
         const actiu = reptes.some(
           r =>
             r.reptador_id === id &&
             ['proposat', 'acceptat'].includes(r.estat)
+
         );
         if (actiu) return false;
         if (!dataStr) return true;
@@ -41,6 +43,7 @@ export function mostraContinu3B() {
         if (isNaN(parsed)) return true;
         const diff = (Date.now() - parsed.getTime()) / (1000 * 60 * 60 * 24);
         return diff >= cooldownReptar;
+
       };
 
       const potSerReptat = (id, dataStr) => {
@@ -56,6 +59,7 @@ export function mostraContinu3B() {
         if (isNaN(parsed)) return true;
         const diff = (Date.now() - parsed.getTime()) / (1000 * 60 * 60 * 24);
         return diff >= cooldownReptar;
+
       };
 
       function mostraPartidesJugador(id, nom) {
@@ -169,8 +173,10 @@ export function mostraContinu3B() {
                 const info = jugadors.find(j => j.id === r.jugador_id);
                 const potRep = potReptar(
                   r.jugador_id,
+
                   info ? info.data_ultim_repte : '',
                   r.posicio
+
                 );
                 const potReptarTd = document.createElement('td');
                 const potReptarSpan = document.createElement('span');
@@ -192,9 +198,11 @@ export function mostraContinu3B() {
                 tr.appendChild(potSerTd);
                 tbody.appendChild(tr);
               });
+
               table.appendChild(tbody);
               appendResponsiveTable(cont, table);
             } else {
+
             const p = document.createElement('p');
             p.textContent = 'No hi ha rànquing disponible.';
             cont.appendChild(p);
