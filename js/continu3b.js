@@ -183,6 +183,10 @@ export function mostraContinu3B() {
               });
             table.appendChild(tbody);
             appendResponsiveTable(cont, table);
+            const legenda = document.createElement('p');
+            legenda.textContent =
+              '🔵 Pot reptar · 🟢 Pot ser reptat · 🔴 No pot ser reptat';
+            cont.appendChild(legenda);
           } else {
             const p = document.createElement('p');
             p.textContent = 'No hi ha rànquing disponible.';
