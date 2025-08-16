@@ -128,36 +128,24 @@ export function mostraContinu3B() {
               );
 
             cont.appendChild(legenda);
-            const table = document.createElement('table');
-            const thead = document.createElement('thead');
-            const headerRow = document.createElement('tr');
-
-            ['Posició', 'Jugador', 'Disponible'].forEach(h => {
-
-              const th = document.createElement('th');
-              th.textContent = h;
-              headerRow.appendChild(th);
-            });
-            thead.appendChild(headerRow);
-            table.appendChild(thead);
-            const tbody = document.createElement('tbody');
+            const cards = document.createElement('div');
+            cards.className = 'ranking-cards';
             ranking
               .slice()
               .sort((a, b) => parseInt(a.posicio, 10) - parseInt(b.posicio, 10))
               .forEach(r => {
-                const tr = document.createElement('tr');
-                const posTd = document.createElement('td');
-                posTd.textContent = r.posicio;
-                tr.appendChild(posTd);
+                const card = document.createElement('div');
+                card.className = 'ranking-card';
+                const posSpan = document.createElement('span');
+                posSpan.textContent = r.posicio;
+                card.appendChild(posSpan);
                 const nom = mapJugadors[r.jugador_id] || r.jugador_id;
-                const nameTd = document.createElement('td');
                 const nameBtn = document.createElement('button');
                 nameBtn.textContent = nom;
                 nameBtn.addEventListener('click', () =>
                   mostraPartidesJugador(r.jugador_id, nom)
                 );
-                nameTd.appendChild(nameBtn);
-                tr.appendChild(nameTd);
+                card.appendChild(nameBtn);
                 const info = jugadors.find(j => j.id === r.jugador_id);
 
                 const pot = disponible(
@@ -165,19 +153,16 @@ export function mostraContinu3B() {
                   info ? info.data_ultim_repte : '',
                   r.posicio
                 );
-                const potTd = document.createElement('td');
                 const potSpan = document.createElement('span');
                 potSpan.textContent = pot ? '🟢' : '🔴';
                 potSpan.title = pot
                   ? 'Pot reptar i ser reptat'
                   : 'No pot reptar ni ser reptat';
-                potTd.appendChild(potSpan);
-                tr.appendChild(potTd);
-                tbody.appendChild(tr);
+                card.appendChild(potSpan);
+                cards.appendChild(card);
               });
-              table.appendChild(tbody);
-              appendResponsiveTable(cont, table);
-            } else {
+            cont.appendChild(cards);
+          } else {
 
             const p = document.createElement('p');
             p.textContent = 'No hi ha rànquing disponible.';
