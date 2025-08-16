@@ -152,32 +152,35 @@ export function mostraContinu3B() {
             const headerRow = document.createElement('tr');
 
             ['Posició', 'Jugador', 'Últim repte', 'Disponible'].forEach(h => {
-
               const th = document.createElement('th');
               th.textContent = h;
               headerRow.appendChild(th);
             });
             thead.appendChild(headerRow);
             table.appendChild(thead);
-            const tbody = document.createElement('tbody');
-            const ordered = ranking
-              .slice()
 
+            const tbody = document.createElement('tbody');
+            ranking
+              .slice()
               .sort((a, b) => parseInt(a.posicio, 10) - parseInt(b.posicio, 10))
               .forEach((r, idx) => {
-
                 const tr = document.createElement('tr');
                 if (idx < 3) tr.classList.add(`top${idx + 1}`);
+
                 const posTd = document.createElement('td');
                 posTd.textContent = r.posicio;
                 tr.appendChild(posTd);
+
                 const nom = mapJugadors[r.jugador_id] || r.jugador_id;
                 const nameBtn = document.createElement('button');
                 nameBtn.textContent = nom;
                 nameBtn.addEventListener('click', () =>
                   mostraPartidesJugador(r.jugador_id, nom)
                 );
-                card.appendChild(nameBtn);
+                const nomTd = document.createElement('td');
+                nomTd.appendChild(nameBtn);
+                tr.appendChild(nomTd);
+
                 const info = jugadors.find(j => j.id === r.jugador_id);
                 const { dies: diesInactiu, data: dataUltim } = calculaInactivitat(
                   info ? info.data_ultim_repte : ''
@@ -189,20 +192,20 @@ export function mostraContinu3B() {
                 }
                 tr.appendChild(ultimTd);
 
-                const pot = disponible(
-                  r.jugador_id,
-                  diesInactiu,
-                  r.posicio
-                );
+                const pot = disponible(r.jugador_id, diesInactiu, r.posicio);
                 const potSpan = document.createElement('span');
                 potSpan.textContent = pot ? '🟢' : '🔴';
                 potSpan.title = pot
                   ? 'Pot reptar i ser reptat'
                   : 'No pot reptar ni ser reptat';
-                card.appendChild(potSpan);
-                cards.appendChild(card);
+                const potTd = document.createElement('td');
+                potTd.appendChild(potSpan);
+                tr.appendChild(potTd);
+
+                tbody.appendChild(tr);
               });
-            cont.appendChild(cards);
+            table.appendChild(tbody);
+            appendResponsiveTable(cont, table);
           } else {
 
             const p = document.createElement('p');
