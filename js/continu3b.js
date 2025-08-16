@@ -358,53 +358,56 @@ export function mostraContinu3B() {
   <h2 class="normes-title">Normativa Continu 3B</h2>
 
   <div class="normes-card">
-    <h3>Rànquing actiu</h3>
-    <p>Màxim 20 jugadors, actualitzat contínuament mitjançant reptes directes. Els jugadors que vulguin formar part del rànquing un cop s'arribi al màxim de 20 jugadors formaran part de la llista d'espera.</p>
-  </div>
-
-  <div class="normes-card">
-    <h3>Reptes normals</h3>
+    <h3>📊 Rànquing actiu</h3>
     <ul>
-      <li>Pots reptar fins a 2 posicions per sobre teu.</li>
-      <li>Màxim un repte actiu per jugador.</li>
-      <li>Mínim 7 dies entre reptes.</li>
-      <li>Si guanya el reptador → intercanvi de posicions.</li>
-      <li>Si perd → no hi ha canvis.</li>
+      <li><strong>Màxim 20 jugadors</strong>, actualitzat contínuament mitjançant reptes directes</li>
+      <li>Els jugadors que vulguin formar part del rànquing un cop s'arribi al màxim de 20 jugadors formaran part de la <strong>llista d'espera</strong>.</li>
     </ul>
   </div>
 
   <div class="normes-card">
-    <h3>Reptes d’accés</h3>
+    <h3>⚔️ Reptes normals</h3>
     <ul>
-      <li>Primer de la llista d’espera pot reptar el jugador 20.</li>
-      <li>Si guanya → entra al rànquing (pos. 20) i el perdedor passa a la llista d’espera.</li>
-      <li>Si perd → passa al final de la llista d’espera.</li>
+      <li>Pots reptar fins a <strong>2 posicions</strong> per sobre teu.</li>
+      <li><strong>Màxim un repte actiu</strong> per jugador.</li>
+      <li><strong>Mínim 7 dies</strong> entre reptes.</li>
+      <li>Si guanya el reptador → <strong>intercanvi de posicions</strong>.</li>
+      <li>Si perd el reptador → <strong>no hi ha canvis</strong>.</li>
     </ul>
   </div>
 
   <div class="normes-card">
-    <h3>Terminis</h3>
-    <p>7 dies per acceptar un repte i 7 dies per jugar-lo un cop acceptat.</p>
-  </div>
-
-  <div class="normes-card">
-    <h3>Penalitzacions</h3>
+    <h3>🚪 Reptes d’accés</h3>
     <ul>
-      <li>Incompareixença o refús sense motiu → derrota automàtica.</li>
-      <li>Sense acord de data → tots dos perden una posició.</li>
+      <li><strong>Primer de la llista d’espera</strong> pot reptar el jugador 20.</li>
+      <li>Si guanya → <strong>entra al rànquing</strong> (pos. 20) i el perdedor passa a la llista d’espera.</li>
+      <li>Si perd → passa al final de la <strong>llista d’espera</strong>.</li>
     </ul>
   </div>
 
   <div class="normes-card">
-    <h3>Inactivitat</h3>
+    <h3>⏱️ Terminis</h3>
+    <p><strong>7 dies</strong> per acceptar un repte i <strong>7 dies</strong> per jugar-lo un cop acceptat.</p>
+  </div>
+
+  <div class="normes-card">
+    <h3>⚠️ Penalitzacions</h3>
     <ul>
-      <li>3 setmanes sense reptes → baixa 5 posicions (pre-inactiu).</li>
-      <li>6 setmanes sense reptes → surt del rànquing i entra el primer de la llista d’espera.</li>
+      <li>Incompareixença o refús sense motiu → <strong>derrota automàtica</strong>.</li>
+      <li>Sense acord de data → tots dos <strong>perden una posició</strong>.</li>
     </ul>
   </div>
 
   <div class="normes-card">
-    <p>Consulta la <a href="https://docs.google.com/document/d/165_bh9m0WxRU_LoTt_k8aiJseZZn9bBZ/edit?usp=sharing&amp;ouid=102336298592739127647&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener">normativa completa</a>.</p>
+    <h3>😴 Inactivitat</h3>
+    <ul>
+      <li><strong>3 setmanes</strong> sense reptes → baixa 5 posicions (pre-inactiu).</li>
+      <li><strong>6 setmanes</strong> sense reptes → surt del rànquing i entra el primer de la llista d’espera.</li>
+    </ul>
+  </div>
+
+  <div class="normes-card">
+    <p>Consulta la <a href="https://docs.google.com/document/d/165_bh9m0WxRU_LoTt_k8aiJseZZn9bBZ/edit?usp=sharing&amp;ouid=102336298592739127647&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener"><strong>normativa completa</strong></a>.</p>
   </div>
 </div>`;
         })
