@@ -947,7 +947,68 @@ function mostraContinu3B() {
         })
       );
 
-      [btnRanking, btnReptes, btnLlista, btnAcces].forEach(b =>
+      const btnNormativa = document.createElement('button');
+      btnNormativa.textContent = 'Normativa';
+      btnNormativa.addEventListener('click', () =>
+        showSection(btnNormativa, () => {
+          cont.innerHTML = `
+<div class="normes-container">
+  <h2 class="normes-title">Normativa Continu 3B</h2>
+
+  <div class="normes-card">
+    <h3>Rànquing actiu</h3>
+    <p>Màxim 20 jugadors, actualitzat contínuament mitjançant reptes directes.</p>
+  </div>
+
+  <div class="normes-card">
+    <h3>Reptes normals</h3>
+    <ul>
+      <li>Pots reptar fins a 2 posicions per sobre teu.</li>
+      <li>Màxim un repte actiu per jugador.</li>
+      <li>Mínim 7 dies entre reptes.</li>
+      <li>Si guanya el reptador → intercanvi de posicions.</li>
+      <li>Si perd → no hi ha canvis.</li>
+    </ul>
+  </div>
+
+  <div class="normes-card">
+    <h3>Reptes d’accés</h3>
+    <ul>
+      <li>Primer de la llista d’espera pot reptar el jugador 20.</li>
+      <li>Si guanya → entra al rànquing (pos. 20) i el perdedor passa a la llista d’espera.</li>
+      <li>Si perd → passa al final de la llista d’espera.</li>
+    </ul>
+  </div>
+
+  <div class="normes-card">
+    <h3>Terminis</h3>
+    <p>7 dies per acceptar un repte i 7 dies per jugar-lo un cop acceptat.</p>
+  </div>
+
+  <div class="normes-card">
+    <h3>Penalitzacions</h3>
+    <ul>
+      <li>Incompareixença o refús sense motiu → derrota automàtica.</li>
+      <li>Sense acord de data → tots dos perden una posició.</li>
+    </ul>
+  </div>
+
+  <div class="normes-card">
+    <h3>Inactivitat</h3>
+    <ul>
+      <li>3 setmanes sense reptes → baixa 5 posicions (pre-inactiu).</li>
+      <li>6 setmanes sense reptes → surt del rànquing i entra el primer de la llista d’espera.</li>
+    </ul>
+  </div>
+
+  <div class="normes-card">
+    <p>Consulta la <a href="https://docs.google.com/document/d/165_bh9m0WxRU_LoTt_k8aiJseZZn9bBZ/edit?usp=sharing&amp;ouid=102336298592739127647&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener">normativa completa</a>.</p>
+  </div>
+</div>`;
+        })
+      );
+
+      [btnRanking, btnReptes, btnLlista, btnAcces, btnNormativa].forEach(b =>
         btnContainer.appendChild(b)
       );
 
