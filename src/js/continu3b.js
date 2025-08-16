@@ -437,58 +437,6 @@ export function mostraContinu3B() {
             cont.appendChild(p);
           }
 
-          const partTitle = document.createElement('h4');
-          partTitle.textContent = 'Partides';
-          cont.appendChild(partTitle);
-          const partidesAcces = partides.filter(p => {
-            const repte = reptes.find(r => r.id === p.repte_id);
-            return repte && repte.tipus === 'acces';
-          });
-          partidesAcces.sort((a, b) => new Date(b.data) - new Date(a.data));
-          if (partidesAcces.length) {
-            const table = document.createElement('table');
-            const thead = document.createElement('thead');
-            const headerRow = document.createElement('tr');
-            ['Data', 'Local', 'Visitant', 'Guanyador', 'Swap'].forEach(h => {
-              const th = document.createElement('th');
-              th.textContent = h;
-              headerRow.appendChild(th);
-            });
-            thead.appendChild(headerRow);
-            table.appendChild(thead);
-            const tbody = document.createElement('tbody');
-            partidesAcces.forEach(p => {
-              const repte = reptes.find(r => r.id === p.repte_id) || {};
-              const reptador = mapJugadors[repte.reptador_id] || repte.reptador_id;
-              const reptat = mapJugadors[repte.reptat_id] || repte.reptat_id;
-              let guanyador = '';
-              if (repte.resultat_guanya_reptador === 'TRUE') {
-                guanyador = reptador;
-              } else if (repte.resultat_guanya_reptador === 'FALSE') {
-                guanyador = reptat;
-              }
-              let swapText = 'No intercanvi posicions';
-              if (repte.tipus === 'acces' && repte.resultat_guanya_reptador === 'TRUE') {
-                swapText = 'Intercanvi posicions';
-              }
-              const date = p.data
-                ? new Date(p.data).toLocaleDateString('ca-ES')
-                : '';
-              const tr = document.createElement('tr');
-              [date, reptador, reptat, guanyador, swapText].forEach(t => {
-                const td = document.createElement('td');
-                td.textContent = t;
-                tr.appendChild(td);
-              });
-              tbody.appendChild(tr);
-            });
-            table.appendChild(tbody);
-            appendResponsiveTable(cont, table);
-          } else {
-            const p = document.createElement('p');
-            p.textContent = 'No hi ha partides registrades.';
-            cont.appendChild(p);
-          }
         })
       );
 
