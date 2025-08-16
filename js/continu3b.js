@@ -135,17 +135,6 @@ export function mostraContinu3B() {
           title.textContent = 'Rànquing actual';
           cont.appendChild(title);
           if (Array.isArray(ranking) && ranking.length) {
-            const legenda = document.createElement('div');
-
-              ['🟢 Pot reptar i ser reptat', '🔴 No pot reptar ni ser reptat'].forEach(
-                t => {
-                  const p = document.createElement('p');
-                  p.textContent = t;
-                  legenda.appendChild(p);
-                }
-              );
-
-            cont.appendChild(legenda);
             const table = document.createElement('table');
             table.classList.add('ranking-table');
             const thead = document.createElement('thead');
@@ -207,6 +196,17 @@ export function mostraContinu3B() {
                 tbody.appendChild(tr);
               });
             table.appendChild(tbody);
+            const legenda = document.createElement('div');
+
+            ['🟢 Pot reptar i ser reptat', '🔴 No pot reptar ni ser reptat'].forEach(
+              t => {
+                const p = document.createElement('p');
+                p.textContent = t;
+                legenda.appendChild(p);
+              }
+            );
+
+            cont.appendChild(legenda);
             appendResponsiveTable(cont, table);
           } else {
 
