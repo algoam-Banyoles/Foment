@@ -227,6 +227,7 @@ export function mostraContinu3B() {
                     diesRestants = Math.max(limit - diff, 0);
                   }
                 } else if (diesInactiu != null) {
+
                   diesRestants = Math.max(cooldownReptar - diesInactiu, 0);
                   if (dataUltim) diesTd.title = `Últim repte: ${dataUltim}`;
                 }
@@ -491,6 +492,65 @@ export function mostraContinu3B() {
         })
       );
 
+      const btnPartides = document.createElement('button');
+      btnPartides.textContent = 'Partides';
+      btnPartides.addEventListener('click', () =>
+        showSection(btnPartides, () => {
+          const title = document.createElement('h3');
+          title.textContent = 'Partides';
+          cont.appendChild(title);
+          if (Array.isArray(partides) && partides.length) {
+            const rankingMap = Object.fromEntries(
+              ranking.map(r => [r.jugador_id, parseInt(r.posicio, 10)])
+            );
+            const sorted = partides
+              .slice()
+              .sort((a, b) => new Date(b.data) - new Date(a.data));
+            sorted.forEach(p => {
+              const card = document.createElement('div');
+              card.classList.add('partida-card');
+              const repte = reptes.find(r => r.id === p.repte_id) || {};
+              const local = mapJugadors[p.local_id] || p.local_id;
+              const visitant = mapJugadors[p.visitant_id] || p.visitant_id;
+              const resultat =
+                p.caramboles_local && p.caramboles_visitant
+                  ? `${p.caramboles_local}-${p.caramboles_visitant}`
+                  : '';
+              const posLocalAfter = rankingMap[p.local_id];
+              const posVisitantAfter = rankingMap[p.visitant_id];
+              const swap = repte.resultat_guanya_reptador === 'TRUE';
+              let posLocalInicial = posLocalAfter;
+              let posVisitantInicial = posVisitantAfter;
+              if (swap && posLocalAfter !== undefined && posVisitantAfter !== undefined) {
+                posLocalInicial = posVisitantAfter;
+                posVisitantInicial = posLocalAfter;
+              }
+              const posLocalText =
+                posLocalInicial !== undefined ? posLocalInicial : '-';
+              const posVisitantText =
+                posVisitantInicial !== undefined ? posVisitantInicial : '-';
+              const swapText = swap
+                ? 'Intercanvi de posicions'
+                : 'No intercanvi de posicions';
+              const date = p.data
+                ? new Date(p.data).toLocaleDateString('ca-ES')
+                : '';
+              card.innerHTML = `
+                <h4>${date}</h4>
+                <p>${local} (Pos. ${posLocalText}) vs ${visitant} (Pos. ${posVisitantText})</p>
+                <p>Resultat: ${resultat}</p>
+                <p>${swapText}</p>
+              `;
+              cont.appendChild(card);
+            });
+          } else {
+            const p = document.createElement('p');
+            p.textContent = 'No hi ha partides registrades.';
+            cont.appendChild(p);
+          }
+        })
+      );
+
       const btnNormativa = document.createElement('button');
       btnNormativa.textContent = 'Normativa';
       btnNormativa.addEventListener('click', () =>
@@ -556,7 +616,7 @@ export function mostraContinu3B() {
         })
       );
 
-      [btnRanking, btnReptes, btnLlista, btnAcces, btnNormativa].forEach(b =>
+      [btnRanking, btnReptes, btnLlista, btnAcces, btnPartides, btnNormativa].forEach(b =>
         btnContainer.appendChild(b)
       );
 
