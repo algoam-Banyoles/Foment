@@ -587,21 +587,13 @@ details summary {
   color: #000;
 }
 
-.ranking-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
 
-.ranking-card {
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+#ranking-filter-disponibles {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
+  gap: 0.25rem;
+  margin: 0.25rem;
+
 }
 
 

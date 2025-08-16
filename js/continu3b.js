@@ -109,8 +109,19 @@ export function mostraContinu3B() {
         render();
       };
 
+      const filterLabel = document.createElement('label');
+      filterLabel.id = 'ranking-filter-disponibles';
+      const chkDisponibles = document.createElement('input');
+      chkDisponibles.type = 'checkbox';
+      filterLabel.appendChild(chkDisponibles);
+      filterLabel.appendChild(
+        document.createTextNode(' Mostra només disponibles')
+      );
+      btnContainer.appendChild(filterLabel);
+
       const btnRanking = document.createElement('button');
       btnRanking.textContent = 'Rànquing actual';
+      chkDisponibles.addEventListener('change', () => btnRanking.click());
       btnRanking.addEventListener('click', () =>
         showSection(btnRanking, () => {
           const title = document.createElement('h3');
@@ -128,17 +139,40 @@ export function mostraContinu3B() {
               );
 
             cont.appendChild(legenda);
-            const cards = document.createElement('div');
-            cards.className = 'ranking-cards';
-            ranking
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+
+            ['Posició', 'Jugador', 'Disponible'].forEach(h => {
+
+              const th = document.createElement('th');
+              th.textContent = h;
+              headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+            const tbody = document.createElement('tbody');
+            const ordered = ranking
               .slice()
-              .sort((a, b) => parseInt(a.posicio, 10) - parseInt(b.posicio, 10))
-              .forEach(r => {
-                const card = document.createElement('div');
-                card.className = 'ranking-card';
-                const posSpan = document.createElement('span');
-                posSpan.textContent = r.posicio;
-                card.appendChild(posSpan);
+              .sort(
+                (a, b) =>
+                  parseInt(a.posicio, 10) - parseInt(b.posicio, 10)
+              );
+            const filtered = chkDisponibles.checked
+              ? ordered.filter(r => {
+                  const info = jugadors.find(j => j.id === r.jugador_id);
+                  return disponible(
+                    r.jugador_id,
+                    info ? info.data_ultim_repte : '',
+                    r.posicio
+                  );
+                })
+              : ordered;
+            filtered.forEach(r => {
+                const tr = document.createElement('tr');
+                const posTd = document.createElement('td');
+                posTd.textContent = r.posicio;
+                tr.appendChild(posTd);
                 const nom = mapJugadors[r.jugador_id] || r.jugador_id;
                 const nameBtn = document.createElement('button');
                 nameBtn.textContent = nom;
