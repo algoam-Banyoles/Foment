@@ -28,7 +28,18 @@ export function mostraContinu3B() {
         ) || 7;
 
 
-      const disponible = (id, dataStr, posicio) => {
+      const calculaInactivitat = dataStr => {
+        if (!dataStr) return { dies: null, data: '' };
+        const [d, m, y] = dataStr.split('/');
+        const parsed = new Date(`${y}-${m}-${d}T00:00:00`);
+        if (isNaN(parsed)) return { dies: null, data: '' };
+        const dies = Math.floor(
+          (Date.now() - parsed.getTime()) / (1000 * 60 * 60 * 24)
+        );
+        return { dies, data: `${d}/${m}/${y}` };
+      };
+
+      const disponible = (id, diesInactiu, posicio) => {
         if (parseInt(posicio, 10) === 1) return false;
         const actiu = reptes.some(
           r =>
@@ -37,12 +48,8 @@ export function mostraContinu3B() {
 
         );
         if (actiu) return false;
-        if (!dataStr) return true;
-        const [d, m, y] = dataStr.split('/');
-        const parsed = new Date(`${y}-${m}-${d}T00:00:00`);
-        if (isNaN(parsed)) return true;
-        const diff = (Date.now() - parsed.getTime()) / (1000 * 60 * 60 * 24);
-        return diff >= cooldownReptar;
+        if (diesInactiu == null) return true;
+        return diesInactiu >= cooldownReptar;
 
       };
 
@@ -132,7 +139,7 @@ export function mostraContinu3B() {
             const thead = document.createElement('thead');
             const headerRow = document.createElement('tr');
 
-            ['Posició', 'Jugador', 'Disponible'].forEach(h => {
+            ['Posició', 'Jugador', 'Últim repte', 'Disponible'].forEach(h => {
 
               const th = document.createElement('th');
               th.textContent = h;
@@ -159,10 +166,19 @@ export function mostraContinu3B() {
                 nameTd.appendChild(nameBtn);
                 tr.appendChild(nameTd);
                 const info = jugadors.find(j => j.id === r.jugador_id);
+                const { dies: diesInactiu, data: dataUltim } = calculaInactivitat(
+                  info ? info.data_ultim_repte : ''
+                );
+                const ultimTd = document.createElement('td');
+                if (diesInactiu != null) {
+                  ultimTd.textContent = `${diesInactiu} dies`;
+                  ultimTd.title = dataUltim;
+                }
+                tr.appendChild(ultimTd);
 
                 const pot = disponible(
                   r.jugador_id,
-                  info ? info.data_ultim_repte : '',
+                  diesInactiu,
                   r.posicio
                 );
                 const potTd = document.createElement('td');
