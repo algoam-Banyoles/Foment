@@ -26,6 +26,8 @@ AGENDA_ID=1IkA50UI7OpFd_VYUb5kNe9V0jj-MZKqu python3 tools/update_events.py
 
 Abans de fer un build o desplegar, cal actualitzar la versió del
 service worker per garantir que els canvis es propaguin als clients.
+La versió es calcula automàticament a partir del contingut dels fitxers
+que es precachen, de manera que qualsevol canvi genera un valor nou.
 
 ```bash
 python3 tools/update_sw_version.py
