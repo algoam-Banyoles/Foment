@@ -129,6 +129,7 @@ export function mostraContinu3B() {
 
             cont.appendChild(legenda);
             const table = document.createElement('table');
+            table.classList.add('ranking-table');
             const thead = document.createElement('thead');
             const headerRow = document.createElement('tr');
 
@@ -144,8 +145,9 @@ export function mostraContinu3B() {
             ranking
               .slice()
               .sort((a, b) => parseInt(a.posicio, 10) - parseInt(b.posicio, 10))
-              .forEach(r => {
+              .forEach((r, idx) => {
                 const tr = document.createElement('tr');
+                if (idx < 3) tr.classList.add(`top${idx + 1}`);
                 const posTd = document.createElement('td');
                 posTd.textContent = r.posicio;
                 tr.appendChild(posTd);
