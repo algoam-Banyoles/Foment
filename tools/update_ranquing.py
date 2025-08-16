@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sync ranking data from a public Google Sheet to ``ranquing.json``.
+"""Sync ranking data from a public Google Sheet to ``data/ranquing.json``.
 
 Fetches data via the OpenSheet service using ``RANK_ID`` and writes the
 resulting JSON only when the content changes.  Inspired by
@@ -28,7 +28,7 @@ HEADERS = {
 
 SHEET_ID = os.getenv("RANK_ID", "").strip()
 SHEET_TAB = os.getenv("RANK_TAB", "1").strip() or "1"
-OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "ranquing.json"))
+OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "data/ranquing.json"))
 TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "30"))
 RETRIES = int(os.getenv("HTTP_RETRIES", "5"))
 

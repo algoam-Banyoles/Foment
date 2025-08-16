@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sync events from a Google Sheet to ``events.json``.
+"""Sync events from a Google Sheet to ``data/events.json``.
 
 Fetches data via the OpenSheet service and writes the resulting JSON file
 only when content changes. Mitjana fields, if present, are normalised to
@@ -10,7 +10,7 @@ Required environment variables:
 
 Optional environment variables:
     AGENDA_TAB      – sheet tab name or index (default: "1")
-    OUTPUT_FILE     – path of the JSON file (default: "events.json")
+    OUTPUT_FILE     – path of the JSON file (default: "data/events.json")
     HTTP_TIMEOUT    – request timeout in seconds (default: 30)
     HTTP_RETRIES    – number of fetch retries (default: 5)
     FORCE_IPV4      – set to "1" to force IPv4 DNS resolution
@@ -44,7 +44,7 @@ SHEET_ID = os.getenv("AGENDA_ID", "").strip()
 SHEET_TAB = (os.getenv("AGENDA_TAB") or "1").strip() or "1"
 
 # Output and HTTP settings
-OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "events.json"))
+OUTPUT_FILE = pathlib.Path(os.getenv("OUTPUT_FILE", "data/events.json"))
 TIMEOUT = int(os.getenv("HTTP_TIMEOUT", "30"))
 MAX_RETRIES = int(os.getenv("HTTP_RETRIES", "5"))
 
