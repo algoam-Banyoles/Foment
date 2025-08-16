@@ -164,6 +164,13 @@ export function mostraContinu3B() {
               .slice()
               .sort((a, b) => parseInt(a.posicio) - parseInt(b.posicio));
             ordered.forEach((r, idx) => {
+                const info = jugadors.find(j => j.id === r.jugador_id);
+                const { dies: diesInactiu, data: dataUltim } = calculaInactivitat(
+                  info ? info.data_ultim_repte : ''
+                );
+                const pot = disponible(r.jugador_id, diesInactiu, r.posicio);
+                if (chkDisponibles.checked && !pot) return;
+
                 const tr = document.createElement('tr');
                 if (idx < 3) tr.classList.add(`top${idx + 1}`);
 
@@ -181,10 +188,6 @@ export function mostraContinu3B() {
                 nomTd.appendChild(nameBtn);
                 tr.appendChild(nomTd);
 
-                const info = jugadors.find(j => j.id === r.jugador_id);
-                const { dies: diesInactiu, data: dataUltim } = calculaInactivitat(
-                  info ? info.data_ultim_repte : ''
-                );
                 const ultimTd = document.createElement('td');
                 if (diesInactiu != null) {
                   ultimTd.textContent = `${diesInactiu} dies`;
@@ -192,7 +195,6 @@ export function mostraContinu3B() {
                 }
                 tr.appendChild(ultimTd);
 
-                const pot = disponible(r.jugador_id, diesInactiu, r.posicio);
                 const potSpan = document.createElement('span');
                 potSpan.textContent = pot ? '🟢' : '🔴';
                 potSpan.title = pot
