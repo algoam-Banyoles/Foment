@@ -688,35 +688,272 @@ function mostraEnllacos() {
 
 
 
-function mostraContinu3B(dades) {
+function mostraContinu3B() {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
-  if (!Array.isArray(dades) || dades.length === 0) {
-    cont.innerHTML = '<p>No hi ha dades disponibles.</p>';
-    return;
-  }
-  const table = document.createElement('table');
-  const thead = document.createElement('thead');
-  const headerRow = document.createElement('tr');
-  Object.keys(dades[0]).forEach(k => {
-    const th = document.createElement('th');
-    th.textContent = k;
-    headerRow.appendChild(th);
-  });
-  thead.appendChild(headerRow);
-  table.appendChild(thead);
-  const tbody = document.createElement('tbody');
-  dades.forEach(row => {
-    const tr = document.createElement('tr');
-    Object.values(row).forEach(val => {
-      const td = document.createElement('td');
-      td.textContent = val;
-      tr.appendChild(td);
+  const btnContainer = document.getElementById('continu3b-buttons');
+  btnContainer.innerHTML = '';
+
+  Promise.all([
+    fetch('data/continu3b_rankingactiu.json').then(r => r.json()).catch(() => []),
+    fetch('data/continu3b_llistaespera.json').then(r => r.json()).catch(() => []),
+    fetch('data/continu3b_reptes.json').then(r => r.json()).catch(() => []),
+    fetch('data/continu3b_partides.json').then(r => r.json()).catch(() => []),
+    fetch('data/continu3b_jugadors.json').then(r => r.json()).catch(() => [])
+  ])
+    .then(([ranking, llista, reptes, partides, jugadors]) => {
+      const mapJugadors = Object.fromEntries(jugadors.map(j => [j.id, j.nom]));
+
+      const showSection = (btn, render) => {
+        btnContainer.querySelectorAll('button').forEach(b =>
+          b.classList.remove('selected')
+        );
+        btn.classList.add('selected');
+        cont.innerHTML = '';
+        render();
+      };
+
+      const btnRanking = document.createElement('button');
+      btnRanking.textContent = 'Rànquing actual';
+      btnRanking.addEventListener('click', () =>
+        showSection(btnRanking, () => {
+          const title = document.createElement('h3');
+          title.textContent = 'Rànquing actual';
+          cont.appendChild(title);
+          if (Array.isArray(ranking) && ranking.length) {
+            const div = document.createElement('div');
+            ranking
+              .slice()
+              .sort((a, b) => parseInt(a.posicio, 10) - parseInt(b.posicio, 10))
+              .forEach(r => {
+                const btn = document.createElement('button');
+                const nom = mapJugadors[r.jugador_id] || r.jugador_id;
+                btn.textContent = `${r.posicio}. ${nom}`;
+                btn.addEventListener('click', () =>
+                  mostraEvolucioJugador(r.jugador_id, nom)
+                );
+                div.appendChild(btn);
+              });
+            cont.appendChild(div);
+          } else {
+            const p = document.createElement('p');
+            p.textContent = 'No hi ha rànquing disponible.';
+            cont.appendChild(p);
+          }
+        })
+      );
+
+      const btnReptes = document.createElement('button');
+      btnReptes.textContent = 'Reptes';
+      btnReptes.addEventListener('click', () =>
+        showSection(btnReptes, () => {
+          const reptesPendents = reptes.filter(
+            r => r.estat !== 'tancat' && r.tipus !== 'acces'
+          );
+          const title = document.createElement('h3');
+          title.textContent = 'Reptes';
+          cont.appendChild(title);
+          if (reptesPendents.length) {
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            ['Reptador', 'Reptat', 'Creació', 'Acceptació', 'Programació', 'Límit'].forEach(
+              h => {
+                const th = document.createElement('th');
+                th.textContent = h;
+                headerRow.appendChild(th);
+              }
+            );
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+            const tbody = document.createElement('tbody');
+            reptesPendents.forEach(r => {
+              const tr = document.createElement('tr');
+              const reptador = mapJugadors[r.reptador_id] || r.reptador_id;
+              const reptat = mapJugadors[r.reptat_id] || r.reptat_id;
+              const created = r.created_at
+                ? new Date(r.created_at).toLocaleDateString('ca-ES')
+                : '';
+              const accept = r.data_acceptacio
+                ? new Date(r.data_acceptacio).toLocaleDateString('ca-ES')
+                : '';
+              const program = r.data_programa
+                ? new Date(r.data_programa).toLocaleDateString('ca-ES')
+                : '';
+              const deadline = r.deadline_jugar
+                ? new Date(r.deadline_jugar).toLocaleDateString('ca-ES')
+                : '';
+              [reptador, reptat, created, accept, program, deadline].forEach(t => {
+                const td = document.createElement('td');
+                td.textContent = t;
+                tr.appendChild(td);
+              });
+              tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+            appendResponsiveTable(cont, table);
+          } else {
+            const p = document.createElement('p');
+            p.textContent = 'No hi ha reptes pendents.';
+            cont.appendChild(p);
+          }
+        })
+      );
+
+      const btnLlista = document.createElement('button');
+      btnLlista.textContent = "Llista d'espera";
+      btnLlista.addEventListener('click', () =>
+        showSection(btnLlista, () => {
+          const title = document.createElement('h3');
+          title.textContent = "Llista d'espera";
+          cont.appendChild(title);
+          if (Array.isArray(llista) && llista.length) {
+            const div = document.createElement('div');
+            llista
+              .slice()
+              .sort((a, b) => parseInt(a.ordre, 10) - parseInt(b.ordre, 10))
+              .forEach(l => {
+                const btn = document.createElement('button');
+                const nom = mapJugadors[l.jugador_id] || l.jugador_id;
+                btn.textContent = `${l.ordre}. ${nom}`;
+                btn.addEventListener('click', () =>
+                  mostraEvolucioJugador(l.jugador_id, nom)
+                );
+                div.appendChild(btn);
+              });
+            cont.appendChild(div);
+          } else {
+            const p = document.createElement('p');
+            p.textContent = "No hi ha jugadors en llista d'espera.";
+            cont.appendChild(p);
+          }
+        })
+      );
+
+      const btnAcces = document.createElement('button');
+      btnAcces.textContent = 'Reptes accés';
+      btnAcces.addEventListener('click', () =>
+        showSection(btnAcces, () => {
+          const title = document.createElement('h3');
+          title.textContent = 'Reptes accés';
+          cont.appendChild(title);
+
+          const reptesAcces = reptes.filter(
+            r => r.estat !== 'tancat' && r.tipus === 'acces'
+          );
+          const subRepTitle = document.createElement('h4');
+          subRepTitle.textContent = 'Reptes';
+          cont.appendChild(subRepTitle);
+          if (reptesAcces.length) {
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            ['Reptador', 'Reptat', 'Creació', 'Acceptació', 'Programació', 'Límit'].forEach(
+              h => {
+                const th = document.createElement('th');
+                th.textContent = h;
+                headerRow.appendChild(th);
+              }
+            );
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+            const tbody = document.createElement('tbody');
+            reptesAcces.forEach(r => {
+              const tr = document.createElement('tr');
+              const reptador = mapJugadors[r.reptador_id] || r.reptador_id;
+              const reptat = mapJugadors[r.reptat_id] || r.reptat_id;
+              const created = r.created_at
+                ? new Date(r.created_at).toLocaleDateString('ca-ES')
+                : '';
+              const accept = r.data_acceptacio
+                ? new Date(r.data_acceptacio).toLocaleDateString('ca-ES')
+                : '';
+              const program = r.data_programa
+                ? new Date(r.data_programa).toLocaleDateString('ca-ES')
+                : '';
+              const deadline = r.deadline_jugar
+                ? new Date(r.deadline_jugar).toLocaleDateString('ca-ES')
+                : '';
+              [reptador, reptat, created, accept, program, deadline].forEach(t => {
+                const td = document.createElement('td');
+                td.textContent = t;
+                tr.appendChild(td);
+              });
+              tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+            appendResponsiveTable(cont, table);
+          } else {
+            const p = document.createElement('p');
+            p.textContent = 'No hi ha reptes d\'accés pendents.';
+            cont.appendChild(p);
+          }
+
+          const partTitle = document.createElement('h4');
+          partTitle.textContent = 'Partides';
+          cont.appendChild(partTitle);
+          const partidesAcces = partides.filter(p => {
+            const repte = reptes.find(r => r.id === p.repte_id);
+            return repte && repte.tipus === 'acces';
+          });
+          partidesAcces.sort((a, b) => new Date(b.data) - new Date(a.data));
+          if (partidesAcces.length) {
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            ['Data', 'Local', 'Visitant', 'Guanyador', 'Swap'].forEach(h => {
+              const th = document.createElement('th');
+              th.textContent = h;
+              headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+            const tbody = document.createElement('tbody');
+            partidesAcces.forEach(p => {
+              const repte = reptes.find(r => r.id === p.repte_id) || {};
+              const reptador = mapJugadors[repte.reptador_id] || repte.reptador_id;
+              const reptat = mapJugadors[repte.reptat_id] || repte.reptat_id;
+              let guanyador = '';
+              if (repte.resultat_guanya_reptador === 'TRUE') {
+                guanyador = reptador;
+              } else if (repte.resultat_guanya_reptador === 'FALSE') {
+                guanyador = reptat;
+              }
+              let swapText = 'No intercanvi posicions';
+              if (repte.tipus === 'acces' && repte.resultat_guanya_reptador === 'TRUE') {
+                swapText = 'Intercanvi posicions';
+              }
+              const date = p.data
+                ? new Date(p.data).toLocaleDateString('ca-ES')
+                : '';
+              const tr = document.createElement('tr');
+              [date, reptador, reptat, guanyador, swapText].forEach(t => {
+                const td = document.createElement('td');
+                td.textContent = t;
+                tr.appendChild(td);
+              });
+              tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+            appendResponsiveTable(cont, table);
+          } else {
+            const p = document.createElement('p');
+            p.textContent = 'No hi ha partides registrades.';
+            cont.appendChild(p);
+          }
+        })
+      );
+
+      [btnRanking, btnReptes, btnLlista, btnAcces].forEach(b =>
+        btnContainer.appendChild(b)
+      );
+
+      btnRanking.click();
+    })
+    .catch(err => {
+      console.error('Error carregant dades continu 3B', err);
+      cont.innerHTML = '<p>Error carregant dades.</p>';
     });
-    tbody.appendChild(tr);
-  });
-  table.appendChild(tbody);
-  appendResponsiveTable(cont, table);
 }
 
 function mostraEvolucioJugador(jugador, nom) {
@@ -1351,6 +1588,7 @@ document.querySelectorAll('.menu-toggle').forEach(btn => {
     document.getElementById('torneig-buttons').style.display = 'none';
     document.getElementById('torneig-title').style.display = 'none';
     document.getElementById('torneig-category-buttons').style.display = 'none';
+    document.getElementById('continu3b-buttons').style.display = 'none';
     document.getElementById('content').style.display = 'none';
   });
 });
@@ -1361,6 +1599,7 @@ document.getElementById('btn-ranking').addEventListener('click', () => {
   document.getElementById('torneig-buttons').style.display = 'none';
   document.getElementById('torneig-title').style.display = 'none';
   document.getElementById('torneig-category-buttons').style.display = 'none';
+  document.getElementById('continu3b-buttons').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraRanquing();
 });
@@ -1373,6 +1612,7 @@ document.getElementById('btn-classificacio').addEventListener('click', () => {
   document.getElementById('torneig-buttons').style.display = 'none';
   document.getElementById('torneig-title').style.display = 'none';
   document.getElementById('torneig-category-buttons').style.display = 'none';
+  document.getElementById('continu3b-buttons').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraClassificacio();
 });
@@ -1383,6 +1623,7 @@ document.getElementById('btn-agenda').addEventListener('click', () => {
   document.getElementById('torneig-buttons').style.display = 'none';
   document.getElementById('torneig-title').style.display = 'none';
   document.getElementById('torneig-category-buttons').style.display = 'none';
+  document.getElementById('continu3b-buttons').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraAgenda();
 });
@@ -1393,6 +1634,7 @@ document.getElementById('btn-horari').addEventListener('click', () => {
   document.getElementById('torneig-buttons').style.display = 'none';
   document.getElementById('torneig-title').style.display = 'none';
   document.getElementById('torneig-category-buttons').style.display = 'none';
+  document.getElementById('continu3b-buttons').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraHorari();
 });
@@ -1403,6 +1645,7 @@ document.getElementById('btn-enllacos').addEventListener('click', () => {
   document.getElementById('torneig-buttons').style.display = 'none';
   document.getElementById('torneig-title').style.display = 'none';
   document.getElementById('torneig-category-buttons').style.display = 'none';
+  document.getElementById('continu3b-buttons').style.display = 'none';
   document.getElementById('content').style.display = 'block';
   mostraEnllacos();
 });
@@ -1415,13 +1658,9 @@ document.getElementById('btn-continu3b').addEventListener('click', () => {
   document.getElementById('torneig-category-buttons').style.display = 'none';
   const cont = document.getElementById('content');
   cont.style.display = 'block';
-  fetch('data/continu3b.json')
-    .then(r => r.json())
-    .then(d => mostraContinu3B(d))
-    .catch(err => {
-      console.error('Error carregant continu 3B', err);
-      cont.innerHTML = '<p>Error carregant dades.</p>';
-    });
+  const btns = document.getElementById('continu3b-buttons');
+  btns.style.display = 'flex';
+  mostraContinu3B();
 });
 
 document.getElementById('btn-torneig').addEventListener('click', () => {
@@ -1429,6 +1668,7 @@ document.getElementById('btn-torneig').addEventListener('click', () => {
   document.getElementById('classificacio-filters').style.display = 'none';
   document.getElementById('torneig-buttons').style.display = 'flex';
   document.getElementById('torneig-category-buttons').style.display = 'none';
+  document.getElementById('continu3b-buttons').style.display = 'none';
   torneigCategoriaSeleccionada = null;
   const title = document.getElementById('torneig-title');
   const cont = document.getElementById('content');
