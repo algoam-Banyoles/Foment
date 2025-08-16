@@ -11,8 +11,8 @@ export function mostraHorari() {
       <li><b>Dilluns, dimecres, dijous, dissabte i diumenge:</b> 9:00 – 21:30</li>
       <li><b>Dimarts i divendres:</b> 10:30 – 21:30</li>
       <li>L'horari d'obertura pot canviar en funció dels horaris d'obertura del <b>Bar del Foment</b>.</li>
-      <li>L'horari del <b>Foment</b> és de <b>DILLUNS A DIVENDRES de 9:00 a 13:00 i de 16:00 a 20:00</b>. <b>AGOST I FESTIUS TANCAT.</b></li>
-      <li><b>La secció romandrà tancada els dies de tancament del FOMENT.</b></li>
+      <li>L'horari d'atenció al públic del <b>FOMENT</b> és de <b>DILLUNS A DIVENDRES DE 9:00 A 13:00 I DE 16:00 A 20:00</b>. <b>LES SECCIONS PODEN TENIR ACTIVITAT FORA D'AQUEST HORARI SI EL BAR ESTÀ OBERT EXCEPTE AGOST I FESTIUS EN ELS QUE EL FOMENT RESTA OFICIALMENT TANCAT</b>.</li>
+      <li><b>LA SECCIÓ ROMANDRÀ TANCADA ELS DIES DE TANCAMENT OFICIAL DEL FOMENT.</b></li>
     </ul>
   </div>
 
