@@ -13,19 +13,34 @@ export function mostraContinu3B() {
     fetch('data/continu3b_llistaespera.json').then(r => r.json()).catch(() => []),
     fetch('data/continu3b_reptes.json').then(r => r.json()).catch(() => []),
     fetch('data/continu3b_partides.json').then(r => r.json()).catch(() => []),
-    fetch('data/continu3b_jugadors.json').then(r => r.json()).catch(() => [])
+    fetch('data/continu3b_jugadors.json').then(r => r.json()).catch(() => []),
+    fetch('data/continu3b_parametres.json').then(r => r.json()).catch(() => [])
   ])
-    .then(([ranking, llista, reptes, partides, jugadors]) => {
+    .then(([ranking, llista, reptes, partides, jugadors, parametres]) => {
 
       const mapJugadors = Object.fromEntries(jugadors.map(j => [j.id, j.nom]));
 
-      const esReptable = dataStr => {
+      const cooldownReptar =
+        parseInt(
+          (parametres.find(p => p.clau === 'COOLDOWN_REPTAR_DIES') || {})
+            .valor,
+          10
+        ) || 7;
+
+      const disponible = (id, dataStr, posicio) => {
+        if (parseInt(posicio, 10) === 1) return false;
+        const actiu = reptes.some(
+          r =>
+            (r.reptador_id === id || r.reptat_id === id) &&
+            ['proposat', 'acceptat', 'programat'].includes(r.estat)
+        );
+        if (actiu) return false;
         if (!dataStr) return true;
         const [d, m, y] = dataStr.split('/');
         const parsed = new Date(`${y}-${m}-${d}T00:00:00`);
         if (isNaN(parsed)) return true;
         const diff = (Date.now() - parsed.getTime()) / (1000 * 60 * 60 * 24);
-        return diff >= 7;
+        return diff >= cooldownReptar;
       };
 
       function mostraPartidesJugador(id, nom) {
@@ -99,10 +114,19 @@ export function mostraContinu3B() {
           title.textContent = 'Rànquing actual';
           cont.appendChild(title);
           if (Array.isArray(ranking) && ranking.length) {
+            const legenda = document.createElement('div');
+              ['🟢 Pot reptar i ser reptat', '🔴 No pot reptar ni ser reptat'].forEach(
+                t => {
+                  const p = document.createElement('p');
+                  p.textContent = t;
+                  legenda.appendChild(p);
+                }
+              );
+            cont.appendChild(legenda);
             const table = document.createElement('table');
             const thead = document.createElement('thead');
             const headerRow = document.createElement('tr');
-            ['Posició', 'Jugador', ''].forEach(h => {
+            ['Posició', 'Jugador', 'Disponible'].forEach(h => {
               const th = document.createElement('th');
               th.textContent = h;
               headerRow.appendChild(th);
@@ -127,19 +151,25 @@ export function mostraContinu3B() {
                 );
                 nameTd.appendChild(nameBtn);
                 tr.appendChild(nameTd);
-                const reptTd = document.createElement('td');
                 const info = jugadors.find(j => j.id === r.jugador_id);
-                const reptable = esReptable(info ? info.data_ultim_repte : '');
-                const span = document.createElement('span');
-                span.textContent = reptable ? '🟢' : '🔴';
-                span.title = reptable ? 'Reptable' : 'No reptable';
-                reptTd.appendChild(span);
-                tr.appendChild(reptTd);
+                const pot = disponible(
+                  r.jugador_id,
+                  info ? info.data_ultim_repte : '',
+                  r.posicio
+                );
+                const potTd = document.createElement('td');
+                const potSpan = document.createElement('span');
+                potSpan.textContent = pot ? '🟢' : '🔴';
+                potSpan.title = pot
+                  ? 'Pot reptar i ser reptat'
+                  : 'No pot reptar ni ser reptat';
+                potTd.appendChild(potSpan);
+                tr.appendChild(potTd);
                 tbody.appendChild(tr);
               });
-            table.appendChild(tbody);
-            appendResponsiveTable(cont, table);
-          } else {
+              table.appendChild(tbody);
+              appendResponsiveTable(cont, table);
+            } else {
             const p = document.createElement('p');
             p.textContent = 'No hi ha rànquing disponible.';
             cont.appendChild(p);
