@@ -174,14 +174,12 @@ export function mostraContinu3B() {
                 posTd.textContent = r.posicio;
                 tr.appendChild(posTd);
                 const nom = mapJugadors[r.jugador_id] || r.jugador_id;
-                const nameTd = document.createElement('td');
                 const nameBtn = document.createElement('button');
                 nameBtn.textContent = nom;
                 nameBtn.addEventListener('click', () =>
                   mostraPartidesJugador(r.jugador_id, nom)
                 );
-                nameTd.appendChild(nameBtn);
-                tr.appendChild(nameTd);
+                card.appendChild(nameBtn);
                 const info = jugadors.find(j => j.id === r.jugador_id);
 
                 const pot = disponible(
@@ -189,19 +187,16 @@ export function mostraContinu3B() {
                   info ? info.data_ultim_repte : '',
                   r.posicio
                 );
-                const potTd = document.createElement('td');
                 const potSpan = document.createElement('span');
                 potSpan.textContent = pot ? '🟢' : '🔴';
                 potSpan.title = pot
                   ? 'Pot reptar i ser reptat'
                   : 'No pot reptar ni ser reptat';
-                potTd.appendChild(potSpan);
-                tr.appendChild(potTd);
-                tbody.appendChild(tr);
+                card.appendChild(potSpan);
+                cards.appendChild(card);
               });
-              table.appendChild(tbody);
-              appendResponsiveTable(cont, table);
-            } else {
+            cont.appendChild(cards);
+          } else {
 
             const p = document.createElement('p');
             p.textContent = 'No hi ha rànquing disponible.';
