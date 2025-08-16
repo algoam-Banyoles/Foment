@@ -39,15 +39,32 @@ export function mostraContinu3B() {
         return { dies, data: `${d}/${m}/${y}` };
       };
 
-      const disponible = (id, diesInactiu, posicio) => {
+      const disponible = (id, diesInactiu, posicio, repteActiu) => {
         if (parseInt(posicio, 10) === 1) return false;
-        const actiu = reptes.some(
-          r =>
-            (r.reptador_id === id || r.reptat_id === id) &&
-            ['proposat', 'acceptat', 'programat'].includes(r.estat)
-
-        );
-        if (actiu) return false;
+        if (repteActiu) {
+          if (!repteActiu.data_programa) {
+            let limit = 0;
+            let base = '';
+            if (repteActiu.estat === 'proposat') {
+              limit = 14;
+              base = repteActiu.created_at;
+            } else if (repteActiu.estat === 'acceptat') {
+              limit = 7;
+              base = repteActiu.data_acceptacio || repteActiu.created_at;
+            }
+            if (limit) {
+              const diff = Math.floor(
+                (Date.now() - new Date(base).getTime()) /
+                  (1000 * 60 * 60 * 24)
+              );
+              if (diff < limit) return false;
+            } else {
+              return false;
+            }
+          } else {
+            return false;
+          }
+        }
         if (diesInactiu == null) return true;
         return diesInactiu >= cooldownReptar;
 
@@ -161,7 +178,17 @@ export function mostraContinu3B() {
                 const { dies: diesInactiu, data: dataUltim } = calculaInactivitat(
                   info ? info.data_ultim_repte : ''
                 );
-                const pot = disponible(r.jugador_id, diesInactiu, r.posicio);
+                const repteActiu = reptes.find(
+                  rp =>
+                    (rp.reptador_id === r.jugador_id || rp.reptat_id === r.jugador_id) &&
+                    ['proposat', 'acceptat', 'programat'].includes(rp.estat)
+                );
+                const pot = disponible(
+                  r.jugador_id,
+                  diesInactiu,
+                  r.posicio,
+                  repteActiu
+                );
                 if (chkDisponibles.checked && !pot) return;
 
                 const tr = document.createElement('tr');
@@ -182,7 +209,25 @@ export function mostraContinu3B() {
 
                 const diesTd = document.createElement('td');
                 let diesRestants = 0;
-                if (diesInactiu != null) {
+                if (repteActiu && !repteActiu.data_programa) {
+                  let limit = 0;
+                  let base = '';
+                  if (repteActiu.estat === 'proposat') {
+                    limit = 14;
+                    base = repteActiu.created_at;
+                  } else if (repteActiu.estat === 'acceptat') {
+                    limit = 7;
+                    base = repteActiu.data_acceptacio || repteActiu.created_at;
+                  }
+                  if (limit) {
+                    const diff = Math.floor(
+                      (Date.now() - new Date(base).getTime()) /
+                        (1000 * 60 * 60 * 24)
+                    );
+                    diesRestants = Math.max(limit - diff, 0);
+                  }
+                } else if (diesInactiu != null) {
+
                   diesRestants = Math.max(cooldownReptar - diesInactiu, 0);
                   if (dataUltim) diesTd.title = `Últim repte: ${dataUltim}`;
                 }
