@@ -359,7 +359,7 @@ export function mostraContinu3B() {
 
   <div class="normes-card">
     <h3>Rànquing actiu</h3>
-    <p>Màxim 20 jugadors, actualitzat contínuament mitjançant reptes directes.</p>
+    <p>Màxim 20 jugadors, actualitzat contínuament mitjançant reptes directes. Els jugadors que vulguin formar part del rànquing un cop s'arribi al màxim de 20 jugadors formaran part de la llista d'espera.</p>
   </div>
 
   <div class="normes-card">
