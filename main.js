@@ -1040,83 +1040,61 @@ function mostraContinu3B() {
       btnNormativa.textContent = 'Normativa';
       btnNormativa.addEventListener('click', () =>
         showSection(btnNormativa, () => {
-          const title = document.createElement('h3');
-          title.textContent = 'Normativa';
-          cont.appendChild(title);
 
-          const list = document.createElement('ul');
+          cont.innerHTML = `
+<div class="normes-container">
+  <h2 class="normes-title">Normativa Continu 3B</h2>
 
-          const liRanking = document.createElement('li');
-          liRanking.textContent =
-            'Rànquing actiu: màxim 20 jugadors, actualitzat contínuament mitjançant reptes directes.';
-          list.appendChild(liRanking);
+  <div class="normes-card">
+    <h3>Rànquing actiu</h3>
+    <p>Màxim 20 jugadors, actualitzat contínuament mitjançant reptes directes.</p>
+  </div>
 
-          const liReptes = document.createElement('li');
-          liReptes.textContent =
-            'Reptes normals: pots reptar fins a 2 posicions per sobre teu, màxim un repte actiu per jugador, mínim 7 dies entre reptes.';
-          const subReptes = document.createElement('ul');
-          const liReptesGuanya = document.createElement('li');
-          liReptesGuanya.textContent = 'Si guanya el reptador → intercanvi de posicions.';
-          subReptes.appendChild(liReptesGuanya);
-          const liReptesPerd = document.createElement('li');
-          liReptesPerd.textContent = 'Si perd → no hi ha canvis.';
-          subReptes.appendChild(liReptesPerd);
-          liReptes.appendChild(subReptes);
-          list.appendChild(liReptes);
+  <div class="normes-card">
+    <h3>Reptes normals</h3>
+    <ul>
+      <li>Pots reptar fins a 2 posicions per sobre teu.</li>
+      <li>Màxim un repte actiu per jugador.</li>
+      <li>Mínim 7 dies entre reptes.</li>
+      <li>Si guanya el reptador → intercanvi de posicions.</li>
+      <li>Si perd → no hi ha canvis.</li>
+    </ul>
+  </div>
 
-          const liAcces = document.createElement('li');
-          liAcces.textContent =
-            'Reptes d’accés: primer de la llista d’espera pot reptar el jugador 20.';
-          const subAcces = document.createElement('ul');
-          const liAccesGuanya = document.createElement('li');
-          liAccesGuanya.textContent =
-            'Si guanya → entra al rànquing (pos. 20) i el perdedor passa a la llista d’espera.';
-          subAcces.appendChild(liAccesGuanya);
-          const liAccesPerd = document.createElement('li');
-          liAccesPerd.textContent = 'Si perd → passa al final de la llista d’espera.';
-          subAcces.appendChild(liAccesPerd);
-          liAcces.appendChild(subAcces);
-          list.appendChild(liAcces);
+  <div class="normes-card">
+    <h3>Reptes d’accés</h3>
+    <ul>
+      <li>Primer de la llista d’espera pot reptar el jugador 20.</li>
+      <li>Si guanya → entra al rànquing (pos. 20) i el perdedor passa a la llista d’espera.</li>
+      <li>Si perd → passa al final de la llista d’espera.</li>
+    </ul>
+  </div>
 
-          const liTerminis = document.createElement('li');
-          liTerminis.textContent =
-            'Terminis: 7 dies per acceptar un repte i 7 dies per jugar-lo un cop acceptat.';
-          list.appendChild(liTerminis);
+  <div class="normes-card">
+    <h3>Terminis</h3>
+    <p>7 dies per acceptar un repte i 7 dies per jugar-lo un cop acceptat.</p>
+  </div>
 
-          const liPen = document.createElement('li');
-          liPen.textContent = 'Penalitzacions:';
-          const subPen = document.createElement('ul');
-          const liPen1 = document.createElement('li');
-          liPen1.textContent =
-            'Incompareixença o refús sense motiu → derrota automàtica.';
-          subPen.appendChild(liPen1);
-          const liPen2 = document.createElement('li');
-          liPen2.textContent =
-            'Sense acord de data → tots dos perden una posició.';
-          subPen.appendChild(liPen2);
-          liPen.appendChild(subPen);
-          list.appendChild(liPen);
+  <div class="normes-card">
+    <h3>Penalitzacions</h3>
+    <ul>
+      <li>Incompareixença o refús sense motiu → derrota automàtica.</li>
+      <li>Sense acord de data → tots dos perden una posició.</li>
+    </ul>
+  </div>
 
-          const liInact = document.createElement('li');
-          liInact.textContent = 'Inactivitat:';
-          const subInact = document.createElement('ul');
-          const liInact1 = document.createElement('li');
-          liInact1.textContent =
-            '3 setmanes sense reptes → baixa 5 posicions (pre-inactiu).';
-          subInact.appendChild(liInact1);
-          const liInact2 = document.createElement('li');
-          liInact2.textContent =
-            '6 setmanes sense reptes → surt del rànquing i entra el primer de la llista d’espera.';
-          subInact.appendChild(liInact2);
-          liInact.appendChild(subInact);
-          list.appendChild(liInact);
+  <div class="normes-card">
+    <h3>Inactivitat</h3>
+    <ul>
+      <li>3 setmanes sense reptes → baixa 5 posicions (pre-inactiu).</li>
+      <li>6 setmanes sense reptes → surt del rànquing i entra el primer de la llista d’espera.</li>
+    </ul>
+  </div>
 
-          cont.appendChild(list);
-
-          const link = document.createElement('p');
-          link.innerHTML =
-            'Consulta la <a href="https://docs.google.com/document/d/165_bh9m0WxRU_LoTt_k8aiJseZZn9bBZ/edit?usp=sharing&amp;ouid=102336298592739127647&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener">normativa completa</a>.';
-          cont.appendChild(link);
+  <div class="normes-card">
+    <p>Consulta la <a href="https://docs.google.com/document/d/165_bh9m0WxRU_LoTt_k8aiJseZZn9bBZ/edit?usp=sharing&amp;ouid=102336298592739127647&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener">normativa completa</a>.</p>
+  </div>
+</div>`;
         })
       );
 
