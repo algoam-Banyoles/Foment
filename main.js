@@ -691,8 +691,10 @@ function mostraEnllacos() {
 function mostraContinu3B() {
   const cont = document.getElementById('content');
   cont.innerHTML = '';
+
   const btnContainer = document.getElementById('continu3b-buttons');
   btnContainer.innerHTML = '';
+
 
   Promise.all([
     fetch('data/continu3b_rankingactiu.json').then(r => r.json()).catch(() => []),
@@ -702,6 +704,7 @@ function mostraContinu3B() {
     fetch('data/continu3b_jugadors.json').then(r => r.json()).catch(() => [])
   ])
     .then(([ranking, llista, reptes, partides, jugadors]) => {
+
       const mapJugadors = Object.fromEntries(jugadors.map(j => [j.id, j.nom]));
 
       const showSection = (btn, render) => {
@@ -1658,8 +1661,10 @@ document.getElementById('btn-continu3b').addEventListener('click', () => {
   document.getElementById('torneig-category-buttons').style.display = 'none';
   const cont = document.getElementById('content');
   cont.style.display = 'block';
+
   const btns = document.getElementById('continu3b-buttons');
   btns.style.display = 'flex';
+
   mostraContinu3B();
 });
 
