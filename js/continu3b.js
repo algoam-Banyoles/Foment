@@ -124,7 +124,6 @@ export function mostraContinu3B() {
       filterLabel.appendChild(
         document.createTextNode(' Mostra només disponibles')
       );
-      btnContainer.appendChild(filterLabel);
 
       const btnRanking = document.createElement('button');
       btnRanking.textContent = 'Rànquing actual';
@@ -140,7 +139,12 @@ export function mostraContinu3B() {
             const thead = document.createElement('thead');
             const headerRow = document.createElement('tr');
 
-            ['Posició', 'Jugador', 'Últim repte', 'Disponible'].forEach(h => {
+            [
+              'Posició',
+              'Jugador',
+              'Dies per reptar/ser reptat',
+              'Disponible'
+            ].forEach(h => {
               const th = document.createElement('th');
               th.textContent = h;
               headerRow.appendChild(th);
@@ -152,7 +156,7 @@ export function mostraContinu3B() {
             const ordered = ranking
               .slice()
               .sort((a, b) => parseInt(a.posicio) - parseInt(b.posicio));
-            ordered.forEach((r, idx) => {
+            ordered.forEach(r => {
                 const info = jugadors.find(j => j.id === r.jugador_id);
                 const { dies: diesInactiu, data: dataUltim } = calculaInactivitat(
                   info ? info.data_ultim_repte : ''
@@ -161,7 +165,6 @@ export function mostraContinu3B() {
                 if (chkDisponibles.checked && !pot) return;
 
                 const tr = document.createElement('tr');
-                if (idx < 3) tr.classList.add(`top${idx + 1}`);
 
                 const posTd = document.createElement('td');
                 posTd.textContent = r.posicio;
@@ -177,12 +180,14 @@ export function mostraContinu3B() {
                 nomTd.appendChild(nameBtn);
                 tr.appendChild(nomTd);
 
-                const ultimTd = document.createElement('td');
+                const diesTd = document.createElement('td');
+                let diesRestants = 0;
                 if (diesInactiu != null) {
-                  ultimTd.textContent = `${diesInactiu} dies`;
-                  ultimTd.title = dataUltim;
+                  diesRestants = Math.max(cooldownReptar - diesInactiu, 0);
+                  if (dataUltim) diesTd.title = `Últim repte: ${dataUltim}`;
                 }
-                tr.appendChild(ultimTd);
+                diesTd.textContent = `${diesRestants} dies`;
+                tr.appendChild(diesTd);
 
                 const potSpan = document.createElement('span');
                 potSpan.textContent = pot ? '🟢' : '🔴';
@@ -207,6 +212,7 @@ export function mostraContinu3B() {
             );
 
             cont.appendChild(legenda);
+            cont.appendChild(filterLabel);
             appendResponsiveTable(cont, table);
           } else {
 

@@ -340,20 +340,6 @@ table:not(.agenda-table) tr:nth-child(even) {
   background: #f5f5f5;
 }
 
-.ranking-table .top1 {
-  background: #ffd700;
-  font-weight: bold;
-}
-
-.ranking-table .top2 {
-  background: #c0c0c0;
-  font-weight: bold;
-}
-
-.ranking-table .top3 {
-  background: #cd7f32;
-  font-weight: bold;
-}
 
 
 
