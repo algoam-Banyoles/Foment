@@ -272,79 +272,105 @@ export function mostraContinu3B() {
       btnReptes.textContent = 'Reptes';
       btnReptes.addEventListener('click', () =>
         showSection(btnReptes, () => {
+          const reptesPendents = reptes.filter(
+            r => r.estat === 'proposat' && r.tipus !== 'acces'
+          );
           const reptesAcceptats = reptes.filter(
             r => r.estat === 'acceptat' && r.tipus !== 'acces'
           );
-          const reptesProposats = reptes.filter(
-            r => r.estat === 'proposat' && r.tipus !== 'acces'
+          const reptesProgramats = reptes.filter(
+            r => r.estat === 'programat' && r.tipus !== 'acces'
+          );
+          const reptesTancats = reptes.filter(
+            r => r.estat === 'tancat' && r.tipus !== 'acces'
           );
 
           const title = document.createElement('h3');
           title.textContent = 'Reptes';
           cont.appendChild(title);
 
-          const drawTable = list => {
-            const table = document.createElement('table');
-            const thead = document.createElement('thead');
-            const headerRow = document.createElement('tr');
-            ['Reptador', 'Reptat', 'Creació', 'Acceptació', 'Programació', 'Límit'].forEach(
-              h => {
-                const th = document.createElement('th');
-                th.textContent = h;
-                headerRow.appendChild(th);
-              }
-            );
-            thead.appendChild(headerRow);
-            table.appendChild(thead);
-            const tbody = document.createElement('tbody');
+          const drawCards = (list, deadlineFn) => {
             list.forEach(r => {
-              const tr = document.createElement('tr');
+              const card = document.createElement('div');
+              card.classList.add('repte-card');
               const reptador = mapJugadors[r.reptador_id] || r.reptador_id;
               const reptat = mapJugadors[r.reptat_id] || r.reptat_id;
-              const created = r.created_at
-                ? new Date(r.created_at).toLocaleDateString('ca-ES')
-                : '';
-              const accept = r.data_acceptacio
-                ? new Date(r.data_acceptacio).toLocaleDateString('ca-ES')
-                : '';
-              const program = r.data_programa
-                ? new Date(r.data_programa).toLocaleDateString('ca-ES')
-                : '';
-              const deadline = r.deadline_jugar
-                ? new Date(r.deadline_jugar).toLocaleDateString('ca-ES')
-                : '';
-              [reptador, reptat, created, accept, program, deadline].forEach(t => {
-                const td = document.createElement('td');
-                td.textContent = t;
-                tr.appendChild(td);
+              const h4 = document.createElement('h4');
+              h4.textContent = `${reptador} vs ${reptat}`;
+              card.appendChild(h4);
+              const info = [
+                ['Creació', r.created_at],
+                ['Acceptació', r.data_acceptacio],
+                ['Programació', r.data_programa],
+                ['Límit jugar', r.deadline_jugar]
+              ];
+              info.forEach(([label, date]) => {
+                if (date) {
+                  const p = document.createElement('p');
+                  p.textContent = `${label}: ${new Date(date).toLocaleDateString('ca-ES')}`;
+                  card.appendChild(p);
+                }
               });
-              tbody.appendChild(tr);
+              if (deadlineFn) deadlineFn(card, r);
+              cont.appendChild(card);
             });
-            table.appendChild(tbody);
-            appendResponsiveTable(cont, table);
           };
 
-          const accTitle = document.createElement('h4');
-          accTitle.textContent = 'Reptes acceptats';
-          cont.appendChild(accTitle);
-          if (reptesAcceptats.length) {
-            drawTable(reptesAcceptats);
-          } else {
-            const p = document.createElement('p');
-            p.textContent = 'No hi ha reptes acceptats.';
-            cont.appendChild(p);
-          }
+          const section = (t, list, deadlineFn, emptyMsg) => {
+            const st = document.createElement('h4');
+            st.textContent = t;
+            cont.appendChild(st);
+            if (list.length) {
+              drawCards(list, deadlineFn);
+            } else {
+              const p = document.createElement('p');
+              p.textContent = emptyMsg;
+              cont.appendChild(p);
+            }
+          };
 
-          const propTitle = document.createElement('h4');
-          propTitle.textContent = 'Reptes proposats';
-          cont.appendChild(propTitle);
-          if (reptesProposats.length) {
-            drawTable(reptesProposats);
-          } else {
-            const p = document.createElement('p');
-            p.textContent = 'No hi ha reptes proposats.';
-            cont.appendChild(p);
-          }
+          const deadlineAcceptar = (card, r) => {
+            if (r.created_at) {
+              const limit = new Date(
+                new Date(r.created_at).getTime() + 14 * 24 * 60 * 60 * 1000
+              );
+              const p = document.createElement('p');
+              p.textContent = `Límit acceptar: ${limit.toLocaleDateString('ca-ES')}`;
+              card.appendChild(p);
+            }
+          };
+
+          const deadlineProgramar = (card, r) => {
+            const base = r.data_acceptacio || r.created_at;
+            if (base) {
+              const limit = new Date(
+                new Date(base).getTime() + 7 * 24 * 60 * 60 * 1000
+              );
+              const p = document.createElement('p');
+              p.textContent = `Límit programar: ${limit.toLocaleDateString('ca-ES')}`;
+              card.appendChild(p);
+            }
+          };
+
+          section(
+            'Pendents d’acceptar',
+            reptesPendents,
+            deadlineAcceptar,
+            'No hi ha reptes pendents.'
+          );
+          section(
+            'Acceptats',
+            reptesAcceptats,
+            deadlineProgramar,
+            'No hi ha reptes acceptats.'
+          );
+          section(
+            'Programats',
+            reptesProgramats,
+            null,
+            'No hi ha reptes programats.'
+          );
+          section('Tancats', reptesTancats, null, 'No hi ha reptes tancats.');
         })
       );
 
