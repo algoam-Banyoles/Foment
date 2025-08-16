@@ -140,6 +140,7 @@ export function mostraContinu3B() {
 
             cont.appendChild(legenda);
             const table = document.createElement('table');
+            table.classList.add('ranking-table');
             const thead = document.createElement('thead');
             const headerRow = document.createElement('tr');
 
@@ -154,22 +155,12 @@ export function mostraContinu3B() {
             const tbody = document.createElement('tbody');
             const ordered = ranking
               .slice()
-              .sort(
-                (a, b) =>
-                  parseInt(a.posicio, 10) - parseInt(b.posicio, 10)
-              );
-            const filtered = chkDisponibles.checked
-              ? ordered.filter(r => {
-                  const info = jugadors.find(j => j.id === r.jugador_id);
-                  return disponible(
-                    r.jugador_id,
-                    info ? info.data_ultim_repte : '',
-                    r.posicio
-                  );
-                })
-              : ordered;
-            filtered.forEach(r => {
+
+              .sort((a, b) => parseInt(a.posicio, 10) - parseInt(b.posicio, 10))
+              .forEach((r, idx) => {
+
                 const tr = document.createElement('tr');
+                if (idx < 3) tr.classList.add(`top${idx + 1}`);
                 const posTd = document.createElement('td');
                 posTd.textContent = r.posicio;
                 tr.appendChild(posTd);
