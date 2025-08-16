@@ -602,6 +602,22 @@ details summary {
 
 }
 
+.repte-card {
+  background: #f8f8f8;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.repte-card h4 {
+  margin: 0 0 5px;
+}
+
+.repte-card p {
+  margin: 4px 0;
+}
+
 .partida-card {
   background: #f8f8f8;
   border-radius: 12px;
