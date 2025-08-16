@@ -707,6 +707,69 @@ function mostraContinu3B() {
 
       const mapJugadors = Object.fromEntries(jugadors.map(j => [j.id, j.nom]));
 
+      const esReptable = dataStr => {
+        if (!dataStr) return true;
+        const [d, m, y] = dataStr.split('/');
+        const parsed = new Date(`${y}-${m}-${d}T00:00:00`);
+        if (isNaN(parsed)) return true;
+        const diff = (Date.now() - parsed.getTime()) / (1000 * 60 * 60 * 24);
+        return diff >= 7;
+      };
+
+      function mostraPartidesJugador(id, nom) {
+        cont.innerHTML = '';
+        const title = document.createElement('h3');
+        title.textContent = `Partides de ${nom}`;
+        cont.appendChild(title);
+        const partJug = partides.filter(
+          p => p.local_id === id || p.visitant_id === id
+        );
+        if (partJug.length) {
+          const table = document.createElement('table');
+          const thead = document.createElement('thead');
+          const headerRow = document.createElement('tr');
+          ['Data', 'Rival', 'Resultat'].forEach(h => {
+            const th = document.createElement('th');
+            th.textContent = h;
+            headerRow.appendChild(th);
+          });
+          thead.appendChild(headerRow);
+          table.appendChild(thead);
+          const tbody = document.createElement('tbody');
+          partJug.forEach(p => {
+            const tr = document.createElement('tr');
+            const data = p.data
+              ? new Date(p.data).toLocaleDateString('ca-ES')
+              : '';
+            const esLocal = p.local_id === id;
+            const rivalId = esLocal ? p.visitant_id : p.local_id;
+            const rival = mapJugadors[rivalId] || rivalId;
+            const resultat =
+              p.caramboles_local && p.caramboles_visitant
+                ? esLocal
+                  ? `${p.caramboles_local}-${p.caramboles_visitant}`
+                  : `${p.caramboles_visitant}-${p.caramboles_local}`
+                : '';
+            [data, rival, resultat].forEach(t => {
+              const td = document.createElement('td');
+              td.textContent = t;
+              tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+          });
+          table.appendChild(tbody);
+          appendResponsiveTable(cont, table);
+        } else {
+          const p = document.createElement('p');
+          p.textContent = 'No hi ha partides per aquest jugador.';
+          cont.appendChild(p);
+        }
+        const backBtn = document.createElement('button');
+        backBtn.textContent = 'Torna';
+        backBtn.addEventListener('click', () => btnRanking.click());
+        cont.appendChild(backBtn);
+      }
+
       const showSection = (btn, render) => {
         btnContainer.querySelectorAll('button').forEach(b =>
           b.classList.remove('selected')
@@ -724,20 +787,46 @@ function mostraContinu3B() {
           title.textContent = 'Rànquing actual';
           cont.appendChild(title);
           if (Array.isArray(ranking) && ranking.length) {
-            const div = document.createElement('div');
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            ['Posició', 'Jugador', ''].forEach(h => {
+              const th = document.createElement('th');
+              th.textContent = h;
+              headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+            const tbody = document.createElement('tbody');
             ranking
               .slice()
               .sort((a, b) => parseInt(a.posicio, 10) - parseInt(b.posicio, 10))
               .forEach(r => {
-                const btn = document.createElement('button');
+                const tr = document.createElement('tr');
+                const posTd = document.createElement('td');
+                posTd.textContent = r.posicio;
+                tr.appendChild(posTd);
                 const nom = mapJugadors[r.jugador_id] || r.jugador_id;
-                btn.textContent = `${r.posicio}. ${nom}`;
-                btn.addEventListener('click', () =>
-                  mostraEvolucioJugador(r.jugador_id, nom)
+                const nameTd = document.createElement('td');
+                const nameBtn = document.createElement('button');
+                nameBtn.textContent = nom;
+                nameBtn.addEventListener('click', () =>
+                  mostraPartidesJugador(r.jugador_id, nom)
                 );
-                div.appendChild(btn);
+                nameTd.appendChild(nameBtn);
+                tr.appendChild(nameTd);
+                const reptTd = document.createElement('td');
+                const info = jugadors.find(j => j.id === r.jugador_id);
+                const reptable = esReptable(info ? info.data_ultim_repte : '');
+                const span = document.createElement('span');
+                span.textContent = reptable ? '🟢' : '🔴';
+                span.title = reptable ? 'Reptable' : 'No reptable';
+                reptTd.appendChild(span);
+                tr.appendChild(reptTd);
+                tbody.appendChild(tr);
               });
-            cont.appendChild(div);
+            table.appendChild(tbody);
+            appendResponsiveTable(cont, table);
           } else {
             const p = document.createElement('p');
             p.textContent = 'No hi ha rànquing disponible.';
