@@ -27,12 +27,14 @@ export function mostraContinu3B() {
           10
         ) || 7;
 
+
       const disponible = (id, dataStr, posicio) => {
         if (parseInt(posicio, 10) === 1) return false;
         const actiu = reptes.some(
           r =>
             (r.reptador_id === id || r.reptat_id === id) &&
             ['proposat', 'acceptat', 'programat'].includes(r.estat)
+
         );
         if (actiu) return false;
         if (!dataStr) return true;
@@ -41,6 +43,7 @@ export function mostraContinu3B() {
         if (isNaN(parsed)) return true;
         const diff = (Date.now() - parsed.getTime()) / (1000 * 60 * 60 * 24);
         return diff >= cooldownReptar;
+
       };
 
       function mostraPartidesJugador(id, nom) {
@@ -115,6 +118,7 @@ export function mostraContinu3B() {
           cont.appendChild(title);
           if (Array.isArray(ranking) && ranking.length) {
             const legenda = document.createElement('div');
+
               ['🟢 Pot reptar i ser reptat', '🔴 No pot reptar ni ser reptat'].forEach(
                 t => {
                   const p = document.createElement('p');
@@ -122,11 +126,14 @@ export function mostraContinu3B() {
                   legenda.appendChild(p);
                 }
               );
+
             cont.appendChild(legenda);
             const table = document.createElement('table');
             const thead = document.createElement('thead');
             const headerRow = document.createElement('tr');
+
             ['Posició', 'Jugador', 'Disponible'].forEach(h => {
+
               const th = document.createElement('th');
               th.textContent = h;
               headerRow.appendChild(th);
@@ -152,6 +159,7 @@ export function mostraContinu3B() {
                 nameTd.appendChild(nameBtn);
                 tr.appendChild(nameTd);
                 const info = jugadors.find(j => j.id === r.jugador_id);
+
                 const pot = disponible(
                   r.jugador_id,
                   info ? info.data_ultim_repte : '',
@@ -170,6 +178,7 @@ export function mostraContinu3B() {
               table.appendChild(tbody);
               appendResponsiveTable(cont, table);
             } else {
+
             const p = document.createElement('p');
             p.textContent = 'No hi ha rànquing disponible.';
             cont.appendChild(p);
