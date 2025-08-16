@@ -17,8 +17,20 @@ document.querySelectorAll('.menu-toggle').forEach(btn => {
     const isVisible = target.style.display === 'flex';
     document.querySelectorAll('.submenu').forEach(sm => {
       sm.style.display = 'none';
+      sm.setAttribute('aria-hidden', 'true');
     });
-    target.style.display = isVisible ? 'none' : 'flex';
+    document.querySelectorAll('.menu-toggle').forEach(b => b.setAttribute('aria-expanded', 'false'));
+    if (!isVisible) {
+      target.style.display = 'flex';
+      target.setAttribute('aria-hidden', 'false');
+      btn.setAttribute('aria-expanded', 'true');
+      const firstButton = target.querySelector('button');
+      if (firstButton) firstButton.focus();
+    } else {
+      target.style.display = 'none';
+      target.setAttribute('aria-hidden', 'true');
+      btn.setAttribute('aria-expanded', 'false');
+    }
     document.getElementById('filters-row').style.display = 'none';
     document.getElementById('classificacio-filters').style.display = 'none';
     document.getElementById('torneig-buttons').style.display = 'none';

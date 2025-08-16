@@ -11,29 +11,29 @@
   <body>
   <div id="app">
     <h1>
-      <img src="icons/icon-192.png" alt="Logo" class="header-logo">Secció de Billar del Foment Martinenc
+      <img src="icons/icon-192.png" alt="Logotip de la Secció de Billar del Foment Martinenc" class="header-logo">Secció de Billar del Foment Martinenc
       <button id="btn-update" aria-label="Actualitza" title="Actualitza">🔄</button>
     </h1>
-    <div id="menu">
-      <button class="menu-toggle" data-target="submenu-billar">Secció Billar</button>
-      <button class="menu-toggle" data-target="submenu-campionats">Campionats en curs</button>
-      <button class="menu-toggle" data-target="submenu-historic">Històric</button>
-      <button class="menu-toggle" data-target="submenu-multimedia">Multimedia</button>
-    </div>
+    <nav id="menu" aria-label="Navegació principal">
+      <button class="menu-toggle" data-target="submenu-billar" aria-controls="submenu-billar" aria-expanded="false" aria-haspopup="true">Secció Billar</button>
+      <button class="menu-toggle" data-target="submenu-campionats" aria-controls="submenu-campionats" aria-expanded="false" aria-haspopup="true">Campionats en curs</button>
+      <button class="menu-toggle" data-target="submenu-historic" aria-controls="submenu-historic" aria-expanded="false" aria-haspopup="true">Històric</button>
+      <button class="menu-toggle" data-target="submenu-multimedia" aria-controls="submenu-multimedia" aria-expanded="false" aria-haspopup="true">Multimedia</button>
+    </nav>
     <div id="submenu-container">
-      <div id="submenu-billar" class="submenu">
+      <div id="submenu-billar" class="submenu" role="navigation" aria-label="Secció Billar" aria-hidden="true">
         <button id="btn-agenda">Agenda Billar</button>
         <button id="btn-horari">Normativa i Horari</button>
       </div>
-      <div id="submenu-campionats" class="submenu">
+      <div id="submenu-campionats" class="submenu" role="navigation" aria-label="Campionats en curs" aria-hidden="true">
         <button id="btn-torneig">Social en curs</button>
         <button id="btn-continu3b">Continu 3B</button>
       </div>
-      <div id="submenu-historic" class="submenu">
+      <div id="submenu-historic" class="submenu" role="navigation" aria-label="Històric" aria-hidden="true">
         <button id="btn-ranking">Rànquings</button>
         <button id="btn-classificacio">Classificacions Socials</button>
       </div>
-      <div id="submenu-multimedia" class="submenu">
+      <div id="submenu-multimedia" class="submenu" role="navigation" aria-label="Multimedia" aria-hidden="true">
         <button id="btn-enllacos">Enllaços Billar</button>
       </div>
     </div>
@@ -71,14 +71,14 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <div id="chart-overlay" style="display:none;">
+  <div id="chart-overlay" role="dialog" aria-modal="true" aria-labelledby="chart-title" style="display:none;">
     <div id="player-chart">
       <div id="chart-header">
         <h3 id="chart-title" style="margin:0.5rem 0;"></h3>
-        <button id="close-chart">Tanca</button>
+        <button id="close-chart" aria-label="Tanca gràfic">Tanca</button>
       </div>
 
-      <canvas id="chart-canvas"></canvas>
+      <canvas id="chart-canvas" role="img" aria-label="Gràfic de l'evolució del jugador"></canvas>
     </div>
   </div>
   <script type="module" src="main.js"></script>

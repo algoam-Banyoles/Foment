@@ -1,5 +1,7 @@
 import { ranquing, lineChart, setLineChart, adjustChartSize } from './init.js';
 
+let lastFocusedElement = null;
+
 export function mostraEvolucioJugador(jugador, nom) {
   const modalitats = ['3 BANDES', 'BANDA', 'LLIURE'];
   const dadesPerMod = modalitats.map(mod =>
@@ -33,6 +35,11 @@ export function mostraEvolucioJugador(jugador, nom) {
   const overlay = document.getElementById('chart-overlay');
   if (overlay) {
     overlay.style.display = 'flex';
+    lastFocusedElement = document.activeElement;
+  }
+  const closeBtn = document.getElementById('close-chart');
+  if (closeBtn) {
+    closeBtn.focus();
   }
   adjustChartSize();
 
@@ -93,6 +100,10 @@ export function closeChart() {
   if (lineChart) {
     lineChart.destroy();
     setLineChart(null);
+  }
+  if (lastFocusedElement) {
+    lastFocusedElement.focus();
+    lastFocusedElement = null;
   }
 }
 
