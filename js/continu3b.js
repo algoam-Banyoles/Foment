@@ -160,10 +160,10 @@ export function mostraContinu3B() {
             table.appendChild(thead);
 
             const tbody = document.createElement('tbody');
-            ranking
+            const ordered = ranking
               .slice()
-              .sort((a, b) => parseInt(a.posicio, 10) - parseInt(b.posicio, 10))
-              .forEach((r, idx) => {
+              .sort((a, b) => parseInt(a.posicio) - parseInt(b.posicio));
+            ordered.forEach((r, idx) => {
                 const tr = document.createElement('tr');
                 if (idx < 3) tr.classList.add(`top${idx + 1}`);
 
