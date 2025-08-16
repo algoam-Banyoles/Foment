@@ -30,14 +30,13 @@ export function mostraContinu3B() {
 
       const potReptar = (id, dataStr, posicio) => {
         if (parseInt(posicio, 10) === 1) return false;
-
         const actiu = reptes.some(
           r =>
             r.reptador_id === id &&
-            ['proposat', 'acceptat', 'programat'].includes(r.estat)
+            ['proposat', 'acceptat'].includes(r.estat)
+
         );
         if (actiu) return false;
-
         if (!dataStr) return true;
         const [d, m, y] = dataStr.split('/');
         const parsed = new Date(`${y}-${m}-${d}T00:00:00`);
