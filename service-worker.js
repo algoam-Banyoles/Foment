@@ -58,3 +58,35 @@ workbox.routing.registerRoute(
     ],
   })
 );
+
+// Same-origin API requests: Stale While Revalidate
+workbox.routing.registerRoute(
+  ({ url, request }) =>
+    request.destination === '' &&
+    url.origin === self.location.origin &&
+    url.pathname.startsWith('/data/'),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: 'api-data',
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 24 * 60 * 60,
+      }),
+    ],
+  })
+);
+
+// Remote API requests: Cache First with 1-day expiration
+workbox.routing.registerRoute(
+  ({ url, request }) =>
+    request.destination === '' && url.origin !== self.location.origin,
+  new workbox.strategies.CacheFirst({
+    cacheName: 'remote-api',
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 24 * 60 * 60,
+      }),
+    ],
+  })
+);
