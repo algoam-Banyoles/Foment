@@ -14,6 +14,7 @@ export function mostraHorari() {
       <li>L'horari d'atenció al públic del <b>FOMENT</b> és de <b>DILLUNS A DIVENDRES</b> de <b>9:00 A 13:00</b> i de <b>16:00 A 20:00</b>.</li>
       <li>Les seccions poden tenir activitat fora d'aquest horari si el bar està obert, excepte <b>AGOST</b> i <b>FESTIUS</b>, quan el <b>FOMENT</b> resta oficialment tancat.</li>
       <li>La secció romandrà tancada els dies de <b>TANCAMENT OFICIAL</b> del <b>FOMENT</b>.</li>
+
     </ul>
   </div>
 
