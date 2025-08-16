@@ -1,15 +1,10 @@
 import { setupServiceWorker } from './js/sw-register.js';
 import { inicialitza } from './js/init.js';
-import { mostraRanquing } from './js/ranking.js';
-import { mostraClassificacio } from './js/classificacio.js';
-import { mostraAgenda } from './js/agenda.js';
-import { mostraHorari } from './js/horari.js';
-import { mostraEnllacos } from './js/enllacos.js';
-import { mostraContinu3B } from './js/continu3b.js';
-import { mostraTorneig } from './js/torneig.js';
+import { setupRouter } from './js/router.js';
 import { closeChart, handleResize } from './js/graficos.js';
 
 setupServiceWorker();
+
 
 document.querySelectorAll('.menu-toggle').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -143,6 +138,7 @@ document.querySelectorAll('#torneig-buttons button').forEach(btn => {
       });
   });
 });
+
 
 document.getElementById('close-chart').addEventListener('click', closeChart);
 window.addEventListener('resize', handleResize);
