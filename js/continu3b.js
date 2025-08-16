@@ -190,13 +190,18 @@ export function mostraContinu3B() {
       btnReptes.textContent = 'Reptes';
       btnReptes.addEventListener('click', () =>
         showSection(btnReptes, () => {
-          const reptesPendents = reptes.filter(
-            r => r.estat !== 'tancat' && r.tipus !== 'acces'
+          const reptesAcceptats = reptes.filter(
+            r => r.estat === 'acceptat' && r.tipus !== 'acces'
           );
+          const reptesProposats = reptes.filter(
+            r => r.estat === 'proposat' && r.tipus !== 'acces'
+          );
+
           const title = document.createElement('h3');
           title.textContent = 'Reptes';
           cont.appendChild(title);
-          if (reptesPendents.length) {
+
+          const drawTable = list => {
             const table = document.createElement('table');
             const thead = document.createElement('thead');
             const headerRow = document.createElement('tr');
@@ -210,7 +215,7 @@ export function mostraContinu3B() {
             thead.appendChild(headerRow);
             table.appendChild(thead);
             const tbody = document.createElement('tbody');
-            reptesPendents.forEach(r => {
+            list.forEach(r => {
               const tr = document.createElement('tr');
               const reptador = mapJugadors[r.reptador_id] || r.reptador_id;
               const reptat = mapJugadors[r.reptat_id] || r.reptat_id;
@@ -235,9 +240,27 @@ export function mostraContinu3B() {
             });
             table.appendChild(tbody);
             appendResponsiveTable(cont, table);
+          };
+
+          const accTitle = document.createElement('h4');
+          accTitle.textContent = 'Reptes acceptats';
+          cont.appendChild(accTitle);
+          if (reptesAcceptats.length) {
+            drawTable(reptesAcceptats);
           } else {
             const p = document.createElement('p');
-            p.textContent = 'No hi ha reptes pendents.';
+            p.textContent = 'No hi ha reptes acceptats.';
+            cont.appendChild(p);
+          }
+
+          const propTitle = document.createElement('h4');
+          propTitle.textContent = 'Reptes proposats';
+          cont.appendChild(propTitle);
+          if (reptesProposats.length) {
+            drawTable(reptesProposats);
+          } else {
+            const p = document.createElement('p');
+            p.textContent = 'No hi ha reptes proposats.';
             cont.appendChild(p);
           }
         })
