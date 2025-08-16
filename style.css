@@ -587,4 +587,11 @@ details summary {
   color: #000;
 }
 
+#ranking-filter-disponibles {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0.25rem;
+}
+
 
