@@ -3,12 +3,20 @@ Aplicació per visualitzar el rànquing de billar.
 
 ## Com executar
 
+El projecte utilitza [Rollup](https://rollupjs.org/) per minificar i
+agrupar els fitxers JavaScript. Primer cal instal·lar les dependències i
+generar els fitxers compilats:
+
 ```bash
+npm install
+npm run build
+python3 tools/update_sw_version.py
 python3 server.py
 ```
 
-Aquesta ordre arrenca un petit servidor web a `http://localhost:8000`.
-La informació de classificacions s'ha d'actualitzar externament
+Aquesta darrera ordre arrenca un petit servidor web a
+`http://localhost:8000`. La informació de classificacions s'ha
+d'actualitzar externament
 mitjançant una aplicació d'escriptori. El rànquing es pot sincronitzar
 d'un Google Sheet públic executant:
 
