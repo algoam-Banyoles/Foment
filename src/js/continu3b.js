@@ -289,8 +289,8 @@ export function mostraContinu3B() {
           title.textContent = 'Reptes';
           cont.appendChild(title);
 
-w
-          const drawCards = (list, infoFn) => {
+
+          const drawCards = (list, infoFn, container = cont) => {
 
             list.forEach(r => {
               const card = document.createElement('div');
@@ -311,20 +311,16 @@ w
                 }
               });
 
-              cont.appendChild(card);
+              container.appendChild(card);
             });
           };
 
-
           const section = (t, list, infoFn, emptyMsg) => {
-
             const st = document.createElement('h4');
             st.textContent = t;
             cont.appendChild(st);
             if (list.length) {
-
               drawCards(list, infoFn);
-
             } else {
               const p = document.createElement('p');
               p.textContent = emptyMsg;
@@ -332,16 +328,21 @@ w
             }
           };
 
-
           const calcLimit = base =>
             base
               ? new Date(new Date(base).getTime() + 7 * 24 * 60 * 60 * 1000)
               : null;
 
-          const infoPendents = r => [
-            ['Creació', r.created_at],
-            ['Límit acceptar', calcLimit(r.created_at)]
-          ];
+          const infoPendents = r => {
+            const limitAcceptar = calcLimit(r.created_at);
+            const limitJugar = calcLimit(limitAcceptar);
+            return [
+              ['Creació', r.created_at],
+              ['Límit acceptar', limitAcceptar],
+              ['Límit jugar', limitJugar]
+            ];
+          };
+
 
           const infoAcceptats = r => [
             ['Creació', r.created_at],
@@ -392,12 +393,20 @@ w
             infoProgramats,
             'No hi ha reptes programats.'
           );
-          section(
-            'Tancats',
-            reptesTancats,
-            infoTancats,
-            'No hi ha reptes tancats.'
-          );
+
+          const detTancats = document.createElement('details');
+          detTancats.id = 'reptes-tancats';
+          const sumTancats = document.createElement('summary');
+          sumTancats.textContent = 'Tancats';
+          detTancats.appendChild(sumTancats);
+          if (reptesTancats.length) {
+            drawCards(reptesTancats, infoTancats, detTancats);
+          } else {
+            const p = document.createElement('p');
+            p.textContent = 'No hi ha reptes tancats.';
+            detTancats.appendChild(p);
+          }
+          cont.appendChild(detTancats);
 
         })
       );
