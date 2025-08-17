@@ -688,6 +688,11 @@ details summary {
     content: none;
   }
 
+  .ranking-table td.ranking-name::before {
+    content: none;
+    margin-right: 0;
+  }
+
   .ranking-table td.ranking-pos {
     position: absolute;
     top: 0.5rem;
