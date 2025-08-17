@@ -1,11 +1,11 @@
-import { ranquing, lineChart, setLineChart, adjustChartSize } from './init.js';
+import { state, setLineChart, adjustChartSize } from './state.js';
 
 let lastFocusedElement = null;
 
 export function mostraEvolucioJugador(jugador, nom) {
   const modalitats = ['3 BANDES', 'BANDA', 'LLIURE'];
   const dadesPerMod = modalitats.map(mod =>
-    ranquing
+    state.ranquing
       .filter(r => r.Jugador === jugador && r.Modalitat === mod)
       .map(r => ({ any: parseInt(r.Any, 10), mitjana: parseFloat(r.Mitjana) }))
       .sort((a, b) => a.any - b.any)
@@ -49,8 +49,8 @@ export function mostraEvolucioJugador(jugador, nom) {
   }
 
   const ctx = canvas.getContext('2d');
-  if (lineChart) {
-    lineChart.destroy();
+  if (state.lineChart) {
+    state.lineChart.destroy();
   }
   setLineChart(new Chart(ctx, {
     type: 'line',
@@ -97,8 +97,8 @@ export function closeChart() {
   if (title) {
     title.textContent = '';
   }
-  if (lineChart) {
-    lineChart.destroy();
+  if (state.lineChart) {
+    state.lineChart.destroy();
     setLineChart(null);
   }
   if (lastFocusedElement) {

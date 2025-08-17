@@ -1,4 +1,4 @@
-import { appendResponsiveTable } from './init.js';
+import { appendResponsiveTable } from './state.js';
 
 export function mostraCalendari(partides) {
   const cont = document.getElementById('content');

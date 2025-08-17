@@ -1,4 +1,4 @@
-import { classificacions, classAnySeleccionat, classModalitatSeleccionada, classCategoriaSeleccionada, appendResponsiveTable } from './init.js';
+import { state, appendResponsiveTable } from './state.js';
 
 export function mostraClassificacio() {
   const cont = document.getElementById('content');
@@ -12,12 +12,12 @@ export function mostraClassificacio() {
   });
   taula.appendChild(cap);
 
-  const dades = classificacions
+  const dades = state.classificacions
     .filter(
       r =>
-        parseInt(r.Any, 10) === classAnySeleccionat &&
-        r.Modalitat === classModalitatSeleccionada &&
-        r.Categoria === classCategoriaSeleccionada
+        parseInt(r.Any, 10) === state.classAnySeleccionat &&
+        r.Modalitat === state.classModalitatSeleccionada &&
+        r.Categoria === state.classCategoriaSeleccionada
     )
     .sort((a, b) => parseInt(a.Posició, 10) - parseInt(b.Posició, 10));
 

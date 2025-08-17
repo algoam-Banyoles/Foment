@@ -1,4 +1,5 @@
-import { preparaTorneigCategories, appendResponsiveTable, torneigCategoriaSeleccionada, torneigCaramboles } from './init.js';
+import { preparaTorneigCategories } from './init.js';
+import { appendResponsiveTable, state } from './state.js';
 import { mostraCalendari } from './calendari.js';
 import { mostraPartides } from './partides.js';
 
@@ -48,9 +49,9 @@ export function mostraTorneig(dades, file) {
     const categories = Object.keys(agrupats);
     const render = () => {
       cont.innerHTML = '';
-      const cat = torneigCategoriaSeleccionada;
+      const cat = state.torneigCategoriaSeleccionada;
       const h3 = document.createElement('h3');
-      const car = torneigCaramboles[cat];
+      const car = state.torneigCaramboles[cat];
       h3.textContent = car
         ? `${cat}a categoria (${car} caramboles)`
         : `${cat}a categoria`;
@@ -77,9 +78,9 @@ export function mostraTorneig(dades, file) {
     const categories = Object.keys(agrupats);
     const render = () => {
       cont.innerHTML = '';
-      const cat = torneigCategoriaSeleccionada;
+      const cat = state.torneigCategoriaSeleccionada;
       const h3 = document.createElement('h3');
-      const car = torneigCaramboles[cat];
+      const car = state.torneigCaramboles[cat];
       h3.textContent = car
         ? `${cat}a categoria (${car} caramboles)`
         : `${cat}a categoria`;
@@ -141,9 +142,9 @@ export function mostraTorneig(dades, file) {
     const categories = Object.keys(agrupats);
     const render = () => {
       cont.innerHTML = '';
-      const cat = torneigCategoriaSeleccionada;
+      const cat = state.torneigCategoriaSeleccionada;
       const h3 = document.createElement('h3');
-      const car = torneigCaramboles[cat];
+      const car = state.torneigCaramboles[cat];
       h3.textContent = car
         ? `${cat}a categoria (${car} caramboles)`
         : `${cat}a categoria`;

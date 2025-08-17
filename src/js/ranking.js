@@ -1,4 +1,4 @@
-import { ranquing, anySeleccionat, modalitatSeleccionada, appendResponsiveTable } from './init.js';
+import { state, appendResponsiveTable } from './state.js';
 import { mostraEvolucioJugador } from './graficos.js';
 
 export function mostraRanquing() {
@@ -13,11 +13,11 @@ export function mostraRanquing() {
   });
   taula.appendChild(cap);
 
-  const dadesOrdenades = ranquing
+  const dadesOrdenades = state.ranquing
     .filter(
       reg =>
-        parseInt(reg.Any, 10) === anySeleccionat &&
-        reg.Modalitat === modalitatSeleccionada
+        parseInt(reg.Any, 10) === state.anySeleccionat &&
+        reg.Modalitat === state.modalitatSeleccionada
     )
     .sort((a, b) => parseFloat(b.Mitjana) - parseFloat(a.Mitjana));
 
