@@ -213,7 +213,7 @@ export function mostraContinu3B() {
                   let limit = 0;
                   let base = '';
                   if (repteActiu.estat === 'proposat') {
-                    limit = 14;
+                    limit = 7;
                     base = repteActiu.created_at;
                   } else if (repteActiu.estat === 'acceptat') {
                     limit = 7;
@@ -272,79 +272,129 @@ export function mostraContinu3B() {
       btnReptes.textContent = 'Reptes';
       btnReptes.addEventListener('click', () =>
         showSection(btnReptes, () => {
+          const reptesPendents = reptes.filter(
+            r => r.estat === 'proposat' && r.tipus !== 'acces'
+          );
           const reptesAcceptats = reptes.filter(
             r => r.estat === 'acceptat' && r.tipus !== 'acces'
           );
-          const reptesProposats = reptes.filter(
-            r => r.estat === 'proposat' && r.tipus !== 'acces'
+          const reptesProgramats = reptes.filter(
+            r => r.estat === 'programat' && r.tipus !== 'acces'
+          );
+          const reptesTancats = reptes.filter(
+            r => r.estat === 'tancat' && r.tipus !== 'acces'
           );
 
           const title = document.createElement('h3');
           title.textContent = 'Reptes';
           cont.appendChild(title);
 
-          const drawTable = list => {
-            const table = document.createElement('table');
-            const thead = document.createElement('thead');
-            const headerRow = document.createElement('tr');
-            ['Reptador', 'Reptat', 'Creació', 'Acceptació', 'Programació', 'Límit'].forEach(
-              h => {
-                const th = document.createElement('th');
-                th.textContent = h;
-                headerRow.appendChild(th);
-              }
-            );
-            thead.appendChild(headerRow);
-            table.appendChild(thead);
-            const tbody = document.createElement('tbody');
+          const drawCards = (list, infoFn, container = cont) => {
             list.forEach(r => {
-              const tr = document.createElement('tr');
+              const card = document.createElement('div');
+              card.classList.add('repte-card');
               const reptador = mapJugadors[r.reptador_id] || r.reptador_id;
               const reptat = mapJugadors[r.reptat_id] || r.reptat_id;
-              const created = r.created_at
-                ? new Date(r.created_at).toLocaleDateString('ca-ES')
-                : '';
-              const accept = r.data_acceptacio
-                ? new Date(r.data_acceptacio).toLocaleDateString('ca-ES')
-                : '';
-              const program = r.data_programa
-                ? new Date(r.data_programa).toLocaleDateString('ca-ES')
-                : '';
-              const deadline = r.deadline_jugar
-                ? new Date(r.deadline_jugar).toLocaleDateString('ca-ES')
-                : '';
-              [reptador, reptat, created, accept, program, deadline].forEach(t => {
-                const td = document.createElement('td');
-                td.textContent = t;
-                tr.appendChild(td);
+              const h4 = document.createElement('h4');
+              h4.textContent = `${reptador} vs ${reptat}`;
+              card.appendChild(h4);
+              const info = infoFn(r);
+              info.forEach(([label, date]) => {
+                if (date) {
+                  const p = document.createElement('p');
+                  p.textContent = `${label}: ${new Date(date).toLocaleDateString('ca-ES')}`;
+                  card.appendChild(p);
+                }
               });
-              tbody.appendChild(tr);
+              container.appendChild(card);
             });
-            table.appendChild(tbody);
-            appendResponsiveTable(cont, table);
           };
 
-          const accTitle = document.createElement('h4');
-          accTitle.textContent = 'Reptes acceptats';
-          cont.appendChild(accTitle);
-          if (reptesAcceptats.length) {
-            drawTable(reptesAcceptats);
-          } else {
-            const p = document.createElement('p');
-            p.textContent = 'No hi ha reptes acceptats.';
-            cont.appendChild(p);
-          }
+          const section = (t, list, infoFn, emptyMsg) => {
+            const st = document.createElement('h4');
+            st.textContent = t;
+            cont.appendChild(st);
+            if (list.length) {
+              drawCards(list, infoFn);
+            } else {
+              const p = document.createElement('p');
+              p.textContent = emptyMsg;
+              cont.appendChild(p);
+            }
+          };
 
-          const propTitle = document.createElement('h4');
-          propTitle.textContent = 'Reptes proposats';
-          cont.appendChild(propTitle);
-          if (reptesProposats.length) {
-            drawTable(reptesProposats);
+          const calcLimit = base =>
+            base
+              ? new Date(new Date(base).getTime() + 7 * 24 * 60 * 60 * 1000)
+              : null;
+
+          const infoPendents = r => {
+            const limitAcceptar = calcLimit(r.created_at);
+            const limitJugar = calcLimit(limitAcceptar);
+            return [
+              ['Creació', r.created_at],
+              ['Límit acceptar', limitAcceptar],
+              ['Límit jugar', limitJugar]
+            ];
+          };
+
+          const infoAcceptats = r => [
+            ['Creació', r.created_at],
+            ['Acceptació', r.data_acceptacio],
+            ['Límit jugar', calcLimit(r.data_acceptacio || r.created_at)]
+          ];
+
+          const infoProgramats = r => [
+            ['Creació', r.created_at],
+            ['Acceptació', r.data_acceptacio],
+            ['Programació', r.data_programa],
+            ['Límit jugar', calcLimit(r.data_acceptacio || r.created_at)]
+          ];
+
+          const mapPartides = Object.fromEntries(partides.map(p => [p.id, p]));
+
+          const infoTancats = r => {
+            const partida = mapPartides[r.partida_id] || {};
+            return [
+              ['Creació', r.created_at],
+              ['Acceptació', r.data_acceptacio],
+              ['Programació', r.data_programa],
+              ['Jugat', partida.data]
+            ];
+          };
+
+          section(
+            'Pendents d’acceptar',
+            reptesPendents,
+            infoPendents,
+            'No hi ha reptes pendents.'
+          );
+          section(
+            'Acceptats',
+            reptesAcceptats,
+            infoAcceptats,
+            'No hi ha reptes acceptats.'
+          );
+          section(
+            'Programats',
+            reptesProgramats,
+            infoProgramats,
+            'No hi ha reptes programats.'
+          );
+
+          const detTancats = document.createElement('details');
+          detTancats.id = 'reptes-tancats';
+          const sumTancats = document.createElement('summary');
+          sumTancats.textContent = 'Tancats';
+          detTancats.appendChild(sumTancats);
+          if (reptesTancats.length) {
+            drawCards(reptesTancats, infoTancats, detTancats);
           } else {
             const p = document.createElement('p');
-            p.textContent = 'No hi ha reptes proposats.';
-            cont.appendChild(p);
+            p.textContent = 'No hi ha reptes tancats.';
+            detTancats.appendChild(p);
           }
+          cont.appendChild(detTancats);
         })
       );
 
