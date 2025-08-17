@@ -1,4 +1,4 @@
-import { appendResponsiveTable, torneigCategoriaSeleccionada } from './init.js';
+import { appendResponsiveTable, state } from './state.js';
 
 export function mostraPartides(partides) {
   const cont = document.getElementById('content');
@@ -32,7 +32,7 @@ export function mostraPartides(partides) {
     filtre = (filtre || '').toLowerCase();
     list.innerHTML = '';
     const filtered = partides
-      .filter(p => p["🏆 Categoria de la partida"] === torneigCategoriaSeleccionada)
+      .filter(p => p["🏆 Categoria de la partida"] === state.torneigCategoriaSeleccionada)
       .filter(p => {
         if (!filtre) return true;
         const nom1 = (p["🎱 Nom del Jugador 1"] || '').trim().toLowerCase();

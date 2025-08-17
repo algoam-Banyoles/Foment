@@ -1,4 +1,4 @@
-import { events, agendaSetmanaInici, appendResponsiveTable } from './init.js';
+import { state, appendResponsiveTable } from './state.js';
 
 export function mostraAgenda() {
   const cont = document.getElementById('content');
@@ -14,11 +14,11 @@ export function mostraAgenda() {
   const label = document.createElement('span');
   label.id = 'calendar-month';
   prev.addEventListener('click', () => {
-    agendaSetmanaInici.setDate(agendaSetmanaInici.getDate() - 7);
+    state.agendaSetmanaInici.setDate(state.agendaSetmanaInici.getDate() - 7);
     render();
   });
   next.addEventListener('click', () => {
-    agendaSetmanaInici.setDate(agendaSetmanaInici.getDate() + 7);
+    state.agendaSetmanaInici.setDate(state.agendaSetmanaInici.getDate() + 7);
     render();
   });
   nav.appendChild(prev);
@@ -53,14 +53,14 @@ export function mostraAgenda() {
     const row = document.createElement('tr');
     for (let i = 0; i < 7; i++) {
       const cell = document.createElement('td');
-      const date = new Date(agendaSetmanaInici);
-      date.setDate(agendaSetmanaInici.getDate() + i);
+      const date = new Date(state.agendaSetmanaInici);
+      date.setDate(state.agendaSetmanaInici.getDate() + i);
       const iso = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
         .toISOString()
         .split('T')[0];
       cell.textContent = date.getDate();
       cell.dataset.date = iso;
-      const dayEvents = events.filter(ev => ev['Data'] === iso);
+      const dayEvents = state.events.filter(ev => ev['Data'] === iso);
       if (dayEvents.length > 0) {
         let cls = 'event-other';
         if (dayEvents.some(ev => ev.Tipus === 'festiu')) {
@@ -97,7 +97,7 @@ export function mostraAgenda() {
       header.appendChild(th);
     });
     listTable.appendChild(header);
-    const dayEvents = events
+    const dayEvents = state.events
       .filter(ev => ev['Data'] === selectedDate)
       .sort((a, b) => (a['Hora'] || '').localeCompare(b['Hora'] || ''));
     dayEvents.forEach(ev => {
@@ -131,14 +131,14 @@ export function mostraAgenda() {
   }
 
   function render() {
-    const end = new Date(agendaSetmanaInici);
-    end.setDate(agendaSetmanaInici.getDate() + 6);
-    const weekEnd = new Date(agendaSetmanaInici);
-    weekEnd.setDate(agendaSetmanaInici.getDate() + 7);
-    if (new Date(selectedDate) < agendaSetmanaInici || new Date(selectedDate) >= weekEnd) {
-      selectedDate = agendaSetmanaInici.toISOString().split('T')[0];
+    const end = new Date(state.agendaSetmanaInici);
+    end.setDate(state.agendaSetmanaInici.getDate() + 6);
+    const weekEnd = new Date(state.agendaSetmanaInici);
+    weekEnd.setDate(state.agendaSetmanaInici.getDate() + 7);
+    if (new Date(selectedDate) < state.agendaSetmanaInici || new Date(selectedDate) >= weekEnd) {
+      selectedDate = state.agendaSetmanaInici.toISOString().split('T')[0];
     }
-    const startStr = agendaSetmanaInici.toLocaleDateString('ca-ES', { day: 'numeric', month: 'short' });
+    const startStr = state.agendaSetmanaInici.toLocaleDateString('ca-ES', { day: 'numeric', month: 'short' });
     const endStr = end.toLocaleDateString('ca-ES', { day: 'numeric', month: 'short', year: 'numeric' });
     label.textContent = `${startStr} - ${endStr}`;
     renderCalendar();
