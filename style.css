@@ -717,17 +717,18 @@ details summary {
     grid-column: 1 / -1;
   }
 
-  .ranking-table tbody tr:nth-child(1) .ranking-pos {
+  /* Colors especials per les 3 primeres posicions només al rànquing actiu */
+  .ranking-table:not(.no-medals) tbody tr:nth-child(1) .ranking-pos {
     border-color: #ffd700;
     color: #ffd700;
   }
 
-  .ranking-table tbody tr:nth-child(2) .ranking-pos {
+  .ranking-table:not(.no-medals) tbody tr:nth-child(2) .ranking-pos {
     border-color: #c0c0c0;
     color: #c0c0c0;
   }
 
-  .ranking-table tbody tr:nth-child(3) .ranking-pos {
+  .ranking-table:not(.no-medals) tbody tr:nth-child(3) .ranking-pos {
     border-color: #cd7f32;
     color: #cd7f32;
   }

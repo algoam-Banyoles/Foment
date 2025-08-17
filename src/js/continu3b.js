@@ -151,8 +151,8 @@ export function mostraContinu3B() {
           title.textContent = 'Rànquing actual';
           cont.appendChild(title);
           if (Array.isArray(ranking) && ranking.length) {
-            const table = document.createElement('table');
-            table.classList.add('ranking-table');
+              const table = document.createElement('table');
+              table.classList.add('ranking-table');
             const thead = document.createElement('thead');
             const headerRow = document.createElement('tr');
 
@@ -426,7 +426,8 @@ export function mostraContinu3B() {
           cont.appendChild(title);
           if (Array.isArray(llista) && llista.length) {
             const table = document.createElement('table');
-            table.classList.add('ranking-table');
+            // Usa el mateix estil del rànquing actiu però sense els colors de medalla
+            table.classList.add('ranking-table', 'no-medals');
             const thead = document.createElement('thead');
             const headerRow = document.createElement('tr');
             ['Posició', 'Jugador', 'Pot reptar'].forEach(h => {
