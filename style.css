@@ -642,4 +642,58 @@ details summary {
   margin: 4px 0;
 }
 
+/* Responsive layout for Continu 3B ranking */
+.ranking-table th,
+.ranking-table td {
+  white-space: normal;
+}
+
+.ranking-table td.ranking-pos {
+  font-weight: bold;
+  color: var(--primary);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .ranking-table thead {
+    display: none;
+  }
+  .ranking-table tr {
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 3rem;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  .ranking-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0;
+    text-align: left;
+  }
+  .ranking-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+  .ranking-table td.ranking-pos {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin: 0;
+  }
+}
+
 
