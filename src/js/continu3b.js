@@ -447,6 +447,7 @@ export function mostraContinu3B() {
 
               const posTd = document.createElement('td');
               posTd.textContent = l.ordre;
+              posTd.classList.add('ranking-pos');
               tr.appendChild(posTd);
 
               const nom = mapJugadors[l.jugador_id] || l.jugador_id;
@@ -456,6 +457,7 @@ export function mostraContinu3B() {
                 mostraEvolucioJugador(l.jugador_id, nom)
               );
               const nomTd = document.createElement('td');
+              nomTd.classList.add('ranking-name');
               nomTd.appendChild(nameBtn);
               tr.appendChild(nomTd);
 
@@ -466,6 +468,7 @@ export function mostraContinu3B() {
               potSpan.title = pot
                 ? 'Pot reptar el jugador 20'
                 : 'No pot reptar';
+              potTd.dataset.label = 'Pot reptar';
               potTd.appendChild(potSpan);
               tr.appendChild(potTd);
 
