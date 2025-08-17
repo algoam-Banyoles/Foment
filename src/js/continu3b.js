@@ -289,7 +289,9 @@ export function mostraContinu3B() {
           title.textContent = 'Reptes';
           cont.appendChild(title);
 
+w
           const drawCards = (list, infoFn) => {
+
             list.forEach(r => {
               const card = document.createElement('div');
               card.classList.add('repte-card');
@@ -298,7 +300,9 @@ export function mostraContinu3B() {
               const h4 = document.createElement('h4');
               h4.textContent = `${reptador} vs ${reptat}`;
               card.appendChild(h4);
+
               const info = infoFn(r);
+
               info.forEach(([label, date]) => {
                 if (date) {
                   const p = document.createElement('p');
@@ -306,22 +310,28 @@ export function mostraContinu3B() {
                   card.appendChild(p);
                 }
               });
+
               cont.appendChild(card);
             });
           };
 
+
           const section = (t, list, infoFn, emptyMsg) => {
+
             const st = document.createElement('h4');
             st.textContent = t;
             cont.appendChild(st);
             if (list.length) {
+
               drawCards(list, infoFn);
+
             } else {
               const p = document.createElement('p');
               p.textContent = emptyMsg;
               cont.appendChild(p);
             }
           };
+
 
           const calcLimit = base =>
             base
@@ -356,23 +366,29 @@ export function mostraContinu3B() {
               ['Programació', r.data_programa],
               ['Jugat', partida.data]
             ];
+
           };
 
           section(
             'Pendents d’acceptar',
             reptesPendents,
+
             infoPendents,
+
             'No hi ha reptes pendents.'
           );
           section(
             'Acceptats',
             reptesAcceptats,
+
             infoAcceptats,
+
             'No hi ha reptes acceptats.'
           );
           section(
             'Programats',
             reptesProgramats,
+
             infoProgramats,
             'No hi ha reptes programats.'
           );
@@ -382,6 +398,7 @@ export function mostraContinu3B() {
             infoTancats,
             'No hi ha reptes tancats.'
           );
+
         })
       );
 
