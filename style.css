@@ -618,11 +618,13 @@ details summary {
   margin: 4px 0;
 }
 
+
 #reptes-tancats summary {
   cursor: pointer;
   font-weight: bold;
   margin: 1rem 0 0.5rem;
 }
+
 
 .partida-card {
   background: #f8f8f8;

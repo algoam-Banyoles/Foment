@@ -289,7 +289,9 @@ export function mostraContinu3B() {
           title.textContent = 'Reptes';
           cont.appendChild(title);
 
+
           const drawCards = (list, infoFn, container = cont) => {
+
             list.forEach(r => {
               const card = document.createElement('div');
               card.classList.add('repte-card');
@@ -298,7 +300,9 @@ export function mostraContinu3B() {
               const h4 = document.createElement('h4');
               h4.textContent = `${reptador} vs ${reptat}`;
               card.appendChild(h4);
+
               const info = infoFn(r);
+
               info.forEach(([label, date]) => {
                 if (date) {
                   const p = document.createElement('p');
@@ -306,6 +310,7 @@ export function mostraContinu3B() {
                   card.appendChild(p);
                 }
               });
+
               container.appendChild(card);
             });
           };
@@ -338,6 +343,7 @@ export function mostraContinu3B() {
             ];
           };
 
+
           const infoAcceptats = r => [
             ['Creació', r.created_at],
             ['Acceptació', r.data_acceptacio],
@@ -361,23 +367,29 @@ export function mostraContinu3B() {
               ['Programació', r.data_programa],
               ['Jugat', partida.data]
             ];
+
           };
 
           section(
             'Pendents d’acceptar',
             reptesPendents,
+
             infoPendents,
+
             'No hi ha reptes pendents.'
           );
           section(
             'Acceptats',
             reptesAcceptats,
+
             infoAcceptats,
+
             'No hi ha reptes acceptats.'
           );
           section(
             'Programats',
             reptesProgramats,
+
             infoProgramats,
             'No hi ha reptes programats.'
           );
@@ -395,6 +407,7 @@ export function mostraContinu3B() {
             detTancats.appendChild(p);
           }
           cont.appendChild(detTancats);
+
         })
       );
 
