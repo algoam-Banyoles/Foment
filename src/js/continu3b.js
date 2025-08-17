@@ -419,20 +419,61 @@ export function mostraContinu3B() {
           title.textContent = "Llista d'espera";
           cont.appendChild(title);
           if (Array.isArray(llista) && llista.length) {
-            const div = document.createElement('div');
-            llista
+            const table = document.createElement('table');
+            table.classList.add('ranking-table');
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            ['Posició', 'Jugador', 'Pot reptar'].forEach(h => {
+              const th = document.createElement('th');
+              th.textContent = h;
+              headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+            const ordered = llista
               .slice()
-              .sort((a, b) => parseInt(a.ordre, 10) - parseInt(b.ordre, 10))
-              .forEach(l => {
-                const btn = document.createElement('button');
-                const nom = mapJugadors[l.jugador_id] || l.jugador_id;
-                btn.textContent = `${l.ordre}. ${nom}`;
-                btn.addEventListener('click', () =>
-                  mostraEvolucioJugador(l.jugador_id, nom)
-                );
-                div.appendChild(btn);
-              });
-            cont.appendChild(div);
+              .sort((a, b) => parseInt(a.ordre, 10) - parseInt(b.ordre, 10));
+            ordered.forEach((l, idx) => {
+              const tr = document.createElement('tr');
+
+              const posTd = document.createElement('td');
+              posTd.textContent = l.ordre;
+              tr.appendChild(posTd);
+
+              const nom = mapJugadors[l.jugador_id] || l.jugador_id;
+              const nameBtn = document.createElement('button');
+              nameBtn.textContent = nom;
+              nameBtn.addEventListener('click', () =>
+                mostraEvolucioJugador(l.jugador_id, nom)
+              );
+              const nomTd = document.createElement('td');
+              nomTd.appendChild(nameBtn);
+              tr.appendChild(nomTd);
+
+              const potTd = document.createElement('td');
+              const potSpan = document.createElement('span');
+              const pot = idx === 0;
+              potSpan.textContent = pot ? '🟢' : '🔴';
+              potSpan.title = pot
+                ? 'Pot reptar el jugador 20'
+                : 'No pot reptar';
+              potTd.appendChild(potSpan);
+              tr.appendChild(potTd);
+
+              tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            const legenda = document.createElement('div');
+            ['🟢 Pot reptar', '🔴 No pot reptar'].forEach(t => {
+              const p = document.createElement('p');
+              p.textContent = t;
+              legenda.appendChild(p);
+            });
+            cont.appendChild(legenda);
+            appendResponsiveTable(cont, table);
           } else {
             const p = document.createElement('p');
             p.textContent = "No hi ha jugadors en llista d'espera.";
