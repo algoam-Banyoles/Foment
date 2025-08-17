@@ -195,6 +195,7 @@ export function mostraContinu3B() {
 
                 const posTd = document.createElement('td');
                 posTd.textContent = r.posicio;
+                posTd.classList.add('ranking-pos');
                 tr.appendChild(posTd);
 
                 const nom = mapJugadors[r.jugador_id] || r.jugador_id;
@@ -232,6 +233,7 @@ export function mostraContinu3B() {
                   if (dataUltim) diesTd.title = `Últim repte: ${dataUltim}`;
                 }
                 diesTd.textContent = `${diesRestants} dies`;
+                diesTd.dataset.label = 'Dies per reptar/ser reptat';
                 tr.appendChild(diesTd);
 
                 const potSpan = document.createElement('span');
@@ -240,6 +242,7 @@ export function mostraContinu3B() {
                   ? 'Pot reptar i ser reptat'
                   : 'No pot reptar ni ser reptat';
                 const potTd = document.createElement('td');
+                potTd.dataset.label = 'Disponible';
                 potTd.appendChild(potSpan);
                 tr.appendChild(potTd);
 
