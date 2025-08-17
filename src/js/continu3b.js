@@ -195,7 +195,9 @@ export function mostraContinu3B() {
 
                 const posTd = document.createElement('td');
                 posTd.textContent = r.posicio;
+
                 posTd.classList.add('ranking-pos');
+
                 tr.appendChild(posTd);
 
                 const nom = mapJugadors[r.jugador_id] || r.jugador_id;
@@ -205,6 +207,7 @@ export function mostraContinu3B() {
                   mostraPartidesJugador(r.jugador_id, nom)
                 );
                 const nomTd = document.createElement('td');
+                nomTd.dataset.label = 'Jugador';
                 nomTd.appendChild(nameBtn);
                 tr.appendChild(nomTd);
 
