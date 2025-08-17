@@ -213,7 +213,7 @@ export function mostraContinu3B() {
                   let limit = 0;
                   let base = '';
                   if (repteActiu.estat === 'proposat') {
-                    limit = 14;
+                    limit = 7;
                     base = repteActiu.created_at;
                   } else if (repteActiu.estat === 'acceptat') {
                     limit = 7;
@@ -289,7 +289,9 @@ export function mostraContinu3B() {
           title.textContent = 'Reptes';
           cont.appendChild(title);
 
-          const drawCards = (list, deadlineFn) => {
+w
+          const drawCards = (list, infoFn) => {
+
             list.forEach(r => {
               const card = document.createElement('div');
               card.classList.add('repte-card');
@@ -298,12 +300,9 @@ export function mostraContinu3B() {
               const h4 = document.createElement('h4');
               h4.textContent = `${reptador} vs ${reptat}`;
               card.appendChild(h4);
-              const info = [
-                ['Creació', r.created_at],
-                ['Acceptació', r.data_acceptacio],
-                ['Programació', r.data_programa],
-                ['Límit jugar', r.deadline_jugar]
-              ];
+
+              const info = infoFn(r);
+
               info.forEach(([label, date]) => {
                 if (date) {
                   const p = document.createElement('p');
@@ -311,17 +310,21 @@ export function mostraContinu3B() {
                   card.appendChild(p);
                 }
               });
-              if (deadlineFn) deadlineFn(card, r);
+
               cont.appendChild(card);
             });
           };
 
-          const section = (t, list, deadlineFn, emptyMsg) => {
+
+          const section = (t, list, infoFn, emptyMsg) => {
+
             const st = document.createElement('h4');
             st.textContent = t;
             cont.appendChild(st);
             if (list.length) {
-              drawCards(list, deadlineFn);
+
+              drawCards(list, infoFn);
+
             } else {
               const p = document.createElement('p');
               p.textContent = emptyMsg;
@@ -329,48 +332,73 @@ export function mostraContinu3B() {
             }
           };
 
-          const deadlineAcceptar = (card, r) => {
-            if (r.created_at) {
-              const limit = new Date(
-                new Date(r.created_at).getTime() + 14 * 24 * 60 * 60 * 1000
-              );
-              const p = document.createElement('p');
-              p.textContent = `Límit acceptar: ${limit.toLocaleDateString('ca-ES')}`;
-              card.appendChild(p);
-            }
-          };
 
-          const deadlineProgramar = (card, r) => {
-            const base = r.data_acceptacio || r.created_at;
-            if (base) {
-              const limit = new Date(
-                new Date(base).getTime() + 7 * 24 * 60 * 60 * 1000
-              );
-              const p = document.createElement('p');
-              p.textContent = `Límit programar: ${limit.toLocaleDateString('ca-ES')}`;
-              card.appendChild(p);
-            }
+          const calcLimit = base =>
+            base
+              ? new Date(new Date(base).getTime() + 7 * 24 * 60 * 60 * 1000)
+              : null;
+
+          const infoPendents = r => [
+            ['Creació', r.created_at],
+            ['Límit acceptar', calcLimit(r.created_at)]
+          ];
+
+          const infoAcceptats = r => [
+            ['Creació', r.created_at],
+            ['Acceptació', r.data_acceptacio],
+            ['Límit jugar', calcLimit(r.data_acceptacio || r.created_at)]
+          ];
+
+          const infoProgramats = r => [
+            ['Creació', r.created_at],
+            ['Acceptació', r.data_acceptacio],
+            ['Programació', r.data_programa],
+            ['Límit jugar', calcLimit(r.data_acceptacio || r.created_at)]
+          ];
+
+          const mapPartides = Object.fromEntries(partides.map(p => [p.id, p]));
+
+          const infoTancats = r => {
+            const partida = mapPartides[r.partida_id] || {};
+            return [
+              ['Creació', r.created_at],
+              ['Acceptació', r.data_acceptacio],
+              ['Programació', r.data_programa],
+              ['Jugat', partida.data]
+            ];
+
           };
 
           section(
             'Pendents d’acceptar',
             reptesPendents,
-            deadlineAcceptar,
+
+            infoPendents,
+
             'No hi ha reptes pendents.'
           );
           section(
             'Acceptats',
             reptesAcceptats,
-            deadlineProgramar,
+
+            infoAcceptats,
+
             'No hi ha reptes acceptats.'
           );
           section(
             'Programats',
             reptesProgramats,
-            null,
+
+            infoProgramats,
             'No hi ha reptes programats.'
           );
-          section('Tancats', reptesTancats, null, 'No hi ha reptes tancats.');
+          section(
+            'Tancats',
+            reptesTancats,
+            infoTancats,
+            'No hi ha reptes tancats.'
+          );
+
         })
       );
 
