@@ -661,15 +661,14 @@ details summary {
     display: none;
   }
   .ranking-table tr {
-    display: block;
+    display: grid;
+    grid-template-columns: auto 1fr;
     border: 1px solid #ddd;
     border-radius: 8px;
     margin-bottom: 0.5rem;
-    padding: 0.5rem 0.5rem 0.5rem 3rem;
+    padding: 0.5rem;
     background: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: relative;
-
   }
   .ranking-table td {
     display: flex;
@@ -694,20 +693,44 @@ details summary {
   }
 
   .ranking-table td.ranking-pos {
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
+    grid-row: 1;
+    grid-column: 1;
     width: 2rem;
     height: 2rem;
-    background: var(--primary);
-    color: #fff;
+    border: 2px solid var(--primary);
+    color: var(--primary);
     border-radius: 50%;
     align-items: center;
     justify-content: center;
     display: flex;
-    margin: 0;
+    margin-right: 0.5rem;
+    background: transparent;
   }
 
+  .ranking-table td.ranking-name {
+    grid-row: 1;
+    grid-column: 2;
+    justify-content: flex-start;
+  }
+
+  .ranking-table td:nth-of-type(n + 3) {
+    grid-column: 1 / -1;
+  }
+
+  .ranking-table tbody tr:nth-child(1) .ranking-pos {
+    border-color: #ffd700;
+    color: #ffd700;
+  }
+
+  .ranking-table tbody tr:nth-child(2) .ranking-pos {
+    border-color: #c0c0c0;
+    color: #c0c0c0;
+  }
+
+  .ranking-table tbody tr:nth-child(3) .ranking-pos {
+    border-color: #cd7f32;
+    color: #cd7f32;
+  }
 }
 
 
