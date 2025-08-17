@@ -296,10 +296,13 @@ export function mostraContinu3B() {
             card.appendChild(h4);
 
             const info = infoFn(r);
-            info.forEach(([label, date]) => {
-              if (date) {
+            info.forEach(([label, value]) => {
+              if (value) {
                 const p = document.createElement('p');
-                p.textContent = `${label}: ${new Date(date).toLocaleDateString('ca-ES')}`;
+                const d = new Date(value);
+                p.textContent = `${label}: ${
+                  !isNaN(d) ? d.toLocaleDateString('ca-ES') : value
+                }`;
                 card.appendChild(p);
               }
             });
@@ -349,13 +352,24 @@ export function mostraContinu3B() {
 
         const mapPartides = Object.fromEntries(partides.map(p => [p.id, p]));
 
+        const motiusMap = {
+          REFUS: 'Refús',
+          INCOMPAREIXENCA: 'Incompareixença',
+          RESULTAT: 'Resultat'
+        };
+
         const infoTancats = r => {
           const partida = mapPartides[r.partida_id] || {};
+          const motiu =
+            !partida.data && r.resultat_motiu
+              ? motiusMap[r.resultat_motiu] || r.resultat_motiu
+              : null;
           return [
             ['Creació', r.created_at],
             ['Acceptació', r.data_acceptacio],
             ['Programació', r.data_programa],
-            ['Jugat', partida.data]
+            ['Jugat', partida.data],
+            ['Motiu tancament', motiu]
           ];
         };
 
