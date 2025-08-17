@@ -1,7 +1,7 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.3/workbox-sw.js');
 
 // This value is replaced at build time by tools/update_sw_version.py
-const CACHE_VERSION = 'f9caddeb3482';
+const CACHE_VERSION = 'f24eb00c909e';
 
 self.addEventListener('install', () => self.skipWaiting());
 
