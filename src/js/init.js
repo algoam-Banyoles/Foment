@@ -2,20 +2,7 @@ import { mostraRanquing } from './ranking.js';
 import { mostraClassificacio } from './classificacio.js';
 import { state } from './state.js';
 
-function setupTheme() {
-  const body = document.body;
-  const btn = document.getElementById('btn-dark-mode');
-  if (localStorage.getItem('theme') === 'dark') {
-    body.classList.add('dark');
-  }
-  btn.addEventListener('click', () => {
-    body.classList.toggle('dark');
-    localStorage.setItem('theme', body.classList.contains('dark') ? 'dark' : 'light');
-  });
-}
-
 export function inicialitza() {
-  setupTheme();
   Promise.all([
     fetch('data/ranquing.json').then(r => r.json()),
     fetch('data/classificacions.json').then(r => r.json()).catch(() => []),
