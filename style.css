@@ -684,6 +684,10 @@ details summary {
     margin-right: 0.5rem;
   }
 
+  .ranking-table td.ranking-pos::before {
+    content: none;
+  }
+
   .ranking-table td.ranking-pos {
     position: absolute;
     top: 0.5rem;

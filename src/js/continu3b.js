@@ -195,7 +195,6 @@ export function mostraContinu3B() {
 
                 const posTd = document.createElement('td');
                 posTd.textContent = r.posicio;
-                posTd.dataset.label = 'Posició';
 
                 posTd.classList.add('ranking-pos');
 
