@@ -518,10 +518,18 @@ export function mostraContinu3B() {
               const repte = reptes.find(r => r.id === p.repte_id) || {};
               const local = mapJugadors[p.local_id] || p.local_id;
               const visitant = mapJugadors[p.visitant_id] || p.visitant_id;
-              const resultat =
-                p.caramboles_local && p.caramboles_visitant
-                  ? `${p.caramboles_local}-${p.caramboles_visitant}`
-                  : '';
+              let resultat = '';
+              if (p.caramboles_local && p.caramboles_visitant) {
+                resultat = `${p.caramboles_local}-${p.caramboles_visitant}`;
+              } else if (
+                repte.resultat_motiu &&
+                repte.resultat_motiu !== 'RESULTAT'
+              ) {
+                resultat = repte.resultat_motiu
+                  .toLowerCase()
+                  .replace(/_/g, ' ');
+                resultat = resultat.charAt(0).toUpperCase() + resultat.slice(1);
+              }
               const posLocalAfter = rankingMap[p.local_id];
               const posVisitantAfter = rankingMap[p.visitant_id];
               const swap = repte.resultat_guanya_reptador === 'TRUE';
