@@ -207,7 +207,7 @@ export function mostraContinu3B() {
                   mostraPartidesJugador(r.jugador_id, nom)
                 );
                 const nomTd = document.createElement('td');
-                nomTd.dataset.label = 'Jugador';
+                nomTd.classList.add('ranking-name');
                 nomTd.appendChild(nameBtn);
                 tr.appendChild(nomTd);
 
