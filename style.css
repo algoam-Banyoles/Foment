@@ -8,13 +8,46 @@
   --category: #8d4f00;
   --category-dark: #5a3300;
   --background: #f9f9f9;
+  --surface: #fff;
+  --surface-muted: #f8f8f8;
   --text-color: #222;
+  --border-color: #ddd;
   --event-inici: #d1e7dd;
   --event-fi: #f1aeb5;
   --event-other: #cfe2ff;
   --event-partida: #e2d9f3;
   --event-assemblea: #fff3cd;
   --event-festiu: #e2e3e5;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #121212;
+    --surface: #1e1e1e;
+    --surface-muted: #1a1a1a;
+    --text-color: #eee;
+    --border-color: #444;
+    --event-inici: #0f5132;
+    --event-fi: #842029;
+    --event-other: #084298;
+    --event-partida: #5b4b81;
+    --event-assemblea: #664d03;
+    --event-festiu: #343a40;
+  }
+}
+
+.dark {
+  --background: #121212;
+  --surface: #1e1e1e;
+  --surface-muted: #1a1a1a;
+  --text-color: #eee;
+  --border-color: #444;
+  --event-inici: #0f5132;
+  --event-fi: #842029;
+  --event-other: #084298;
+  --event-partida: #5b4b81;
+  --event-assemblea: #664d03;
+  --event-festiu: #343a40;
 }
 
 body {
@@ -236,7 +269,7 @@ table {
   border-collapse: collapse;
   width: 100%;
   max-width: 100%;
-  background: #fff;
+  background: var(--surface);
   border-radius: 4px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -245,7 +278,7 @@ table {
 
 th,
 td {
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   padding: 0.5rem 0.75rem;
 
   text-align: center;
@@ -263,7 +296,7 @@ td {
   margin-bottom: 1rem;
   width: 100%;
   border-collapse: collapse;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--border-color);
 }
 
 /* Remove bottom border only for the last match container */
@@ -365,7 +398,7 @@ table:not(.agenda-table) tr:nth-child(even) {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  background: #fff;
+  background: var(--surface);
   padding: 1rem;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -544,7 +577,7 @@ details summary {
 }
 
 .normes-card {
-  background: #f8f8f8;
+  background: var(--surface-muted);
   border-radius: 12px;
   padding: 15px;
   margin-bottom: 15px;
@@ -603,7 +636,7 @@ details summary {
 }
 
 .repte-card {
-  background: #f8f8f8;
+  background: var(--surface-muted);
   border-radius: 12px;
   padding: 10px;
   margin-bottom: 10px;
@@ -627,7 +660,7 @@ details summary {
 
 
 .partida-card {
-  background: #f8f8f8;
+  background: var(--surface-muted);
   border-radius: 12px;
   padding: 10px;
   margin-bottom: 10px;
@@ -663,11 +696,11 @@ details summary {
   .ranking-table tr {
     display: grid;
     grid-template-columns: auto 1fr;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     margin-bottom: 0.5rem;
     padding: 0.5rem;
-    background: #fff;
+    background: var(--surface);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   .ranking-table td {
