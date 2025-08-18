@@ -110,7 +110,10 @@ export function mostraContinu3B() {
               'Jugador',
               'Pot reptar',
               'Pot ser reptat',
-              'Motiu'
+
+              'Motiu',
+              'Termini per nou repte'
+
             ].forEach(h => {
               const th = document.createElement('th');
               th.textContent = h;
@@ -127,7 +130,24 @@ export function mostraContinu3B() {
                 const info = jugadors.find(j => j.id === r.jugador_id) || {};
                 const potReptar = info.pot_reptar === 'OK';
                 const potSerReptat = info.pot_ser_reptat === 'OK';
-                const motiu = info.eligibility_reptar_motiu;
+
+                const motiuRaw = info.eligibility_reptar_motiu;
+                let motiuText = '';
+                let terminiText = '';
+                if (motiuRaw && motiuRaw !== 'NOW') {
+                  const match = motiuRaw.match(/^(\w+)(?:\((\d+)\))?$/);
+                  if (match) {
+                    const motiuMap = { ACCEPTED: 'Repte actiu' };
+                    motiuText = motiuMap[match[1]] || match[1];
+                    if (match[2]) {
+                      const dies = parseInt(match[2], 10);
+                      terminiText = `${dies} ${dies === 1 ? 'dia' : 'dies'}`;
+                    }
+                  } else {
+                    motiuText = motiuRaw;
+                  }
+                }
+
                 const pot = potReptar && potSerReptat;
                 if (chkDisponibles.checked && !pot) return;
 
@@ -173,8 +193,15 @@ export function mostraContinu3B() {
 
                 const motiuTd = document.createElement('td');
                 motiuTd.dataset.label = 'Motiu';
-                motiuTd.textContent = motiu === 'NOW' ? '' : motiu;
+
+                motiuTd.textContent = motiuText;
                 tr.appendChild(motiuTd);
+
+                const terminiTd = document.createElement('td');
+                terminiTd.dataset.label = 'Termini per nou repte';
+                terminiTd.textContent = terminiText;
+                tr.appendChild(terminiTd);
+
 
                 tbody.appendChild(tr);
               });
