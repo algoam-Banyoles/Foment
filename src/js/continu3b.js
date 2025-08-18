@@ -110,8 +110,10 @@ export function mostraContinu3B() {
               'Jugador',
               'Pot reptar',
               'Pot ser reptat',
+
               'Motiu',
               'Termini per nou repte'
+
             ].forEach(h => {
               const th = document.createElement('th');
               th.textContent = h;
@@ -128,6 +130,7 @@ export function mostraContinu3B() {
                 const info = jugadors.find(j => j.id === r.jugador_id) || {};
                 const potReptar = info.pot_reptar === 'OK';
                 const potSerReptat = info.pot_ser_reptat === 'OK';
+
                 const motiuRaw = info.eligibility_reptar_motiu;
                 let motiuText = '';
                 let terminiText = '';
@@ -144,6 +147,7 @@ export function mostraContinu3B() {
                     motiuText = motiuRaw;
                   }
                 }
+
                 const pot = potReptar && potSerReptat;
                 if (chkDisponibles.checked && !pot) return;
 
@@ -189,6 +193,7 @@ export function mostraContinu3B() {
 
                 const motiuTd = document.createElement('td');
                 motiuTd.dataset.label = 'Motiu';
+
                 motiuTd.textContent = motiuText;
                 tr.appendChild(motiuTd);
 
@@ -196,6 +201,7 @@ export function mostraContinu3B() {
                 terminiTd.dataset.label = 'Termini per nou repte';
                 terminiTd.textContent = terminiText;
                 tr.appendChild(terminiTd);
+
 
                 tbody.appendChild(tr);
               });
