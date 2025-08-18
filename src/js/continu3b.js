@@ -13,62 +13,11 @@ export function mostraContinu3B() {
     fetch('data/continu3b_llistaespera.json').then(r => r.json()).catch(() => []),
     fetch('data/continu3b_reptes.json').then(r => r.json()).catch(() => []),
     fetch('data/continu3b_partides.json').then(r => r.json()).catch(() => []),
-    fetch('data/continu3b_jugadors.json').then(r => r.json()).catch(() => []),
-    fetch('data/continu3b_parametres.json').then(r => r.json()).catch(() => [])
+    fetch('data/continu3b_jugadors.json').then(r => r.json()).catch(() => [])
   ])
-    .then(([ranking, llista, reptes, partides, jugadors, parametres]) => {
+    .then(([ranking, llista, reptes, partides, jugadors]) => {
 
       const mapJugadors = Object.fromEntries(jugadors.map(j => [j.id, j.nom]));
-
-      const cooldownReptar =
-        parseInt(
-          (parametres.find(p => p.clau === 'COOLDOWN_REPTAR_DIES') || {})
-            .valor,
-          10
-        ) || 7;
-
-
-      const calculaInactivitat = dataStr => {
-        if (!dataStr) return { dies: null, data: '' };
-        const [d, m, y] = dataStr.split('/');
-        const parsed = new Date(`${y}-${m}-${d}T00:00:00`);
-        if (isNaN(parsed)) return { dies: null, data: '' };
-        const dies = Math.floor(
-          (Date.now() - parsed.getTime()) / (1000 * 60 * 60 * 24)
-        );
-        return { dies, data: `${d}/${m}/${y}` };
-      };
-
-      const disponible = (id, diesInactiu, posicio, repteActiu) => {
-        if (parseInt(posicio, 10) === 1) return false;
-        if (repteActiu) {
-          if (!repteActiu.data_programa) {
-            let limit = 0;
-            let base = '';
-            if (repteActiu.estat === 'proposat') {
-              limit = 14;
-              base = repteActiu.created_at;
-            } else if (repteActiu.estat === 'acceptat') {
-              limit = 7;
-              base = repteActiu.data_acceptacio || repteActiu.created_at;
-            }
-            if (limit) {
-              const diff = Math.floor(
-                (Date.now() - new Date(base).getTime()) /
-                  (1000 * 60 * 60 * 24)
-              );
-              if (diff < limit) return false;
-            } else {
-              return false;
-            }
-          } else {
-            return false;
-          }
-        }
-        if (diesInactiu == null) return true;
-        return diesInactiu >= cooldownReptar;
-
-      };
 
       function mostraPartidesJugador(id, nom) {
         cont.innerHTML = '';
@@ -159,8 +108,10 @@ export function mostraContinu3B() {
             [
               'Posició',
               'Jugador',
-              'Dies per reptar/ser reptat',
-              'Disponible'
+              'Pot reptar',
+              'Pot ser reptat',
+              'Motiu',
+              'Termini per nou repte'
             ].forEach(h => {
               const th = document.createElement('th');
               th.textContent = h;
@@ -174,21 +125,26 @@ export function mostraContinu3B() {
               .slice()
               .sort((a, b) => parseInt(a.posicio) - parseInt(b.posicio));
             ordered.forEach(r => {
-                const info = jugadors.find(j => j.id === r.jugador_id);
-                const { dies: diesInactiu, data: dataUltim } = calculaInactivitat(
-                  info ? info.data_ultim_repte : ''
-                );
-                const repteActiu = reptes.find(
-                  rp =>
-                    (rp.reptador_id === r.jugador_id || rp.reptat_id === r.jugador_id) &&
-                    ['proposat', 'acceptat', 'programat'].includes(rp.estat)
-                );
-                const pot = disponible(
-                  r.jugador_id,
-                  diesInactiu,
-                  r.posicio,
-                  repteActiu
-                );
+                const info = jugadors.find(j => j.id === r.jugador_id) || {};
+                const potReptar = info.pot_reptar === 'OK';
+                const potSerReptat = info.pot_ser_reptat === 'OK';
+                const motiuRaw = info.eligibility_reptar_motiu;
+                let motiuText = '';
+                let terminiText = '';
+                if (motiuRaw && motiuRaw !== 'NOW') {
+                  const match = motiuRaw.match(/^(\w+)(?:\((\d+)\))?$/);
+                  if (match) {
+                    const motiuMap = { ACCEPTED: 'Repte actiu' };
+                    motiuText = motiuMap[match[1]] || match[1];
+                    if (match[2]) {
+                      const dies = parseInt(match[2], 10);
+                      terminiText = `${dies} ${dies === 1 ? 'dia' : 'dies'}`;
+                    }
+                  } else {
+                    motiuText = motiuRaw;
+                  }
+                }
+                const pot = potReptar && potSerReptat;
                 if (chkDisponibles.checked && !pot) return;
 
                 const tr = document.createElement('tr');
@@ -211,56 +167,46 @@ export function mostraContinu3B() {
                 nomTd.appendChild(nameBtn);
                 tr.appendChild(nomTd);
 
-                const diesTd = document.createElement('td');
-                let diesRestants = 0;
-                if (repteActiu && !repteActiu.data_programa) {
-                  let limit = 0;
-                  let base = '';
-                  if (repteActiu.estat === 'proposat') {
-                    limit = 7;
-                    base = repteActiu.created_at;
-                  } else if (repteActiu.estat === 'acceptat') {
-                    limit = 7;
-                    base = repteActiu.data_acceptacio || repteActiu.created_at;
-                  }
-                  if (limit) {
-                    const diff = Math.floor(
-                      (Date.now() - new Date(base).getTime()) /
-                        (1000 * 60 * 60 * 24)
-                    );
-                    diesRestants = Math.max(limit - diff, 0);
-                  }
-                } else if (diesInactiu != null) {
+                const reptarTd = document.createElement('td');
+                const reptarSpan = document.createElement('span');
+                reptarSpan.textContent = potReptar ? '🟢' : '🔴';
+                reptarSpan.title = potReptar
+                  ? 'Pot reptar'
+                  : 'No pot reptar';
+                reptarTd.dataset.label = 'Pot reptar';
+                reptarTd.appendChild(reptarSpan);
+                tr.appendChild(reptarTd);
 
-                  diesRestants = Math.max(cooldownReptar - diesInactiu, 0);
-                  if (dataUltim) diesTd.title = `Últim repte: ${dataUltim}`;
-                }
-                diesTd.textContent = `${diesRestants} dies`;
-                diesTd.dataset.label = 'Dies per reptar/ser reptat';
-                tr.appendChild(diesTd);
+                const serTd = document.createElement('td');
+                const serSpan = document.createElement('span');
+                serSpan.textContent = potSerReptat ? '🟢' : '🔴';
+                serSpan.title = potSerReptat
+                  ? 'Pot ser reptat'
+                  : 'No pot ser reptat';
+                serTd.dataset.label = 'Pot ser reptat';
+                serTd.appendChild(serSpan);
+                tr.appendChild(serTd);
 
-                const potSpan = document.createElement('span');
-                potSpan.textContent = pot ? '🟢' : '🔴';
-                potSpan.title = pot
-                  ? 'Pot reptar i ser reptat'
-                  : 'No pot reptar ni ser reptat';
-                const potTd = document.createElement('td');
-                potTd.dataset.label = 'Disponible';
-                potTd.appendChild(potSpan);
-                tr.appendChild(potTd);
+                const motiuTd = document.createElement('td');
+                motiuTd.dataset.label = 'Motiu';
+                motiuTd.textContent = motiuText;
+                tr.appendChild(motiuTd);
+
+                const terminiTd = document.createElement('td');
+                terminiTd.dataset.label = 'Termini per nou repte';
+                terminiTd.textContent = terminiText;
+                tr.appendChild(terminiTd);
 
                 tbody.appendChild(tr);
               });
             table.appendChild(tbody);
             const legenda = document.createElement('div');
 
-            ['🟢 Pot reptar i ser reptat', '🔴 No pot reptar ni ser reptat'].forEach(
-              t => {
+            ['🟢 Sí', '🔴 No'].forEach(t => {
                 const p = document.createElement('p');
                 p.textContent = t;
                 legenda.appendChild(p);
-              }
-            );
+              });
 
             cont.appendChild(legenda);
             cont.appendChild(filterLabel);
