@@ -2,6 +2,9 @@ import { mostraRanquing } from './ranking.js';
 import { mostraClassificacio } from './classificacio.js';
 import { state } from './state.js';
 
+const ADMIN_CODE = '12345678';
+let adminAttempts = 0;
+
 const originalFetch = window.fetch.bind(window);
 window.fetch = async (url, options = {}) => {
   const opts = { ...options };
@@ -190,25 +193,31 @@ export function promptAdminCode() {
   const modal = document.getElementById('admin-modal');
   const input = document.getElementById('admin-code');
   const submit = document.getElementById('admin-submit');
-  const error = document.getElementById('admin-error');
   return new Promise(resolve => {
-    error.textContent = '';
     input.value = '';
     modal.style.display = 'block';
-    const handler = () => {
+    const submitHandler = () => {
       const code = input.value.trim();
-
-      if (!/^[a-zA-Z0-9]{8,12}$/.test(code)) {
-        error.textContent = 'Format de codi invàlid (8-12 caràcters alfanumèrics)';
-
-        return;
-      }
-      localStorage.setItem('adminCode', code);
-      enableAdminFeatures();
       modal.style.display = 'none';
-      submit.removeEventListener('click', handler);
-      resolve(code);
+      submit.removeEventListener('click', submitHandler);
+      input.removeEventListener('keypress', keyHandler);
+      if (/^[a-zA-Z0-9]{8,12}$/.test(code) && code === ADMIN_CODE) {
+        alert('Codi correcte');
+        localStorage.setItem('adminCode', code);
+        enableAdminFeatures();
+        if (adminBtn) adminBtn.style.display = 'none';
+        resolve(code);
+      } else {
+        alert('Codi incorrecte');
+        adminAttempts += 1;
+        if (adminAttempts >= 3 && adminBtn) adminBtn.style.display = 'none';
+        resolve(null);
+      }
     };
-    submit.addEventListener('click', handler);
+    const keyHandler = e => {
+      if (e.key === 'Enter') submitHandler();
+    };
+    submit.addEventListener('click', submitHandler);
+    input.addEventListener('keypress', keyHandler);
   });
 }
