@@ -202,7 +202,7 @@ export function promptAdminCode() {
       modal.style.display = 'none';
       submit.removeEventListener('click', submitHandler);
       input.removeEventListener('keypress', keyHandler);
-      if (/^[a-zA-Z0-9]{8,12}$/.test(code) && code === ADMIN_CODE) {
+      if (/^[a-zA-Z0-9]{8,12}$/.test(code) && (!ADMIN_CODE || code === ADMIN_CODE)) {
         alert('Codi correcte');
         localStorage.setItem('adminCode', code);
         enableAdminFeatures();
