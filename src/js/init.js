@@ -3,6 +3,7 @@ import { mostraClassificacio } from './classificacio.js';
 import { state } from './state.js';
 
 const ADMIN_CODE = window.ADMIN_CODE;
+
 let adminAttempts = 0;
 
 const originalFetch = window.fetch.bind(window);
