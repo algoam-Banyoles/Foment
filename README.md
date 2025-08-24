@@ -12,6 +12,7 @@ npm install
 npm run build
 python3 tools/update_sw_version.py
 export ADMIN_CODE=el_teu_codi_secret
+echo "window.ADMIN_CODE='${ADMIN_CODE}';" > admin-config.js
 python3 server.py
 ```
 
@@ -22,6 +23,7 @@ secret `ADMIN_CODE` i exposa'l a les tasques amb:
 ```yaml
 env:
   ADMIN_CODE: ${{ secrets.ADMIN_CODE }}
+- run: echo "window.ADMIN_CODE='${ADMIN_CODE}';" > admin-config.js
 ```
 
 Aquesta darrera ordre arrenca un petit servidor web a
