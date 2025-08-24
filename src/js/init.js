@@ -212,8 +212,10 @@ export function promptAdminCode() {
     modal.style.display = 'block';
     const handler = () => {
       const code = input.value.trim();
+
       if (!/^[a-zA-Z0-9]{8,12}$/.test(code)) {
         error.textContent = 'Format de codi invàlid (8-12 caràcters alfanumèrics)';
+
         return;
       }
       localStorage.setItem('adminCode', code);

@@ -67,7 +67,9 @@ h1 {
 }
 
 #btn-admin {
+
   position: absolute;
+
   bottom: 0.5rem;
   right: 0.5rem;
   font-size: 0.8rem;
