@@ -65,6 +65,14 @@ h1 {
   color: #ddd;
 }
 
+#btn-admin {
+  position: fixed;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+}
+
 .header-logo {
   height: 3rem;
 }

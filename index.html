@@ -12,7 +12,7 @@
   <div id="app">
     <h1>
       <img src="icons/icon-192.png" alt="Logotip de la Secció de Billar del Foment Martinenc" class="header-logo">Secció de Billar del Foment Martinenc
-      <button id="btn-update" aria-label="Actualitza" title="Actualitza">🔄</button>
+      <button id="btn-update" aria-label="Actualitza" title="Actualitza" style="display:none">🔄</button>
     </h1>
     <nav id="menu" aria-label="Navegació principal">
       <button class="menu-toggle" data-target="submenu-billar" aria-controls="submenu-billar" aria-expanded="false" aria-haspopup="true">Secció Billar</button>
@@ -64,8 +64,17 @@
     <div id="torneig-category-buttons" class="button-group category-buttons" style="display:none"></div>
     <!-- aquí es poden afegir més botons en el futur -->
     <div id="continu3b-buttons" class="button-group secondary-buttons" style="display:none"></div>
-    <div id="content"></div>
+  <div id="content"></div>
 
+  </div>
+
+  <div id="admin-modal" role="dialog" aria-modal="true" style="display:none;" aria-labelledby="admin-modal-title">
+    <div class="modal-content">
+      <h2 id="admin-modal-title" style="margin-top:0">Codi d'administrador</h2>
+      <input id="admin-code" type="password" pattern="[A-Za-z0-9]{4}" aria-label="Codi d'administrador" title="4 caràcters alfanumèrics" />
+      <button id="admin-submit">Entrar</button>
+      <p id="admin-error" style="color:red"></p>
+    </div>
   </div>
 
 
@@ -81,6 +90,7 @@
       <canvas id="chart-canvas" role="img" aria-label="Gràfic de l'evolució del jugador"></canvas>
     </div>
   </div>
+  <button id="btn-admin" aria-label="Admin" title="Admin">Admin</button>
   <script type="module" src="main.js"></script>
 
   </body>

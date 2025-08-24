@@ -2,6 +2,46 @@ import { mostraRanquing } from './ranking.js';
 import { mostraClassificacio } from './classificacio.js';
 import { state } from './state.js';
 
+const originalFetch = window.fetch.bind(window);
+window.fetch = async (url, options = {}) => {
+  const opts = { ...options };
+  if (typeof url === 'string' && url.startsWith('/update-')) {
+    let code = localStorage.getItem('adminCode');
+    if (!code) {
+      code = await promptAdminCode();
+    }
+    opts.headers = { ...(opts.headers || {}), 'X-Admin-Code': code };
+  }
+  const res = await originalFetch(url, opts);
+  if (res.status === 403) {
+    alert("Codi d'administrador incorrecte");
+    localStorage.removeItem('adminCode');
+    disableAdminFeatures();
+  }
+  return res;
+};
+
+function enableAdminFeatures() {
+  const updateBtn = document.getElementById('btn-update');
+  if (updateBtn) updateBtn.style.display = 'inline';
+}
+
+function disableAdminFeatures() {
+  const updateBtn = document.getElementById('btn-update');
+  if (updateBtn) updateBtn.style.display = 'none';
+}
+
+const adminBtn = document.getElementById('btn-admin');
+if (adminBtn) {
+  adminBtn.addEventListener('click', async () => {
+    await promptAdminCode();
+  });
+}
+
+if (localStorage.getItem('adminCode')) {
+  enableAdminFeatures();
+}
+
 export function inicialitza() {
   Promise.all([
     fetch('data/ranquing.json').then(r => r.json()),
@@ -159,4 +199,29 @@ export function preparaTorneigCategories(categories, render) {
   });
   cont.style.display = 'flex';
   render();
+}
+
+export function promptAdminCode() {
+  const modal = document.getElementById('admin-modal');
+  const input = document.getElementById('admin-code');
+  const submit = document.getElementById('admin-submit');
+  const error = document.getElementById('admin-error');
+  return new Promise(resolve => {
+    error.textContent = '';
+    input.value = '';
+    modal.style.display = 'block';
+    const handler = () => {
+      const code = input.value.trim();
+      if (!/^[a-zA-Z0-9]{4}$/.test(code)) {
+        error.textContent = 'Format de codi invàlid (4 caràcters alfanumèrics)';
+        return;
+      }
+      localStorage.setItem('adminCode', code);
+      enableAdminFeatures();
+      modal.style.display = 'none';
+      submit.removeEventListener('click', handler);
+      resolve(code);
+    };
+    submit.addEventListener('click', handler);
+  });
 }
