@@ -30,6 +30,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         "/update-ranking": "tools/update_ranquing.py",
         "/update-classificacions": "tools/update_classificacions.py",
         "/update-events": "tools/update_events.py",
+        "/update-continu3b": "tools/update_continu3B.py",
     }
 
     def do_GET(self) -> None:  # noqa: D401 - inherited docs
