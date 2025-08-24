@@ -67,6 +67,7 @@ h1 {
 }
 
 #btn-admin {
+
   font-size: 0.8rem;
   padding: 0.3rem 0.6rem;
 }
@@ -79,6 +80,7 @@ h1 {
   flex-direction: column;
   align-items: center;
   gap: 0.25rem;
+
 }
 
 .header-logo {
