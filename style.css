@@ -51,6 +51,7 @@ h1 {
 
 #btn-update {
   position: absolute;
+  top: 0.5rem;
   right: 0.5rem;
   background: none;
   border: none;
@@ -66,7 +67,9 @@ h1 {
 }
 
 #btn-admin {
-  position: fixed;
+
+  position: absolute;
+
   bottom: 0.5rem;
   right: 0.5rem;
   font-size: 0.8rem;
