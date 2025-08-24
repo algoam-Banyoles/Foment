@@ -11,7 +11,17 @@ generar els fitxers compilats:
 npm install
 npm run build
 python3 tools/update_sw_version.py
+export ADMIN_CODE=el_teu_codi_secret
 python3 server.py
+```
+
+Per executar els workflows de GitHub Actions amb accés administratiu,
+desa aquest codi a **Settings → Secrets and variables → Actions** com a
+secret `ADMIN_CODE` i exposa'l a les tasques amb:
+
+```yaml
+env:
+  ADMIN_CODE: ${{ secrets.ADMIN_CODE }}
 ```
 
 Aquesta darrera ordre arrenca un petit servidor web a
@@ -29,6 +39,9 @@ De la mateixa manera, els esdeveniments es sincronitzen d'un Google Sheet públi
 ```bash
 AGENDA_ID=1IkA50UI7OpFd_VYUb5kNe9V0jj-MZKqu python3 tools/update_events.py
 ```
+
+Els endpoints `/update-*` requereixen enviar el mateix codi mitjançant el
+capçal `X-Admin-Code` o el paràmetre de consulta `code`.
 
 ### Actualitzar la versió del service worker
 
