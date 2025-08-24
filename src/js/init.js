@@ -16,30 +16,15 @@ window.fetch = async (url, options = {}) => {
   if (res.status === 403) {
     alert("Codi d'administrador incorrecte");
     localStorage.removeItem('adminCode');
-    disableAdminFeatures();
   }
   return res;
 };
-
-function enableAdminFeatures() {
-  const updateBtn = document.getElementById('btn-update');
-  if (updateBtn) updateBtn.style.display = 'inline';
-}
-
-function disableAdminFeatures() {
-  const updateBtn = document.getElementById('btn-update');
-  if (updateBtn) updateBtn.style.display = 'none';
-}
 
 const adminBtn = document.getElementById('btn-admin');
 if (adminBtn) {
   adminBtn.addEventListener('click', async () => {
     await promptAdminCode();
   });
-}
-
-if (localStorage.getItem('adminCode')) {
-  enableAdminFeatures();
 }
 
 export function inicialitza() {
