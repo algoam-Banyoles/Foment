@@ -10,6 +10,7 @@ export const state = {
   classModalitatSeleccionada: '3 BANDES',
   classCategoriaSeleccionada: null,
   events: [],
+  isAdmin: false,
   agendaSetmanaInici: (() => {
     const d = new Date();
     d.setHours(0, 0, 0, 0);

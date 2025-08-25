@@ -31,6 +31,14 @@ if (adminBtn) {
   });
 }
 
+export function enableAdminFeatures() {
+  state.isAdmin = true;
+  const manageBtn = document.getElementById('btn-gestio-reptes');
+  if (manageBtn) {
+    manageBtn.style.display = '';
+  }
+}
+
 export function inicialitza() {
   Promise.all([
     fetch('data/ranquing.json').then(r => r.json()),

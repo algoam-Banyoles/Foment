@@ -1,4 +1,4 @@
-import { appendResponsiveTable } from './state.js';
+import { appendResponsiveTable, state } from './state.js';
 
 export function mostraContinu3B() {
   const cont = document.getElementById('content');
@@ -516,6 +516,21 @@ export function mostraContinu3B() {
           }
         })
       );
+      const btnGestio = document.createElement('button');
+      btnGestio.id = 'btn-gestio-reptes';
+      btnGestio.textContent = 'Gestió reptes';
+      btnGestio.addEventListener('click', () => {
+        fetch('/update-continu3b')
+          .then(res => {
+            if (!res.ok) throw new Error();
+            alert('Reptes actualitzats');
+            mostraContinu3B();
+          })
+          .catch(() => alert('Error actualitzant reptes'));
+      });
+      if (!state.isAdmin) {
+        btnGestio.style.display = 'none';
+      }
 
       const btnNormativa = document.createElement('button');
       btnNormativa.textContent = 'Normativa';
@@ -582,9 +597,15 @@ export function mostraContinu3B() {
         })
       );
 
-      [btnRanking, btnReptes, btnLlista, btnAcces, btnPartides, btnNormativa].forEach(b =>
-        btnContainer.appendChild(b)
-      );
+      [
+        btnRanking,
+        btnReptes,
+        btnLlista,
+        btnAcces,
+        btnPartides,
+        btnNormativa,
+        btnGestio
+      ].forEach(b => btnContainer.appendChild(b));
 
       btnRanking.click();
     })
