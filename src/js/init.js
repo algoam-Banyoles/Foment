@@ -66,7 +66,7 @@ export function inicialitza() {
           return {
             ...ev,
             'Títol': titol,
-            Tipus: titol.toLowerCase().includes('assemblea') ? 'assemblea' : 'altre'
+            Categoria: titol.toLowerCase().includes('assemblea') ? 'assemblea' : 'altre'
           };
         })
         .concat(
@@ -74,7 +74,8 @@ export function inicialitza() {
             Data: p.Data,
             Hora: '',
             Títol: `${p['Jugador A'].trim()} vs ${p['Jugador B'].trim()} (${p.Hora})`,
-            Tipus: 'partida'
+            Tipus: '',
+            Categoria: 'partida'
           }))
         )
         .concat(
@@ -82,7 +83,8 @@ export function inicialitza() {
             Data: f.Data,
             Hora: '',
             Títol: `Foment tancat (${f.Títol || ''})`,
-            Tipus: 'festiu'
+            Tipus: '',
+            Categoria: 'festiu'
           }))
         );
 

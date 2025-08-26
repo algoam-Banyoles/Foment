@@ -63,11 +63,11 @@ export function mostraAgenda() {
       const dayEvents = state.events.filter(ev => ev['Data'] === iso);
       if (dayEvents.length > 0) {
         let cls = 'event-other';
-        if (dayEvents.some(ev => ev.Tipus === 'festiu')) {
+        if (dayEvents.some(ev => ev.Categoria === 'festiu')) {
           cls = 'event-festiu';
-        } else if (dayEvents.some(ev => ev.Tipus === 'assemblea')) {
+        } else if (dayEvents.some(ev => ev.Categoria === 'assemblea')) {
           cls = 'event-assemblea';
-        } else if (dayEvents.some(ev => ev.Tipus === 'partida')) {
+        } else if (dayEvents.some(ev => ev.Categoria === 'partida')) {
           cls = 'event-partida';
         } else if (dayEvents.some(ev => ev['Títol'].includes('Fi'))) {
           cls = 'event-fi';
@@ -104,11 +104,11 @@ export function mostraAgenda() {
       const tr = document.createElement('tr');
       tr.dataset.date = ev['Data'];
       let cls = 'event-other';
-      if (ev.Tipus === 'festiu') {
+      if (ev.Categoria === 'festiu') {
         cls = 'event-festiu';
-      } else if (ev.Tipus === 'assemblea') {
+      } else if (ev.Categoria === 'assemblea') {
         cls = 'event-assemblea';
-      } else if (ev.Tipus === 'partida') {
+      } else if (ev.Categoria === 'partida') {
         cls = 'event-partida';
       } else if (ev['Títol'].includes('Fi')) {
         cls = 'event-fi';
@@ -122,7 +122,15 @@ export function mostraAgenda() {
           const [y, m, d] = (ev['Data'] || '').split('-');
           td.textContent = `${d}/${m}`;
         } else {
-          td.textContent = ev[clau] || '';
+          const text = ev[clau] || '';
+          const tipus = (ev.Tipus || '').toLowerCase();
+          if (tipus === 'confirmat') {
+            td.innerHTML = `<strong>${text}</strong>`;
+          } else if (tipus === 'previsió' || tipus === 'previsio') {
+            td.innerHTML = `<em>${text} (previsió)</em>`;
+          } else {
+            td.textContent = text;
+          }
         }
         tr.appendChild(td);
       });
