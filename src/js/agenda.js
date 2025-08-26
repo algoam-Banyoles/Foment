@@ -123,7 +123,9 @@ export function mostraAgenda() {
           td.textContent = `${d}/${m}`;
         } else {
           const text = ev[clau] || '';
+
           const tipus = (ev.Tipus || '').toLowerCase();
+
           if (tipus === 'confirmat') {
             td.innerHTML = `<strong>${text}</strong>`;
           } else if (tipus === 'previsió' || tipus === 'previsio') {
