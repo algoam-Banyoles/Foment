@@ -171,6 +171,9 @@ def main() -> None:
                 row = dict(entry)
                 if "Data" in row:
                     row["Data"] = to_iso_date(str(row.get("Data", "")))
+                # Normalize optional ``tipus`` column (previsió/confirmat)
+                if "tipus" in row:
+                    row["tipus"] = str(row.get("tipus", "")).strip().lower()
                 rows.append(row)
     normalise_mitjana_fields(rows if rows else data)
     if write_if_changed(OUTPUT_FILE, rows if rows else data):

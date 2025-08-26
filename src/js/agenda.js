@@ -122,7 +122,15 @@ export function mostraAgenda() {
           const [y, m, d] = (ev['Data'] || '').split('-');
           td.textContent = `${d}/${m}`;
         } else {
-          td.textContent = ev[clau] || '';
+          const text = ev[clau] || '';
+          const tipus = (ev.tipus || '').toLowerCase();
+          if (tipus === 'confirmat') {
+            td.innerHTML = `<strong>${text}</strong>`;
+          } else if (tipus === 'previsió' || tipus === 'previsio') {
+            td.innerHTML = `<em>${text} (previsió)</em>`;
+          } else {
+            td.textContent = text;
+          }
         }
         tr.appendChild(td);
       });
