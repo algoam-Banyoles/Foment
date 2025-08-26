@@ -188,7 +188,6 @@ def main() -> None:
                         row["Tipus"] = ""
                     if key != "Tipus":
                         row.pop(key, None)
-n
                 rows.append(row)
     normalise_mitjana_fields(rows if rows else data)
     if write_if_changed(OUTPUT_FILE, rows if rows else data):
