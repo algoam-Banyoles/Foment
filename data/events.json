@@ -39,7 +39,6 @@
     "Data": "2025-10-04",
     "Hora": "",
     "Tipus": "Previsió",
-
     "Titol": "1r Exprés 9 Modalitats"
   },
   {
@@ -52,21 +51,18 @@
     "Data": "2025-10-25",
     "Hora": "",
     "Tipus": "Previsió",
-
     "Titol": "2n Exprés 9 Modalitats"
   },
   {
     "Data": "2025-10-26",
     "Hora": "",
     "Tipus": "Previsió",
-
     "Titol": "2n Exprés 9 Modalitats"
   },
   {
     "Data": "2025-11-24",
     "Hora": "",
     "Tipus": "Previsió",
-
     "Titol": "Inici inscripció Social Lliure"
   },
   {
@@ -132,7 +128,6 @@
   {
     "Data": "2026-03-02",
     "Hora": "",
-   
     "Tipus": "Previsió",
     "Titol": "Inici Social Banda"
   },
@@ -176,6 +171,6 @@
     "Data": "2026-06-23",
     "Hora": "",
     "Tipus": "Previsió",
-   "Titol": "Fi Hàndicap"
+    "Titol": "Fi Hàndicap"
   }
 ]
