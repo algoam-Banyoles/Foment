@@ -6,15 +6,16 @@ import { mostraEnllacos } from './enllacos.js';
 import { mostraContinu3B } from './continu3b.js';
 import { mostraTorneig } from './torneig.js';
 
-const uiSections = [
-  'filters-row',
-  'classificacio-filters',
-  'torneig-buttons',
-  'torneig-title',
-  'torneig-category-buttons',
-  'continu3b-buttons',
-  'content'
-];
+  const uiSections = [
+    'filters-row',
+    'classificacio-filters',
+    'torneig-buttons',
+    'torneig-title',
+    'torneig-category-buttons',
+    'continu3b-buttons',
+    'campionats-disclaimer',
+    'content'
+  ];
 
 function hideAll() {
   uiSections.forEach(id => {
@@ -54,11 +55,17 @@ const routes = {
   'btn-horari': { action: mostraHorari },
   'btn-enllacos': { action: mostraEnllacos },
   'btn-continu3b': {
-    show: [{ id: 'continu3b-buttons', display: 'flex' }],
+    show: [
+      { id: 'continu3b-buttons', display: 'flex' },
+      { id: 'campionats-disclaimer', display: 'block' }
+    ],
     action: mostraContinu3B
   },
   'btn-torneig': {
-    show: [{ id: 'torneig-buttons', display: 'flex' }],
+    show: [
+      { id: 'torneig-buttons', display: 'flex' },
+      { id: 'campionats-disclaimer', display: 'block' }
+    ],
     action: loadTorneig
   }
 };
