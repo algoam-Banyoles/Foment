@@ -1,10 +1,15 @@
+// API base URL can be overridden via a global variable or environment variable
+const API_BASE =
+  window.API_BASE ||
+  (typeof process !== 'undefined' && process.env.API_BASE) ||
+  "http://localhost:8000/api";
 const token = 'secret';
 async function fetchData() {
-    const resR = await fetch('/api/ranking');
+    const resR = await fetch(`${API_BASE}/ranking`);
     const ranking = await resR.json();
-    const resW = await fetch('/api/waitlist');
+    const resW = await fetch(`${API_BASE}/waitlist`);
     const wait = await resW.json();
-    const resC = await fetch('/api/challenges');
+    const resC = await fetch(`${API_BASE}/challenges`);
     const chall = await resC.json();
     const rList = document.getElementById('ranking');
     ranking.forEach(e=>{
