@@ -5,7 +5,8 @@ export default {
   output: {
     file: 'main.js',
     format: 'es',
-    sourcemap: true
+    sourcemap: true,
+    inlineDynamicImports: true
   },
   plugins: [terser()]
 };

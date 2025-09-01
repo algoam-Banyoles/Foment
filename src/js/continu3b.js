@@ -519,15 +519,14 @@ export function mostraContinu3B() {
       const btnGestio = document.createElement('button');
       btnGestio.id = 'btn-gestio-reptes';
       btnGestio.textContent = 'Gestió reptes';
-      btnGestio.addEventListener('click', () => {
-        fetch('/update-continu3b')
-          .then(res => {
-            if (!res.ok) throw new Error();
-            alert('Reptes actualitzats');
-            mostraContinu3B();
-          })
-          .catch(() => alert('Error actualitzant reptes'));
-      });
+      btnGestio.addEventListener('click', () =>
+        showSection(btnGestio, async () => {
+          const mod =
+            window.gestioReptes || (await import('./gestioReptes.js'));
+          window.gestioReptes = mod;
+          mod.mostraGestioReptes(cont);
+        })
+      );
       if (!state.isAdmin) {
         btnGestio.style.display = 'none';
       }
