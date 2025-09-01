@@ -31,11 +31,17 @@ if (adminBtn) {
   });
 }
 
-export function enableAdminFeatures() {
+export async function enableAdminFeatures() {
   state.isAdmin = true;
   const manageBtn = document.getElementById('btn-gestio-reptes');
   if (manageBtn) {
     manageBtn.style.display = '';
+  }
+  if (!window.gestioReptes) {
+    window.gestioReptes = await import('./gestioReptes.js');
+    if (window.gestioReptes.initGestioReptesAdmin) {
+      window.gestioReptes.initGestioReptesAdmin();
+    }
   }
 }
 
