@@ -16,6 +16,9 @@ echo "window.ADMIN_CODE='${ADMIN_CODE}';" > admin-config.js
 python3 server.py
 ```
 
+Per canviar la ubicació de la base de dades, defineix la variable
+d'entorn `DATABASE_URL`. Per defecte s'utilitza `sqlite:///./app.db`.
+
 Per executar els workflows de GitHub Actions amb accés administratiu,
 desa aquest codi a **Settings → Secrets and variables → Actions** com a
 secret `ADMIN_CODE` i exposa'l a les tasques amb:
