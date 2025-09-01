@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 from ..db import get_db
-from .. import schemas, models
+from .. import schemas
 from ..services import challenges as svc_challenges
 from ..config import settings
 
