@@ -14,13 +14,16 @@ export async function mostraGestioReptes(container) {
 
   try {
     const res = await fetch('/api/challenges');
+    if (!res.ok) {
+      throw new Error(res.statusText);
+    }
     const data = await res.json();
     const pre = document.createElement('pre');
     pre.textContent = JSON.stringify(data, null, 2);
     container.appendChild(pre);
   } catch (err) {
     const p = document.createElement('p');
-    p.textContent = 'Error carregant reptes';
+    p.textContent = `Error carregant reptes: ${err.message}`;
     container.appendChild(p);
   }
 }
