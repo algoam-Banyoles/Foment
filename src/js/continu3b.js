@@ -1,4 +1,4 @@
-import { appendResponsiveTable, state } from './state.js';
+import { appendResponsiveTable } from './state.js';
 
 export function mostraContinu3B() {
   const cont = document.getElementById('content');
@@ -521,20 +521,6 @@ export function mostraContinu3B() {
           }
         })
       );
-      const btnGestio = document.createElement('button');
-      btnGestio.id = 'btn-gestio-reptes';
-      btnGestio.textContent = 'Gestió reptes';
-        btnGestio.addEventListener('click', () =>
-          showSection(btnGestio, async () => {
-            const mod =
-              window.gestioReptes || (await import('./gestioReptes.js'));
-            window.gestioReptes = mod;
-            await mod.mostraGestioReptes(cont);
-          })
-        );
-      if (!state.isAdmin) {
-        btnGestio.style.display = 'none';
-      }
 
       const btnNormativa = document.createElement('button');
       btnNormativa.textContent = 'Normativa';
@@ -607,8 +593,7 @@ export function mostraContinu3B() {
         btnLlista,
         btnAcces,
         btnPartides,
-        btnNormativa,
-        btnGestio
+        btnNormativa
       ].forEach(b => btnContainer.appendChild(b));
 
       btnRanking.click();

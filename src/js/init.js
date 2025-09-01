@@ -31,20 +31,6 @@ if (adminBtn) {
   });
 }
 
-export async function enableAdminFeatures() {
-  state.isAdmin = true;
-  const manageBtn = document.getElementById('btn-gestio-reptes');
-  if (manageBtn) {
-    manageBtn.style.display = '';
-  }
-  if (!window.gestioReptes) {
-    window.gestioReptes = await import('./gestioReptes.js');
-    if (window.gestioReptes.initGestioReptesAdmin) {
-      window.gestioReptes.initGestioReptesAdmin();
-    }
-  }
-}
-
 export function inicialitza() {
   Promise.all([
     fetch('data/ranquing.json').then(r => r.json()),
@@ -221,7 +207,6 @@ export function promptAdminCode() {
       if (/^[a-zA-Z0-9]{8,12}$/.test(code) && (!ADMIN_CODE || code === ADMIN_CODE)) {
         alert('Codi correcte');
         localStorage.setItem('adminCode', code);
-        enableAdminFeatures();
         if (adminBtn) adminBtn.style.display = 'none';
         resolve(code);
       } else {
