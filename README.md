@@ -17,8 +17,10 @@ alembic upgrade head
 python3 server.py
 ```
 
-L'ordre `alembic upgrade head` crea o actualitza les taules de la base de
-dades aplicant les migracions.
+
+Per canviar la ubicació de la base de dades, defineix la variable
+d'entorn `DATABASE_URL`. Per defecte s'utilitza `sqlite:///./app.db`.
+
 
 Per executar els workflows de GitHub Actions amb accés administratiu,
 desa aquest codi a **Settings → Secrets and variables → Actions** com a
