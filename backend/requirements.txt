@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+SQLAlchemy
+alembic
+pydantic
+APScheduler
+python-dateutil
+pytest
+pydantic-settings
