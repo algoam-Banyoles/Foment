@@ -1,6 +1,5 @@
 from app.db import SessionLocal, engine, Base
 from app import crud
-from app import models
 from datetime import datetime
 
 Base.metadata.create_all(bind=engine)
