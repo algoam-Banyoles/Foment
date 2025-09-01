@@ -20,6 +20,7 @@ export function mostraEnllacos() {
         tipusSummary.classList.add('enllac-tipus');
         tipusDetails.appendChild(tipusSummary);
 
+
         Object.entries(clubs).forEach(([club, items]) => {
           if (club) {
             const clubDiv = document.createElement('div');
@@ -34,6 +35,7 @@ export function mostraEnllacos() {
           items.forEach(ci => {
             const url = ci['Enllaç'] || ci.Enllac || ci.URL || ci.Url || ci.url;
             if (!url) return;
+
             const li = document.createElement('li');
             li.classList.add('enllac-url');
             const a = document.createElement('a');
@@ -41,6 +43,7 @@ export function mostraEnllacos() {
             a.target = '_blank';
             a.rel = 'noopener';
             let text =
+              ci.Club ||
               ci.Títol ||
               ci.Titol ||
               ci.Nom ||
