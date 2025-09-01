@@ -47,16 +47,18 @@ export function mostraEnllacos() {
             a.href = url;
             a.target = '_blank';
             a.rel = 'noopener';
-            let text =
-              ci.Club ||
-              ci.Títol ||
-              ci.Titol ||
-              ci.Nom ||
-              ci.Name ||
-              ci.Text ||
-              (ci.Billar ? `Billar ${ci.Billar}` : url);
-            if (ci.Billar && (ci.Títol || ci.Titol || ci.Nom || ci.Name || ci.Text)) {
-              text += ` - Billar ${ci.Billar}`;
+            let text;
+            if (ci.Billar) {
+              text = `Billar ${ci.Billar}`;
+            } else {
+              text =
+                ci.Club ||
+                ci.Títol ||
+                ci.Titol ||
+                ci.Nom ||
+                ci.Name ||
+                ci.Text ||
+                url;
             }
             a.textContent = text;
             li.appendChild(a);
