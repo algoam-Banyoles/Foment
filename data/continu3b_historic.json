@@ -1,1 +1,1 @@
-[]
+[{"data": "01/09/2025 12:58:03", "delta_posicio": "0", "id": "e21136db-ec2d-4296-a3aa-b5f2147d1afb", "jugador_id": "W01", "notes": "Accés des de Llista d’Esper­a (baixa voluntària; #20 buida)", "partida_id": "", "posicio_anterior": "", "posicio_nova": "20", "repte_id": "", "tipus": "ACCESS_PROMOTE"}, {"data": "01/09/2025 12:58:04", "delta_posicio": "0", "id": "55c0d5fa-c646-45f1-99b0-51ca9b348af9", "jugador_id": "J001", "notes": "Baixa voluntària: surt de l’Ordre", "partida_id": "", "posicio_anterior": "1", "posicio_nova": "", "repte_id": "", "tipus": "VOLUNTARY_LEAVE"}]
