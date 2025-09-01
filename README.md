@@ -13,8 +13,12 @@ npm run build
 python3 tools/update_sw_version.py
 export ADMIN_CODE=el_teu_codi_secret
 echo "window.ADMIN_CODE='${ADMIN_CODE}';" > admin-config.js
+alembic upgrade head
 python3 server.py
 ```
+
+L'ordre `alembic upgrade head` crea o actualitza les taules de la base de
+dades aplicant les migracions.
 
 Per executar els workflows de GitHub Actions amb accés administratiu,
 desa aquest codi a **Settings → Secrets and variables → Actions** com a
