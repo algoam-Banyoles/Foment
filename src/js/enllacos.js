@@ -19,7 +19,7 @@ export function mostraEnllacos() {
         tipusDetails.appendChild(tipusSummary);
 
         items.forEach(ci => {
-          const url = ci.URL || ci.Url || ci.url;
+          const url = ci['Enllaç'] || ci.Enllac || ci.URL || ci.Url || ci.url;
           if (url) {
             const ul = tipusDetails.querySelector('ul') || document.createElement('ul');
             const li = document.createElement('li');
@@ -28,6 +28,7 @@ export function mostraEnllacos() {
             a.target = '_blank';
             a.rel = 'noopener';
             let text =
+              ci.Club ||
               ci.Títol ||
               ci.Titol ||
               ci.Nom ||
