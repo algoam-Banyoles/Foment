@@ -73,13 +73,18 @@ export function mostraContinu3B() {
         cont.appendChild(backBtn);
       }
 
-      const showSection = (btn, render) => {
+      const showSection = async (btn, render) => {
         btnContainer.querySelectorAll('button').forEach(b =>
           b.classList.remove('selected')
         );
         btn.classList.add('selected');
         cont.innerHTML = '';
-        render();
+        try {
+          await render();
+        } catch (err) {
+          console.error('Error carregant secció', err);
+          cont.innerHTML = '<p>Error carregant secció.</p>';
+        }
       };
 
       const filterLabel = document.createElement('label');
@@ -519,14 +524,14 @@ export function mostraContinu3B() {
       const btnGestio = document.createElement('button');
       btnGestio.id = 'btn-gestio-reptes';
       btnGestio.textContent = 'Gestió reptes';
-      btnGestio.addEventListener('click', () =>
-        showSection(btnGestio, async () => {
-          const mod =
-            window.gestioReptes || (await import('./gestioReptes.js'));
-          window.gestioReptes = mod;
-          mod.mostraGestioReptes(cont);
-        })
-      );
+        btnGestio.addEventListener('click', () =>
+          showSection(btnGestio, async () => {
+            const mod =
+              window.gestioReptes || (await import('./gestioReptes.js'));
+            window.gestioReptes = mod;
+            await mod.mostraGestioReptes(cont);
+          })
+        );
       if (!state.isAdmin) {
         btnGestio.style.display = 'none';
       }
