@@ -22,11 +22,16 @@ export function mostraEnllacos() {
 
 
         Object.entries(clubs).forEach(([club, items]) => {
+          let parent = tipusDetails;
+
           if (club) {
-            const clubDiv = document.createElement('div');
-            clubDiv.textContent = club;
-            clubDiv.classList.add('enllac-club');
-            tipusDetails.appendChild(clubDiv);
+            const clubDetails = document.createElement('details');
+            const clubSummary = document.createElement('summary');
+            clubSummary.textContent = club;
+            clubSummary.classList.add('enllac-club');
+            clubDetails.appendChild(clubSummary);
+            tipusDetails.appendChild(clubDetails);
+            parent = clubDetails;
           }
 
           const ul = document.createElement('ul');
@@ -42,23 +47,25 @@ export function mostraEnllacos() {
             a.href = url;
             a.target = '_blank';
             a.rel = 'noopener';
-            let text =
-              ci.Club ||
-              ci.Títol ||
-              ci.Titol ||
-              ci.Nom ||
-              ci.Name ||
-              ci.Text ||
-              (ci.Billar ? `Billar ${ci.Billar}` : url);
-            if (ci.Billar && (ci.Títol || ci.Titol || ci.Nom || ci.Name || ci.Text)) {
-              text += ` - Billar ${ci.Billar}`;
+            let text;
+            if (ci.Billar) {
+              text = `Billar ${ci.Billar}`;
+            } else {
+              text =
+                ci.Club ||
+                ci.Títol ||
+                ci.Titol ||
+                ci.Nom ||
+                ci.Name ||
+                ci.Text ||
+                url;
             }
             a.textContent = text;
             li.appendChild(a);
             ul.appendChild(li);
           });
 
-          tipusDetails.appendChild(ul);
+          parent.appendChild(ul);
         });
 
         cont.appendChild(tipusDetails);
