@@ -19,9 +19,8 @@ El token d'administració es configura a `app/config.py` (`secret` per defecte).
 La PWA es pot servir amb qualsevol servidor estàtic (p.ex. GitHub Pages). Per desenvolupament:
 
 ```bash
-python -m http.server --directory frontend 8001
+python -m http.server 8001
 ```
-Configura `API_BASE` del frontend perquè apunti a `http://localhost:8000/api`.
 
 ## Tests
 
