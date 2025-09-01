@@ -524,11 +524,7 @@ details summary {
   border-radius: 4px;
   margin-left: 1rem;
   margin-top: 0.3rem;
-}
-
-.enllac-club > a {
-  color: #fff;
-  display: block;
+  cursor: pointer;
 }
 
 .enllacos-list {
