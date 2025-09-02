@@ -31,62 +31,74 @@ if (adminBtn) {
   });
 }
 
-export function inicialitza() {
-  Promise.all([
-    fetch('data/ranquing.json').then(r => r.json()),
-    fetch('data/classificacions.json').then(r => r.json()).catch(() => []),
-    fetch('data/events.json').then(r => r.json()).catch(() => []),
-    fetch('data/calendari.json').then(r => r.json()).catch(() => []),
-    fetch('data/festius.json').then(r => r.json()).catch(() => [])
-  ])
-    .then(([dadesRanking, dadesClass, dadesEvents, dadesCalendari, dadesFestius]) => {
-      state.ranquing = dadesRanking;
-      state.anys = [...new Set(dadesRanking.map(d => parseInt(d.Any, 10)))]
-        .sort((a, b) => a - b);
-      state.anySeleccionat = state.anys[state.anys.length - 1];
+export async function inicialitza() {
+  const status = document.getElementById('loading-status');
+  try {
+    status.textContent = 'Carregant rànquing...';
+    const dadesRanking = await fetch('data/ranquing.json').then(r => r.json());
 
-      state.classificacions = dadesClass;
-      state.classYears = [...new Set(dadesClass.map(d => parseInt(d.Any, 10)))]
-        .sort((a, b) => a - b);
-      state.classAnySeleccionat = state.classYears[state.classYears.length - 1] || null;
-      const categories = new Set(dadesClass.map(d => d.Categoria));
-      state.classCategoriaSeleccionada = categories.values().next().value || null;
+    status.textContent = 'Carregant classificacions...';
+    const dadesClass = await fetch('data/classificacions.json').then(r => r.json()).catch(() => []);
 
-      state.events = dadesEvents
-        .map(ev => {
-          const titol = ev['Títol'] || ev['Titol'] || '';
-          return {
-            ...ev,
-            'Títol': titol,
-            Categoria: titol.toLowerCase().includes('assemblea') ? 'assemblea' : 'altre'
-          };
-        })
-        .concat(
-          dadesCalendari.map(p => ({
-            Data: p.Data,
-            Hora: '',
-            Títol: `${p['Jugador A'].trim()} vs ${p['Jugador B'].trim()} (${p.Hora})`,
-            Tipus: '',
-            Categoria: 'partida'
-          }))
-        )
-        .concat(
-          dadesFestius.map(f => ({
-            Data: f.Data,
-            Hora: '',
-            Títol: `Foment tancat (${f.Títol || ''})`,
-            Tipus: '',
-            Categoria: 'festiu'
-          }))
-        );
+    status.textContent = 'Carregant esdeveniments...';
+    const dadesEvents = await fetch('data/events.json').then(r => r.json()).catch(() => []);
 
-      preparaSelectors();
-      preparaSelectorsClassificacio();
-      document.getElementById('btn-agenda').click();
-    })
-    .catch(err => {
-      console.error('Error carregant dades', err);
-    });
+    status.textContent = 'Carregant calendari...';
+    const dadesCalendari = await fetch('data/calendari.json').then(r => r.json()).catch(() => []);
+
+    status.textContent = 'Carregant festius...';
+    const dadesFestius = await fetch('data/festius.json').then(r => r.json()).catch(() => []);
+
+    status.textContent = 'Processant dades...';
+
+    state.ranquing = dadesRanking;
+    state.anys = [...new Set(dadesRanking.map(d => parseInt(d.Any, 10)))]
+      .sort((a, b) => a - b);
+    state.anySeleccionat = state.anys[state.anys.length - 1];
+
+    state.classificacions = dadesClass;
+    state.classYears = [...new Set(dadesClass.map(d => parseInt(d.Any, 10)))]
+      .sort((a, b) => a - b);
+    state.classAnySeleccionat = state.classYears[state.classYears.length - 1] || null;
+    const categories = new Set(dadesClass.map(d => d.Categoria));
+    state.classCategoriaSeleccionada = categories.values().next().value || null;
+
+    state.events = dadesEvents
+      .map(ev => {
+        const titol = ev['Títol'] || ev['Titol'] || '';
+        return {
+          ...ev,
+          'Títol': titol,
+          Categoria: titol.toLowerCase().includes('assemblea') ? 'assemblea' : 'altre'
+        };
+      })
+      .concat(
+        dadesCalendari.map(p => ({
+          Data: p.Data,
+          Hora: '',
+          Títol: `${p['Jugador A'].trim()} vs ${p['Jugador B'].trim()} (${p.Hora})`,
+          Tipus: '',
+          Categoria: 'partida'
+        }))
+      )
+      .concat(
+        dadesFestius.map(f => ({
+          Data: f.Data,
+          Hora: '',
+          Títol: `Foment tancat (${f.Títol || ''})`,
+          Tipus: '',
+          Categoria: 'festiu'
+        }))
+      );
+
+    preparaSelectors();
+    preparaSelectorsClassificacio();
+    document.getElementById('btn-agenda').click();
+    status.textContent = '';
+  } catch (err) {
+    status.textContent = 'Error carregant dades';
+    console.error('Error carregant dades', err);
+  }
 }
 
 export function preparaSelectors() {
