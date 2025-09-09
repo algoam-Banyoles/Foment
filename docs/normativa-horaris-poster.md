@@ -3,7 +3,10 @@
 ## Horari d'obertura de la Secció
 
 - 🕒 **Dilluns, dimecres, dijous i dissabte:** 9:00 – 21:30
-- 🕒 **Dimarts i divendres:** 10:30 – 21:30
+
+- 🕒 **Dimarts:** 10:30 – 13:00 i 16:00 – 20:00
+- 🕒 **Divendres:** 10:30 – 21:30
+
 - 🕒 **Diumenge:** 9:00 – 16:00
 - ℹ️ L'horari pot canviar segons l'obertura del **Bar del Foment**.
 - 🏢 Horari d'atenció al públic del **FOMENT**: **dilluns a divendres, 9:00–13:00 i 16:00–20:00**.
