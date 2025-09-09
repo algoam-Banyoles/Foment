@@ -9,8 +9,10 @@ export function mostraHorari() {
     <h3>🕒 Horari d'obertura de la Secció</h3>
     <ul>
       <li><b>Dilluns, dimecres, dijous i dissabte:</b> 9:00 – 21:30</li>
+
       <li><b>Dimarts:</b> 10:30 – 13:00 i 16:00 – 20:00</li>
       <li><b>Divendres:</b> 10:30 – 21:30</li>
+
       <li><b>Diumenge:</b> 9:00 – 16:00</li>
       <li>L'horari d'obertura pot canviar en funció dels horaris d'obertura del <b>Bar del Foment</b>.</li>
       <li>L'horari d'atenció al públic del <b>FOMENT</b> és de <b>DILLUNS A DIVENDRES</b> de <b>9:00 A 13:00</b> i de <b>16:00 A 20:00</b>.</li>
