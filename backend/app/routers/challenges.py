@@ -1,16 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from ..db import get_db
 from .. import schemas
 from ..services import challenges as svc_challenges
-from ..config import settings
+from ..auth import verify_admin
 
 router = APIRouter(prefix="/api", tags=["challenges"])
 
-
-def verify_admin(token: str = Header(None, alias="X-Admin-Token")):
-    if token != settings.admin_token:
-        raise HTTPException(status_code=401, detail="Invalid admin token")
 
 @router.post("/challenges", response_model=schemas.ChallengeBase, dependencies=[Depends(verify_admin)])
 def create_challenge(payload: schemas.ChallengeCreate, db: Session = Depends(get_db)):

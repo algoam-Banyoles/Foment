@@ -7,3 +7,4 @@ APScheduler
 python-dateutil
 pytest
 pydantic-settings
+requests

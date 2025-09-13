@@ -1,16 +1,13 @@
 from datetime import datetime
-from fastapi import APIRouter, Depends, Header, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from ..db import get_db
-from ..config import settings
 from .. import models, crud
 from ..services import ranking
+from ..auth import verify_admin
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
-def verify_admin(token: str = Header(None, alias="X-Admin-Token")):
-    if token != settings.admin_token:
-        raise HTTPException(status_code=401, detail="Invalid admin token")
 
 @router.post("/leave", dependencies=[Depends(verify_admin)])
 def voluntary_leave(player_id: int, db: Session = Depends(get_db)):
