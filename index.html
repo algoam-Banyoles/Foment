@@ -1,112 +1,33 @@
 <!DOCTYPE html>
 <html lang="ca">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="manifest" href="data/manifest.json" />
-  <meta name="theme-color" content="#005a9e" />
-  <link rel="stylesheet" href="style.css" />
-  <title>Secció de Billar del Foment Martinenc</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campionat de 3 bandes</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+
+      body {
+        display: flex;
+      }
+
+      iframe {
+        border: 0;
+        flex: 1;
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
-  <div id="iframe-experiment" class="iframe-experiment" aria-label="Prova del campionat de 3 bandes">
-    <div class="iframe-toolbar">
-      <a href="https://campionat-3bandes.vercel.app/" target="_blank" rel="noopener" class="iframe-link">Obre en una pestanya nova</a>
-      <button id="show-original-app" aria-label="Mostra l'aplicació original">Mostra l'aplicació original</button>
-    </div>
-    <iframe src="https://campionat-3bandes.vercel.app/" title="Campionat de 3 bandes" loading="lazy"></iframe>
-  </div>
-  <div id="app" class="hidden">
-    <div id="loading-status" aria-live="polite"></div>
-    <h1>
-      <div class="logo-admin">
-        <img src="icons/icon-192.png" alt="Logotip de la Secció de Billar del Foment Martinenc" class="header-logo" />
-        <button id="btn-admin" aria-label="Admin" title="Admin">Admin</button>
-        <button id="btn-install" aria-label="Instal·la l'aplicació" title="Instal·la" style="display:none">Instal·la</button>
-        <button id="show-iframe-experiment" aria-label="Mostra la prova del campionat">Campionat 3B (prova)</button>
-      </div>
-      <div class="header-title">Secció de Billar del Foment Martinenc</div>
-    </h1>
-    <nav id="menu" aria-label="Navegació principal">
-      <button class="menu-toggle" data-target="submenu-billar" aria-controls="submenu-billar" aria-expanded="false" aria-haspopup="true">Secció Billar</button>
-      <button class="menu-toggle" data-target="submenu-campionats" aria-controls="submenu-campionats" aria-expanded="false" aria-haspopup="true">Campionats en curs</button>
-      <button class="menu-toggle" data-target="submenu-historic" aria-controls="submenu-historic" aria-expanded="false" aria-haspopup="true">Històric</button>
-      <button class="menu-toggle" data-target="submenu-multimedia" aria-controls="submenu-multimedia" aria-expanded="false" aria-haspopup="true">Multimedia</button>
-    </nav>
-    <div id="submenu-container">
-      <div id="submenu-billar" class="submenu" role="navigation" aria-label="Secció Billar" aria-hidden="true">
-        <button id="btn-agenda">Agenda Billar</button>
-        <button id="btn-horari">Normativa i Horari</button>
-      </div>
-      <div id="submenu-campionats" class="submenu" role="navigation" aria-label="Campionats en curs" aria-hidden="true">
-        <button id="btn-torneig">Social en curs</button>
-        <button id="btn-continu3b">Continu 3B</button>
-      </div>
-      <div id="submenu-historic" class="submenu" role="navigation" aria-label="Històric" aria-hidden="true">
-        <button id="btn-ranking">Rànquings</button>
-        <button id="btn-classificacio">Classificacions Socials</button>
-      </div>
-      <div id="submenu-multimedia" class="submenu" role="navigation" aria-label="Multimedia" aria-hidden="true">
-        <button id="btn-enllacos">Enllaços Billar</button>
-      </div>
-    </div>
-    <div id="campionats-disclaimer" class="disclaimer" style="display:none">🚧 En construcció! 🛠️</div>
-    <div id="filters-row" style="display:none">
-      <select id="year-select"></select>
-      <div id="modalitat-buttons" class="button-group secondary-buttons">
-        <button data-mod="3 BANDES">3 Bandes</button>
-        <button data-mod="BANDA">Banda</button>
-        <button data-mod="LLIURE">Lliure</button>
-      </div>
-    </div>
-    <div id="classificacio-filters" style="display:none">
-      <select id="classificacio-year-select"></select>
-      <div id="classificacio-modalitat-buttons" class="button-group secondary-buttons">
-        <button data-mod="3 BANDES">3 Bandes</button>
-        <button data-mod="BANDA">Banda</button>
-        <button data-mod="LLIURE">Lliure</button>
-      </div>
-      <div id="categoria-buttons" class="button-group category-buttons"></div>
-    </div>
-    <h2 id="torneig-title" style="display:none"></h2>
-    <div id="torneig-buttons" class="button-group secondary-buttons" style="display:none">
-      <button data-file="inscrits.json">Inscrits</button>
-      <button data-file="calendari.json">Calendari</button>
-      <button data-file="partides.json">Resultats</button>
-      <button data-file="classificacio.json">Classificació</button>
-    </div>
-    <div id="torneig-category-buttons" class="button-group category-buttons" style="display:none"></div>
-    <!-- aquí es poden afegir més botons en el futur -->
-    <div id="continu3b-buttons" class="button-group secondary-buttons" style="display:none"></div>
-  <div id="content"></div>
-
-
-  </div>
-
-
-  <div id="admin-modal" role="dialog" aria-modal="true" style="display:none;" aria-labelledby="admin-modal-title">
-    <div class="modal-content">
-      <h2 id="admin-modal-title" style="margin-top:0">Codi d'administrador</h2>
-      <input id="admin-code" type="password" pattern="[A-Za-z0-9]{8,12}" aria-label="Codi d'administrador" title="8 a 12 caràcters alfanumèrics" />
-      <button id="admin-submit">Entrar</button>
-      <p id="admin-error" style="color:red"></p>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <div id="chart-overlay" role="dialog" aria-modal="true" aria-labelledby="chart-title" style="display:none;">
-    <div id="player-chart">
-      <div id="chart-header">
-        <h3 id="chart-title" style="margin:0.5rem 0;"></h3>
-        <button id="close-chart" aria-label="Tanca gràfic">Tanca</button>
-      </div>
-
-  <canvas id="chart-canvas" role="img" aria-label="Gràfic de l'evolució del jugador"></canvas>
-    </div>
-  </div>
-  <script src="admin-config.js"></script>
-  <script type="module" src="main.js"></script>
-
+    <iframe
+      src="https://campionat-3bandes.vercel.app/"
+      title="Campionat de 3 bandes"
+      loading="lazy"
+      allowfullscreen
+    ></iframe>
   </body>
 </html>
