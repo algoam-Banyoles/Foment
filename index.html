@@ -9,13 +9,21 @@
   <title>Secció de Billar del Foment Martinenc</title>
   </head>
   <body>
-  <div id="app">
+  <div id="iframe-experiment" class="iframe-experiment" aria-label="Prova del campionat de 3 bandes">
+    <div class="iframe-toolbar">
+      <a href="https://campionat-3bandes.vercel.app/" target="_blank" rel="noopener" class="iframe-link">Obre en una pestanya nova</a>
+      <button id="show-original-app" aria-label="Mostra l'aplicació original">Mostra l'aplicació original</button>
+    </div>
+    <iframe src="https://campionat-3bandes.vercel.app/" title="Campionat de 3 bandes" loading="lazy"></iframe>
+  </div>
+  <div id="app" class="hidden">
     <div id="loading-status" aria-live="polite"></div>
     <h1>
       <div class="logo-admin">
         <img src="icons/icon-192.png" alt="Logotip de la Secció de Billar del Foment Martinenc" class="header-logo" />
         <button id="btn-admin" aria-label="Admin" title="Admin">Admin</button>
         <button id="btn-install" aria-label="Instal·la l'aplicació" title="Instal·la" style="display:none">Instal·la</button>
+        <button id="show-iframe-experiment" aria-label="Mostra la prova del campionat">Campionat 3B (prova)</button>
       </div>
       <div class="header-title">Secció de Billar del Foment Martinenc</div>
     </h1>

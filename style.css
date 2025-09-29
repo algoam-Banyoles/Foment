@@ -30,6 +30,47 @@ body {
   color: var(--text-color);
 }
 
+.hidden {
+  display: none !important;
+}
+
+.iframe-experiment {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100vh;
+  max-width: 100%;
+}
+
+.iframe-experiment iframe {
+  flex: 1;
+  border: none;
+  width: 100%;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.iframe-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.iframe-link {
+  text-decoration: none;
+  background: var(--secondary);
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.iframe-link:hover,
+.iframe-link:focus {
+  background: var(--secondary-dark);
+}
+
 #app {
   max-width: 800px;
   margin: 0 auto;
