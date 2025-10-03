@@ -36,7 +36,7 @@ workbox.precaching.precacheAndRoute([
 
 // index.html and navigation requests: Network First
 workbox.routing.registerRoute(
-  ({ request }) => request.mode === 'navigate',
+  ({ request, url }) => request.mode === 'navigate' && url.origin === self.location.origin,
   new workbox.strategies.NetworkFirst({ cacheName: 'pages' })
 );
 
